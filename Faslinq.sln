@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31717.71
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Faslinq", "Faslinq\Faslinq.csproj", "{08FDC69F-0821-42F9-BFD6-53DC72BD8147}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Faslinq.Tests", "Faslinq.Tests\Faslinq.Tests.csproj", "{6A2292A4-5791-4F54-A203-08146670C386}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{08FDC69F-0821-42F9-BFD6-53DC72BD8147}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{08FDC69F-0821-42F9-BFD6-53DC72BD8147}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{08FDC69F-0821-42F9-BFD6-53DC72BD8147}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{08FDC69F-0821-42F9-BFD6-53DC72BD8147}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A2292A4-5791-4F54-A203-08146670C386}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A2292A4-5791-4F54-A203-08146670C386}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A2292A4-5791-4F54-A203-08146670C386}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A2292A4-5791-4F54-A203-08146670C386}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C8978BB2-2FF0-4A6F-BF52-739624348D3C}
+	EndGlobalSection
+EndGlobal
