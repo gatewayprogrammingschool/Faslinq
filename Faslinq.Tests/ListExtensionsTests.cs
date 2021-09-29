@@ -1,6 +1,5 @@
 ﻿namespace Faslinq.Tests;
 
-using TestValueTuple = System.ValueTuple<int, string, double>;
 
 [TestClass()]
 public class ListExtensionsTests

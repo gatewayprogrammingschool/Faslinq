@@ -1,20 +1,43 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
+        <OutputType>exe</OutputType>
         <TargetFrameworks>net6.0;net5.0;netcoreapp3.1;net472;net48</TargetFrameworks>
+        <!---->
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <LangVersion>10.0</LangVersion>
         <IsPackable>false</IsPackable>
+        <StartupObject>Faslinq.Tests.Program</StartupObject>
     </PropertyGroup>
 
+    <!--<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0|AnyCPU'">
+      <Optimize>True</Optimize>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net5.0|AnyCPU'">
+      <Optimize>True</Optimize>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netcoreapp3.1|AnyCPU'">
+      <Optimize>True</Optimize>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net472|AnyCPU'">
+      <Optimize>True</Optimize>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net48|AnyCPU'">
+      <Optimize>True</Optimize>
+    </PropertyGroup>-->
+
     <ItemGroup>
-        <PackageReference Include="Netstandard20.Range.Bridge" Version="1.0.0"
-                          Condition="'$(TargetFramework)'=='netstandard2.0' or '$(TargetFramework)'=='net472' or '$(TargetFramework)'=='net48' "/>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0-rc.1.21451.13" />
+        <PackageReference Include="Netstandard20.Range.Bridge" Version="1.0.0" Condition="'$(TargetFramework)'=='netstandard2.0' or '$(TargetFramework)'=='net472' or '$(TargetFramework)'=='net48' " />
     </ItemGroup>
     
     <ItemGroup Condition="'$(TargetFramework)'=='netcoreapp'">
-        <Assembly Remove="Netstandard20.Range.Bridge"/>
+        <Assembly Remove="Netstandard20.Range.Bridge" />
     </ItemGroup>
     
     <ItemGroup>
@@ -28,6 +51,42 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Faslinq\Faslinq.csproj" />
+    </ItemGroup>
+
+    <!--<ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
+      <PackageReference Include="GPS.RandomDataGenerator">
+        <Version>1.1.4</Version>
+      </PackageReference>
+      <PackageReference Include="GPS.RandomDataGenerator.BaseData">
+        <Version>1.1.4</Version>
+      </PackageReference>
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(TargetFramework)' == 'net5.0'">
+      <PackageReference Include="GPS.RandomDataGenerator">
+        <Version>1.1.4</Version>
+      </PackageReference>
+      <PackageReference Include="GPS.RandomDataGenerator.BaseData">
+        <Version>1.1.4</Version>
+      </PackageReference>
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1'">
+        <PackageReference Include="GPS.RandomDataGenerator">
+            <Version>1.1.4</Version>
+        </PackageReference>
+        <PackageReference Include="GPS.RandomDataGenerator.BaseData">
+            <Version>1.1.4</Version>
+        </PackageReference>
+    </ItemGroup>-->
+
+    <ItemGroup>
+        <PackageReference Include="GPS.RandomDataGenerator">
+            <Version>1.1.4</Version>
+        </PackageReference>
+        <PackageReference Include="GPS.RandomDataGenerator.BaseData">
+            <Version>1.1.4</Version>
+        </PackageReference>
     </ItemGroup>
 
 </Project>

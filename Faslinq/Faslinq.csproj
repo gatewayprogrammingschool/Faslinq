@@ -7,8 +7,24 @@
         <LangVersion>10.0</LangVersion>
     </PropertyGroup>
 
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0|AnyCPU'">
+      <Optimize>True</Optimize>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net5.0|AnyCPU'">
+      <Optimize>True</Optimize>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.1|AnyCPU'">
+      <Optimize>True</Optimize>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'">
+      <Optimize>True</Optimize>
+    </PropertyGroup>
+
     <ItemGroup>
-        <PackageReference Include="Netstandard20.Range.Bridge" Version="1.0.0"
-                          Condition="'$(TargetFramework)'=='netstandard2.0'"/>
+        <PackageReference Include="BenchmarkDotNet" Version="0.13.1" />
+        <PackageReference Include="Netstandard20.Range.Bridge" Version="1.0.0" Condition="'$(TargetFramework)'=='netstandard2.0'" />
     </ItemGroup>
 </Project>
