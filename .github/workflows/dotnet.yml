@@ -1,0 +1,62 @@
+name: .NET
+
+on:
+  push:
+    branches: [ release/* ]
+    tags: 
+      - v*
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+      
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.x
+        include-prerelease: true
+        
+    - name: Setup Scoop
+      run: |
+        iwr -useb get.scoop.sh | iex
+        scoop install gitversion
+        GitVersion
+        
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build Debug
+      if: ${{ github.event_name != 'push.tags' }}
+      run: dotnet build -c Debug --no-restore 
+    - name: Build Release
+      if: ${{ github.event_name == 'push.tags' }}
+      run: dotnet build -c Release --no-restore 
+    - name: Tests
+      run: dotnet test --no-build
+    - name: Publish
+      if: ${{ github.event_name == 'push.tags' }}
+      run: | 
+        $outPath = (Join-Path . -Child packages)
+        dotnet pack -c Release --no-restore --include-source --no-build -o $outPath 
+        
+        gci $outPath\*.nupkg -ErrorAction Stop
+        gci $outPath\*.snupkg -ErrorAction Stop
+        
+        gci $outPath\*.nupkg | forEach-Object -process {
+          dotnet nuget push $_ -k "${{ secrets.NUGET_KEY }}" -s https://api.nuget.org/v3/index.json --skip-duplicate
+        }
+        gci $outPath\*.snupkg | forEach-Object -process {
+          dotnet nuget push $_ -k "${{ secrets.NUGET_KEY }}" -s https://api.nuget.org/v3/index.json --skip-duplicate
+        }
+        
