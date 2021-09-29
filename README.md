@@ -10,7 +10,7 @@ I also was thinking about typical use cases, such as Where().Select()[.Take()] c
 
 List<TData> data = GetFromSource<TData>();
 
-var result = data.Where(d => d.Prop1 == 1).Select(d => (d.Prop1, d.Prop2).Take(10).ToList();
+var result = data.Where(d => d.Prop1 == 1).Select(d => (d.Prop1, d.Prop2)).Take(10).ToList();
 
 // becomes
 
