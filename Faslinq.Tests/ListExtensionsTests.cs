@@ -424,6 +424,11 @@ public class ListExtensionsTests
     }
     #endregion WhereSelect Tests
 
+    public ListExtensionsTests()
+    {
+        Debugger.Break();
+    }
+
     #region Take & TakeLast
     [DataTestMethod]
     [DynamicData(nameof(GetTestDataMethodsTestData), DynamicDataSourceType.Method)]

@@ -5,37 +5,39 @@ public class RangeExtensionsTests
 {
     [DataTestMethod]
     [DynamicData(nameof(GetRangeData), DynamicDataSourceType.Method)]
-    public void ContainsTest(Range[] ranges)
+    public void ContainsTest(object[] ranges)
     {
+        var first = (Range)ranges[0];
+        var last = (Range)ranges[^1];
         PositionCollection positions = new(0, 0);
 
         foreach (var r in ranges)
         {
-            positions.Add(r);
+            positions.Add((Range)r);
         }
 
-        positions.Contains(ranges[0]).Should().BeTrue();
-        positions.Contains(ranges[0].Start).Should().BeTrue();
-        positions.Contains(ranges[0].End.Value - 1).Should().BeTrue();
-        positions.Contains(ranges[^1]).Should().BeTrue();
-        positions.Contains(ranges[^1].Start).Should().BeTrue();
-        positions.Contains(ranges[^1].End.Value - 1).Should().BeTrue();
+        positions.Contains(first).Should().BeTrue();
+        positions.Contains(first.Start).Should().BeTrue();
+        positions.Contains(first.End.Value - 1).Should().BeTrue();
+        positions.Contains(last).Should().BeTrue();
+        positions.Contains(last.Start).Should().BeTrue();
+        positions.Contains(last.End.Value - 1).Should().BeTrue();
     }
 
     [DataTestMethod]
     [DynamicData(nameof(GetRangeData), DynamicDataSourceType.Method)]
-    public void FilterTest(Range[] ranges)
+    public void FilterTest(object[] ranges)
     {
+        var first = (Range)ranges[0];
+        var last = (Range)ranges[^1];
         PositionCollection positions = new(0, 0);
 
         foreach (var r in ranges)
         {
-            positions.Add(r);
+            positions.Add((Range)r);
         }
 
-        var first = ranges[0];
         var firstArray = first.ToInt32Array().Select(i => $"firstArray={i}");
-        var last = ranges[^1];
         var lastArray = last.ToInt32Array().Select(i => $"lastArray={i}");
         //var shouldBeFound = firstEnd >= (lastStart - 1);
 
@@ -59,50 +61,60 @@ public class RangeExtensionsTests
 
     [DataTestMethod]
     [DynamicData(nameof(GetRangeData), DynamicDataSourceType.Method)]
-    public void FindTest(Range[] ranges)
+    public void FindTest(object[] ranges)
     {
+        var r = (Range)ranges[0];
         SortedList<int, Range> rangeList = new();
 
-        rangeList.Add(ranges[0].Start.Value, ranges[0]);
+        rangeList.Add(r.Start.Value, r);
 
-        var found = rangeList.Find(ranges[0].End.Value - 1);
+        var found = rangeList.Find(r.End.Value - 1);
 
-        found.Should().BeEquivalentTo(ranges[0]);
+        found.Should().BeEquivalentTo(r);
     }
 
     [DataTestMethod]
     [DynamicData(nameof(GetRangeData), DynamicDataSourceType.Method)]
-    public void AnyByRangeTest(Range[] ranges)
+    public void AnyByRangeTest(object[] ranges)
     {
+        var first = (Range)ranges[0];
+        var last = (Range)ranges[^1];
         SortedList<int, Range> rangeList = new();
 
-        rangeList.Add(ranges[0].Start.Value, ranges[0]);
+        rangeList.Add(first.Start.Value, first);
 
-        var areSame = ranges[0].Start.Equals(ranges[^1].Start) &&
-                      ranges[0].End.Equals(ranges[^1].End);
+        var areSame = first.Start.Equals(last.Start) &&
+                      first.End.Equals(last.End);
 
-        rangeList.Any(ranges[0]).Should().BeTrue();
-        rangeList.Any(ranges[^1]).Should().Be(areSame);
+        rangeList.Any(first).Should().BeTrue();
+        rangeList.Any(last).Should().Be(areSame);
     }
+
+    public RangeExtensionsTests()
+    {
+        Debugger.Break();
+    }
+
     [DataTestMethod]
     [DynamicData(nameof(GetRangeData), DynamicDataSourceType.Method)]
-    public void AnyByIndexTest(Range[] ranges)
+    public void AnyByIndexTest(object[] ranges)
     {
         SortedList<int, Range> rangeList = new();
 
-        rangeList.Add(ranges[0].Start.Value, ranges[0]);
+        var r = (Range)ranges[0];
+        rangeList.Add(r.Start.Value, r);
 
-        rangeList.Any(ranges[0].End.Value - 1).Should().BeTrue();
-        rangeList.Any(ranges[0].End.Value).Should().BeFalse();
-        rangeList.Any(ranges[0].End.Value + 1).Should().BeFalse();
+        rangeList.Any(r.End.Value - 1).Should().BeTrue();
+        rangeList.Any(r.End.Value).Should().BeFalse();
+        rangeList.Any(r.End.Value + 1).Should().BeFalse();
     }
 
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP
     [DataTestMethod]
     [DynamicData(nameof(GetRangeData), DynamicDataSourceType.Method)]
-    public void ToSpanTest(Range[] ranges)
+    public void ToSpanTest(object[] ranges)
     {
-        foreach (var range in ranges)
+        foreach (Range range in ranges)
         {
             var array = range.ToArray();
 
@@ -115,9 +127,9 @@ public class RangeExtensionsTests
 
     [DataTestMethod]
     [DynamicData(nameof(GetRangeData), DynamicDataSourceType.Method)]
-    public void ToArrayTest(Range[] ranges)
+    public void ToArrayTest(object[] ranges)
     {
-        foreach (var range in ranges)
+        foreach (Range range in ranges)
         {
             var array = range.ToArray();
 
@@ -137,11 +149,8 @@ public class RangeExtensionsTests
         var r2 = new Range(0, 3); Debug.WriteLine(r2);
         var r3 = new Range(5, 15); Debug.WriteLine(r3);
 
-        Debugger.Break();
-        yield return new object[] { new[] { r1 } };
-        //Debugger.Break();
-        //yield return new object[] { new[] { r2 } };
-        //Debugger.Break();
-        //yield return new object[] { new[] { r2, r3 } };
+        yield return new object[] { new object[] { r1 } };
+        yield return new object[] { new object[] { r2 } };
+        yield return new object[] { new object[] { r2, r3 } };
     }
 }

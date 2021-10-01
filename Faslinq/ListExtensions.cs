@@ -1,4 +1,6 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Concurrent;
+using System.Diagnostics;
+using System.Xml.Linq;
 
 namespace Faslinq;
 
@@ -165,11 +167,36 @@ public static partial class ListExtensions
 #region Select
 public static partial class ListExtensions
 {
+    private static ConcurrentDictionary<object, bool> _selectors = new();
+    private static bool SelectsSelf<TData, TResult>(Func<TData, TResult> selector, TData data)
+    {
+        if (selector is null)
+        {
+            return false;
+        }
+
+        if(_selectors.TryGetValue(selector, out var value))
+        {
+            return value;
+        }
+
+        var result = selector(data)?.Equals(data) ?? false;
+
+        _selectors.AddOrUpdate(selector, result, (_, _) => result);
+
+        return result;
+    }
+
     public static List<TResult> Select<TData, TResult>(
         this List<TData> source,
         Func<TData, TResult> selector)
     {
         if (source.Count == 0) return new List<TResult>();
+
+        if(SelectsSelf(selector, source[0]))
+        {
+            return (List<TResult>)(object)source;
+        }
 
         return source.SelectTake(selector, source.Count);
     }
@@ -182,6 +209,16 @@ public static partial class ListExtensions
         if (source.Count == 0) return new List<TResult>();
 
         if (takeCount < 1) { takeCount = 0; }
+
+        if (SelectsSelf(selector, source[0]))
+        {
+            if (source.Count == takeCount)
+            {
+                return (List<TResult>)(object)source;
+            }
+
+            return (List<TResult>)(object)source.Take(takeCount);
+        }
 
         List<TResult> result = new();
         for (int i = 0; i < source.Count; i++)
@@ -205,6 +242,11 @@ public static partial class ListExtensions
         if (source.Count == 0) return new List<TResult>();
 
         if (takeCount < 1) { takeCount = 0; }
+
+        if (selector is not null && SelectsSelf(selector, source[0]))
+        {
+            return (List<TResult>)(object)source.TakeLast(takeCount);
+        }
 
         List<TResult> result = new();
         for (int i = source.Count - takeCount; i < source.Count; i++)
@@ -309,12 +351,36 @@ public static partial class ListExtensions
     public static List<TData> Take<TData>(
             this List<TData> source,
             int takeCount)
-            => SelectTake<TData, TData>(source, i => i, takeCount);
+    {
+        if (source.Count == 0) return source;
+
+        if (takeCount < 1) { takeCount = 0; }
+
+        List<TData> result = new();
+        for (int i = 0; i < Math.Min(source.Count, takeCount); i++)
+        {
+            result.Add(source[i]);
+        }
+
+        return result;
+    }
 
     public static List<TData> TakeLast<TData>(
         this List<TData> source,
         int takeCount)
-        => SelectTakeLast<TData, TData>(source, null, takeCount);
+    {
+        if (source.Count == 0) return source;
+
+        if (takeCount < 1) { takeCount = 0; }
+
+        List<TData> result = new();
+        for (int i = source.Count - takeCount; i < source.Count; i++)
+        {
+            result.Add(source[i]);
+        }
+
+        return result;
+    }
 }
 #endregion Take / TakeLast
 
