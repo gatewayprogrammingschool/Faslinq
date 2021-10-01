@@ -145,7 +145,7 @@ public class ArrayExtensionsTests
         list.Should().NotBeNull();
         list.Should().HaveCount(tuple.Item2 * 3);
 
-        var result = ArrayExtensions.WhereTake(list.ToArray(), 2, i => i.Item1 == list[0].Item1);
+        var result = ArrayExtensions.WhereTake(list.ToArray(), i => i.Item1 == list[0].Item1, 2);
 
         result.Should().NotBeNull();
         result!.Length.Should().Be(Math.Min(2, list.Count));
@@ -172,7 +172,7 @@ public class ArrayExtensionsTests
         list.Should().NotBeNull();
         list.Should().HaveCount(tuple.Item2 * 3);
 
-        var result = ArrayExtensions.WhereTakeLast(list.ToArray(), 2, i => i.Item1 == list[first].Item1);
+        var result = ArrayExtensions.WhereTakeLast(list.ToArray(), i => i.Item1 == list[first].Item1, 2);
 
         result.Should().NotBeNull();
         result!.Length.Should().Be(Math.Min(2, list.Count));
@@ -184,17 +184,17 @@ public class ArrayExtensionsTests
         result[1].Item2.Should().Be(list[first].Item2);
         result[1].Item3.Should().Be(list[first].Item3);
     }
-    #endregion SelectWhere Tests
+    #endregion WhereSelect Tests
 
     #region Select Tests
     [DataTestMethod]
     [DynamicData(nameof(GetAnonymousTestData), DynamicDataSourceType.Method)]
     [DynamicData(nameof(GetEmptyAnonymousTestData), DynamicDataSourceType.Method)]
-    public void AnonymousSelectWhereTest(object? toSelect = null)
+    public void AnonymousWhereSelectTest(object? toSelect = null)
     {
         var anonymous = new[] { toSelect };
         var expected = ((dynamic?)toSelect)?.Index;
-        object? first = ArrayExtensions.SelectWhere(
+        object? first = ArrayExtensions.WhereSelect(
                 anonymous.Cast<dynamic?>().ToArray(),
                 a => a?.Index == expected,
                 i => i)?
@@ -206,7 +206,7 @@ public class ArrayExtensionsTests
     [DataTestMethod]
     [DynamicData(nameof(GetValueTupleTestData), DynamicDataSourceType.Method)]
     [DynamicData(nameof(GetEmptValueTupleTestData), DynamicDataSourceType.Method)]
-    public void ValueTupleSelectWhereTest(TestValueTuple? toSelect = null)
+    public void ValueTupleWhereSelectTest(TestValueTuple? toSelect = null)
     {
         TestValueTuple[] anonymous = new[] { toSelect ?? default };
 
@@ -227,7 +227,7 @@ public class ArrayExtensionsTests
     [DataTestMethod]
     [DynamicData(nameof(GetTestDataMethodsTestData), DynamicDataSourceType.Method)]
     [DynamicData(nameof(GetEmptyTestDataMethodsTestData), DynamicDataSourceType.Method)]
-    public void ValueTupleSelectWhereMultipleTest(ValueTuple<object[], int> tuple)
+    public void ValueTupleWhereSelectMultipleTest(ValueTuple<object[], int> tuple)
     {
         var list = tuple.Item1.Cast<TestValueTuple>().ToList();
 
@@ -244,7 +244,7 @@ public class ArrayExtensionsTests
     [DataTestMethod]
     [DynamicData(nameof(GetTestDataMethodsTestData), DynamicDataSourceType.Method)]
     [DynamicData(nameof(GetEmptyTestDataMethodsTestData), DynamicDataSourceType.Method)]
-    public void ValueTupleSelectWhereTakeTest(ValueTuple<object[], int> tuple)
+    public void ValueTupleWhereSelectTakeTest(ValueTuple<object[], int> tuple)
     {
         var list = tuple.Item1.Cast<TestValueTuple>().ToList();
 
@@ -254,7 +254,7 @@ public class ArrayExtensionsTests
         list.Should().NotBeNull();
         list.Should().HaveCount(tuple.Item2 * 3);
 
-        var result = ArrayExtensions.SelectTake(list.ToArray(), 2, i => i);
+        var result = ArrayExtensions.SelectTake(list.ToArray(), i => i, 2);
 
         result.Should().NotBeNull();
         result!.Length.Should().Be(Math.Min(2, list.Count));
@@ -270,7 +270,7 @@ public class ArrayExtensionsTests
     [DataTestMethod]
     [DynamicData(nameof(GetTestDataMethodsTestData), DynamicDataSourceType.Method)]
     [DynamicData(nameof(GetEmptyTestDataMethodsTestData), DynamicDataSourceType.Method)]
-    public void ValueTupleSelectWhereTakeLastTest(ValueTuple<object[], int> tuple)
+    public void ValueTupleWhereSelectTakeLastTest(ValueTuple<object[], int> tuple)
     {
         var list = tuple.Item1.Cast<TestValueTuple>().ToList();
         var first = list.Count - 2;
@@ -282,7 +282,7 @@ public class ArrayExtensionsTests
         list.Should().NotBeNull();
         list.Should().HaveCount(tuple.Item2 * 3);
 
-        var result = ArrayExtensions.SelectTakeLast(list.ToArray(), 2, i => i);
+        var result = ArrayExtensions.SelectTakeLast(list.ToArray(), i => i, 2);
 
         result.Should().NotBeNull();
         result!.Length.Should().Be(Math.Min(2, list.Count));
@@ -294,9 +294,9 @@ public class ArrayExtensionsTests
         result[1].Item2.Should().Be(list[last].Item2);
         result[1].Item3.Should().Be(list[last].Item3);
     }
-    #endregion SelectWhere Tests
+    #endregion WhereSelect Tests
 
-    #region SelectWhere Tests
+    #region WhereSelect Tests
     [DataTestMethod]
     [DynamicData(nameof(GetAnonymousTestData), DynamicDataSourceType.Method)]
     [DynamicData(nameof(GetEmptyAnonymousTestData), DynamicDataSourceType.Method)]
@@ -362,7 +362,7 @@ public class ArrayExtensionsTests
         list.Should().NotBeNull();
         list.Should().HaveCount(tuple.Item2 * 3);
 
-        var result = ArrayExtensions.SelectTake(list.ToArray(), 2, i => i);
+        var result = ArrayExtensions.SelectTake(list.ToArray(), i => i, 2);
 
         result.Should().NotBeNull();
         result!.Length.Should().Be(Math.Min(2, list.Count));
@@ -390,7 +390,7 @@ public class ArrayExtensionsTests
         list.Should().NotBeNull();
         list.Should().HaveCount(tuple.Item2 * 3);
 
-        var result = ArrayExtensions.SelectTakeLast(list.ToArray(), 2, i => i);
+        var result = ArrayExtensions.SelectTakeLast(list.ToArray(), i => i, 2);
 
         result.Should().NotBeNull();
         result!.Length.Should().Be(Math.Min(2, list.Count));
@@ -402,7 +402,7 @@ public class ArrayExtensionsTests
         result[1].Item2.Should().Be(list[last].Item2);
         result[1].Item3.Should().Be(list[last].Item3);
     }
-    #endregion SelectWhere Tests
+    #endregion WhereSelect Tests
 
     #region Take & TakeLast
     [DataTestMethod]
@@ -492,7 +492,7 @@ public class ArrayExtensionsTests
         list.Should().NotBeNull();
         list.Should().HaveCount(tuple.Item2);
 
-        TestValueTuple[] result = ArrayExtensions.OrderByTake(list.ToArray(), 2, i => i.Item1)!;
+        TestValueTuple[] result = ArrayExtensions.OrderByTake(list.ToArray(), i => i.Item1, 2)!;
 
         result.Should().NotBeNull();
         result!.Length.Should().Be(Math.Min(2, list.Count));
@@ -519,7 +519,7 @@ public class ArrayExtensionsTests
         list.Should().NotBeNull();
         list.Should().HaveCount(tuple.Item2);
 
-        TestValueTuple[] result = ArrayExtensions.OrderByTakeLast(list.ToArray(), 2, i => i.Item1)!;
+        TestValueTuple[] result = ArrayExtensions.OrderByTakeLast(list.ToArray(), i => i.Item1, 2)!;
 
         result.Should().NotBeNull();
         result!.Length.Should().Be(Math.Min(2, list.Count));
@@ -575,7 +575,7 @@ public class ArrayExtensionsTests
         list.Should().NotBeNull();
         list.Should().HaveCount(tuple.Item2);
 
-        TestValueTuple[] result = ArrayExtensions.OrderByDescendingTake(list.ToArray(), 2, i => i.Item1)!;
+        TestValueTuple[] result = ArrayExtensions.OrderByDescendingTake(list.ToArray(), i => i.Item1, 2)!;
 
         result.Should().NotBeNull();
         result!.Length.Should().Be(Math.Min(2, list.Count));
@@ -603,7 +603,7 @@ public class ArrayExtensionsTests
         list.Should().NotBeNull();
         list.Should().HaveCount(tuple.Item2);
 
-        TestValueTuple[] result = ArrayExtensions.OrderByDescendingTakeLast(list.ToArray(), 2, i => i.Item1)!;
+        TestValueTuple[] result = ArrayExtensions.OrderByDescendingTakeLast(list.ToArray(), i => i.Item1, 2)!;
 
         result.Should().NotBeNull();
         result!.Length.Should().Be(Math.Min(2, list.Count));

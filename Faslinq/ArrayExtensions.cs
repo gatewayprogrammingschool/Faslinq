@@ -48,7 +48,7 @@ public static partial class ArrayExtensions
     {
         if (source.Length == 0) throw new ArgumentException("List does not contain a matching value.");
 
-        var result = source.WhereTake(1, query);
+        var result = source.WhereTake(query, 1);
         return result.Length > 0
             ? result[0]
             : throw new ArgumentException("List does not contain a matching value.");
@@ -60,7 +60,7 @@ public static partial class ArrayExtensions
     {
         if (source.Length == 0) return default;
 
-        return source.WhereTake(1, query).Length > 0
+        return source.WhereTake(query, 1).Length > 0
             ? source[0]
             : default;
     }
@@ -76,7 +76,7 @@ public static partial class ArrayExtensions
     {
         if (source.Length == 0) throw new ArgumentException("List does not contain a matching value.");
 
-        var result = source.WhereTakeLast(1, query);
+        var result = source.WhereTakeLast(query, 1);
         return result.Length > 0
             ? result[0]
             : throw new ArgumentException("List does not contain a matching value.");
@@ -88,7 +88,7 @@ public static partial class ArrayExtensions
     {
         if (source.Length == 0) return default;
 
-        return source.WhereTakeLast(1, query).Length > 0
+        return source.WhereTakeLast(query, 1).Length > 0
             ? source[0]
             : default;
     }
@@ -101,14 +101,16 @@ public static partial class ArrayExtensions
     public static TData[] Where<TData>(
         this TData[] source,
         Predicate<TData> query) 
-        => source.SelectWhereTake(source.Length, query, i => i);
+        => source.WhereSelectTake(query, i => i, source.Length);
 
     public static TData[] WhereTake<TData>(
         this TData[] source,
-        int takeCount,
-        Predicate<TData> query)
+        Predicate<TData> query,
+        int takeCount)
     {
         if (source.Length == 0) return Array.Empty<TData>();
+
+        if (takeCount < 1) { takeCount = 0; }
 
         List<TData> result = new();
         var targetLength = Math.Min(source.Length, takeCount);
@@ -128,10 +130,12 @@ public static partial class ArrayExtensions
 
     public static TData[] WhereTakeLast<TData>(
         this TData[] source,
-        int takeCount,
-        Predicate<TData> query)
+        Predicate<TData> query,
+        int takeCount)
     {
         if (source.Length == 0) return Array.Empty<TData>();
+
+        if (takeCount < 1) { takeCount = 0; }
 
         List<TData> result = new();
         for (int i = source.Length - 1; i >= 0; --i)
@@ -160,14 +164,16 @@ public static partial class ArrayExtensions
     public static TResult[] Select<TData, TResult>(
         this TData[] source,
         Func<TData, TResult> selector) 
-        => source.SelectTake(source.Length, selector);
+        => source.SelectTake(selector, source.Length);
 
     public static TResult[] SelectTake<TData, TResult>(
         this TData[] source,
-        int takeCount,
-        Func<TData, TResult> selector)
+        Func<TData, TResult> selector,
+        int takeCount)
     {
         if (source.Length == 0) return Array.Empty<TResult>();
+
+        if (takeCount < 1) { takeCount = 0; }
 
         List<TResult> result = new();
         for (int i = 0; i < source.Length; i++)
@@ -185,10 +191,12 @@ public static partial class ArrayExtensions
 
     public static TResult[] SelectTakeLast<TData, TResult>(
         this TData[] source,
-        int takeCount,
-        Func<TData, TResult>? selector)
+        Func<TData, TResult>? selector,
+        int takeCount)
     {
         if (source.Length == 0) return Array.Empty<TResult>();
+
+        if (takeCount < 1) { takeCount = 0; }
 
         List<TResult> result = new();
         for (int i = source.Length - takeCount; i < source.Length; i++)
@@ -213,23 +221,27 @@ public static partial class ArrayExtensions
 }
 #endregion Select
 
-#region SelectWhere
+#region WhereSelect
 public static partial class ArrayExtensions
 {
-    public static TResult[] SelectWhere<TData, TResult>(
+    public static TResult[] WhereSelect<TData, TResult>(
     this TData[] source,
     Predicate<TData> query,
     Func<TData, TResult> selector)
     {
-        return source.SelectWhereTake(source.Length, query, selector);
+        return source.WhereSelectTake(query, selector, source.Length);
     }
 
-    public static TResult[] SelectWhereTake<TData, TResult>(
+    public static TResult[] WhereSelectTake<TData, TResult>(
         this TData[] source,
-        int takeCount,
         Predicate<TData> query,
-        Func<TData, TResult> selector)
+        Func<TData, TResult> selector,
+        int takeCount)
     {
+        if (source.Length == 0) return Array.Empty<TResult>();
+
+        if (takeCount < 1) { takeCount = 0; }
+
         List<TResult> result = new();
         for (int i = 0; i < source.Length; i++)
         {
@@ -249,12 +261,16 @@ public static partial class ArrayExtensions
         return result.ToArray();
     }
 
-    public static TResult[] SelectWhereTakeLast<TData, TResult>(
+    public static TResult[] WhereSelectTakeLast<TData, TResult>(
         this TData[] source,
-        int takeCount,
         Predicate<TData> query,
-        Func<TData, TResult> selector)
+        Func<TData, TResult> selector,
+        int takeCount)
     {
+        if (source.Length == 0) return Array.Empty<TResult>();
+
+        if (takeCount < 1) { takeCount = 0; }
+
         List<TResult> result = new();
 
         for (int i = source.Length - 1; i >= 0; --i)
@@ -275,7 +291,7 @@ public static partial class ArrayExtensions
         return result.ToArray();
     }
 }
-#endregion SelectWhere
+#endregion WhereSelect
 
 #region Take / TakeLast
 public static partial class ArrayExtensions
@@ -283,12 +299,12 @@ public static partial class ArrayExtensions
     public static TData[] Take<TData>(
             this TData[] source,
             int takeCount)
-            => SelectTake<TData, TData>(source, takeCount, i => i);
+            => SelectTake<TData, TData>(source, i => i, takeCount);
 
     public static TData[] TakeLast<TData>(
         this TData[] source,
         int takeCount)
-        => SelectTakeLast<TData, TData>(source, takeCount, null);
+        => SelectTakeLast<TData, TData>(source, null, takeCount);
 }
 #endregion Take / TakeLast
 
@@ -298,14 +314,16 @@ public static partial class ArrayExtensions
     public static TData[] OrderBy<TData, TKey>(
         this TData[] source,
         Func<TData, TKey> comparison)
-        => OrderByTake(source, source.Length, comparison);
+        => OrderByTake(source, comparison, source.Length);
 
     public static TData[] OrderByTake<TData, TKey>(
         this TData[] source,
-        int takeCount,
-        Func<TData, TKey> comparison)
+        Func<TData, TKey> comparison,
+        int takeCount)
     {
         if(source.Length == 0) return Array.Empty<TData>();
+
+        if (takeCount < 1) { takeCount = 0; }
 
         int[] indices = Enumerable.Range(0, source.Length).ToArray();
         IComparer<TKey> comparer = Comparer<TKey>.Default;
@@ -326,10 +344,12 @@ public static partial class ArrayExtensions
 
     public static TData[] OrderByTakeLast<TData, TKey>(
         this TData[] source,
-        int takeCount,
-        Func<TData, TKey> comparison)
+        Func<TData, TKey> comparison,
+        int takeCount)
     {
         if (source.Length == 0) return Array.Empty<TData>();
+
+        if (takeCount < 1) { takeCount = 0; }
 
         int[] indices = Enumerable.Range(0, source.Length).ToArray();
         IComparer<TKey> comparer = Comparer<TKey>.Default;
@@ -354,14 +374,16 @@ public static partial class ArrayExtensions
     public static TData[] OrderByDescending<TData, TKey>(
         this TData[] source,
         Func<TData, TKey> comparison)
-        => OrderByDescendingTake(source, source.Length, comparison);
+        => OrderByDescendingTake(source, comparison, source.Length);
 
     public static TData[] OrderByDescendingTakeLast<TData, TKey>(
         this TData[] source,
-        int takeCount,
-        Func<TData, TKey> comparison)
+        Func<TData, TKey> comparison,
+        int takeCount)
     {
         if (source.Length == 0) return Array.Empty<TData>();
+
+        if (takeCount < 1) { takeCount = 0; }
 
         int[] indices = Enumerable.Range(0, source.Length).ToArray();
         IComparer<TKey> comparer = Comparer<TKey>.Default;
@@ -383,10 +405,12 @@ public static partial class ArrayExtensions
 
     public static TData[] OrderByDescendingTake<TData, TKey>(
         this TData[] source,
-        int takeCount,
-        Func<TData, TKey> comparison)
+        Func<TData, TKey> comparison,
+        int takeCount)
     {
         if (source.Length == 0) return Array.Empty<TData>();
+
+        if (takeCount < 1) { takeCount = 0; }
 
         int[] indices = Enumerable.Range(0, source.Length).ToArray();
         IComparer<TKey> comparer = Comparer<TKey>.Default;

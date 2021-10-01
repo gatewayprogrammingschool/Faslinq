@@ -142,7 +142,7 @@ public class ListExtensionsTests
         list.Should().NotBeNull();
         list.Should().HaveCount(tuple.Item2 * 3);
 
-        var result = ListExtensions.WhereTake(list, 2, i => i.Item1 == list[0].Item1);
+        var result = ListExtensions.WhereTake(list, i => i.Item1 == list[0].Item1, 2);
 
         result.Should().NotBeNull();
         result!.Count.Should().Be(Math.Min(2, list.Count));
@@ -169,7 +169,7 @@ public class ListExtensionsTests
         list.Should().NotBeNull();
         list.Should().HaveCount(tuple.Item2 * 3);
 
-        var result = ListExtensions.WhereTakeLast(list, 2, i => i.Item1 == list[first].Item1);
+        var result = ListExtensions.WhereTakeLast(list, i => i.Item1 == list[first].Item1, 2);
 
         result.Should().NotBeNull();
         result!.Count.Should().Be(Math.Min(2, list.Count));
@@ -181,17 +181,17 @@ public class ListExtensionsTests
         result[1].Item2.Should().Be(list[first].Item2);
         result[1].Item3.Should().Be(list[first].Item3);
     }
-    #endregion SelectWhere Tests
+    #endregion WhereSelect Tests
 
     #region Select Tests
     [DataTestMethod]
     [DynamicData(nameof(GetAnonymousTestData), DynamicDataSourceType.Method)]
     [DynamicData(nameof(GetEmptyAnonymousTestData), DynamicDataSourceType.Method)]
-    public void AnonymousSelectWhereTest(object? toSelect = null)
+    public void AnonymousWhereSelectTest(object? toSelect = null)
     {
         var anonymous = new List<dynamic?>() { toSelect ?? default };
         var expected = ((dynamic?)toSelect)?.Index;
-        object? first = ListExtensions.SelectWhere(
+        object? first = ListExtensions.WhereSelect(
                 anonymous,
                 a => a?.Index == expected,
                 i => i)?
@@ -203,7 +203,7 @@ public class ListExtensionsTests
     [DataTestMethod]
     [DynamicData(nameof(GetValueTupleTestData), DynamicDataSourceType.Method)]
     [DynamicData(nameof(GetEmptValueTupleTestData), DynamicDataSourceType.Method)]
-    public void ValueTupleSelectWhereTest(TestValueTuple? toSelect = null)
+    public void ValueTupleWhereSelectTest(TestValueTuple? toSelect = null)
     {
         var anonymous = new List<TestValueTuple>() { toSelect ?? default };
 
@@ -247,7 +247,7 @@ public class ListExtensionsTests
     [DataTestMethod]
     [DynamicData(nameof(GetTestDataMethodsTestData), DynamicDataSourceType.Method)]
     [DynamicData(nameof(GetEmptyTestDataMethodsTestData), DynamicDataSourceType.Method)]
-    public void ValueTupleSelectWhereMultipleTest(ValueTuple<object[], int> tuple)
+    public void ValueTupleWhereSelectMultipleTest(ValueTuple<object[], int> tuple)
     {
         var list = tuple.Item1.Cast<TestValueTuple>().ToList();
 
@@ -264,7 +264,7 @@ public class ListExtensionsTests
     [DataTestMethod]
     [DynamicData(nameof(GetTestDataMethodsTestData), DynamicDataSourceType.Method)]
     [DynamicData(nameof(GetEmptyTestDataMethodsTestData), DynamicDataSourceType.Method)]
-    public void ValueTupleSelectWhereTakeTest(ValueTuple<object[], int> tuple)
+    public void ValueTupleWhereSelectTakeTest(ValueTuple<object[], int> tuple)
     {
         var list = tuple.Item1.Cast<TestValueTuple>().ToList();
 
@@ -274,7 +274,7 @@ public class ListExtensionsTests
         list.Should().NotBeNull();
         list.Should().HaveCount(tuple.Item2 * 3);
 
-        var result = ListExtensions.SelectTake(list, 2, i => i);
+        var result = ListExtensions.SelectTake(list, i => i, 2);
 
         result.Should().NotBeNull();
         result!.Count.Should().Be(Math.Min(2, list.Count));
@@ -290,7 +290,7 @@ public class ListExtensionsTests
     [DataTestMethod]
     [DynamicData(nameof(GetTestDataMethodsTestData), DynamicDataSourceType.Method)]
     [DynamicData(nameof(GetEmptyTestDataMethodsTestData), DynamicDataSourceType.Method)]
-    public void ValueTupleSelectWhereTakeLastTest(ValueTuple<object[], int> tuple)
+    public void ValueTupleWhereSelectTakeLastTest(ValueTuple<object[], int> tuple)
     {
         var list = tuple.Item1.Cast<TestValueTuple>().ToList();
         var first = list.Count - 2;
@@ -302,7 +302,7 @@ public class ListExtensionsTests
         list.Should().NotBeNull();
         list.Should().HaveCount(tuple.Item2 * 3);
 
-        var result = ListExtensions.SelectTakeLast(list, 2, i => i);
+        var result = ListExtensions.SelectTakeLast(list, i => i, 2);
 
         result.Should().NotBeNull();
         result!.Count.Should().Be(Math.Min(2, list.Count));
@@ -314,9 +314,9 @@ public class ListExtensionsTests
         result[1].Item2.Should().Be(list[last].Item2);
         result[1].Item3.Should().Be(list[last].Item3);
     }
-    #endregion SelectWhere Tests
+    #endregion WhereSelect Tests
 
-    #region SelectWhere Tests
+    #region WhereSelect Tests
     [DataTestMethod]
     [DynamicData(nameof(GetAnonymousTestData), DynamicDataSourceType.Method)]
     [DynamicData(nameof(GetEmptyAnonymousTestData), DynamicDataSourceType.Method)]
@@ -382,7 +382,7 @@ public class ListExtensionsTests
         list.Should().NotBeNull();
         list.Should().HaveCount(tuple.Item2 * 3);
 
-        var result = ListExtensions.SelectTake(list, 2, i => i);
+        var result = ListExtensions.SelectTake(list, i => i, 2);
 
         result.Should().NotBeNull();
         result!.Count.Should().Be(Math.Min(2, list.Count));
@@ -410,7 +410,7 @@ public class ListExtensionsTests
         list.Should().NotBeNull();
         list.Should().HaveCount(tuple.Item2 * 3);
 
-        var result = ListExtensions.SelectTakeLast(list, 2, i => i);
+        var result = ListExtensions.SelectTakeLast(list, i => i, 2);
 
         result.Should().NotBeNull();
         result!.Count.Should().Be(Math.Min(2, list.Count));
@@ -422,7 +422,7 @@ public class ListExtensionsTests
         result[1].Item2.Should().Be(list[last].Item2);
         result[1].Item3.Should().Be(list[last].Item3);
     }
-    #endregion SelectWhere Tests
+    #endregion WhereSelect Tests
 
     #region Take & TakeLast
     [DataTestMethod]
@@ -512,7 +512,7 @@ public class ListExtensionsTests
         list.Should().NotBeNull();
         list.Should().HaveCount(tuple.Item2);
 
-        var result = ListExtensions.OrderByTake(list, 2, i => i.Item1)!;
+        var result = ListExtensions.OrderByTake(list, i => i.Item1, 2)!;
 
         result.Should().NotBeNull();
         result!.Count.Should().Be(Math.Min(2, list.Count));
@@ -539,7 +539,7 @@ public class ListExtensionsTests
         list.Should().NotBeNull();
         list.Should().HaveCount(tuple.Item2);
 
-        var result = ListExtensions.OrderByTakeLast(list, 2, i => i.Item1)!;
+        var result = ListExtensions.OrderByTakeLast(list, i => i.Item1, 2)!;
 
         result.Should().NotBeNull();
         result!.Count.Should().Be(Math.Min(2, list.Count));
@@ -595,7 +595,7 @@ public class ListExtensionsTests
         list.Should().NotBeNull();
         list.Should().HaveCount(tuple.Item2);
 
-        var result = ListExtensions.OrderByDescendingTake(list, 2, i => i.Item1)!;
+        var result = ListExtensions.OrderByDescendingTake(list, i => i.Item1, 2)!;
 
         result.Should().NotBeNull();
         result!.Count.Should().Be(Math.Min(2, list.Count));
@@ -623,7 +623,7 @@ public class ListExtensionsTests
         list.Should().NotBeNull();
         list.Should().HaveCount(tuple.Item2);
 
-        var result = ListExtensions.OrderByDescendingTakeLast(list, 2, i => i.Item1)!;
+        var result = ListExtensions.OrderByDescendingTakeLast(list, i => i.Item1, 2)!;
 
         result.Should().NotBeNull();
         result!.Count.Should().Be(Math.Min(2, list.Count));
@@ -858,12 +858,12 @@ public class ListExtensionsTests
 //        result[1].Item2.Should().Be(list[first].Item2);
 //        result[1].Item3.Should().Be(list[first].Item3);
 //    }
-//    #endregion SelectWhere Tests
+//    #endregion WhereSelect Tests
 
 //    #region Select Tests
 //    [DataTestMethod]
 //    [DynamicData(nameof(GetAnonymousTestData), DynamicDataSourceType.Method)]
-//    public void AnonymousSelectWhereTest(object toSelect)
+//    public void AnonymousWhereSelectTest(object toSelect)
 //    {
 //        List<dynamic> anonymous = new();
 
@@ -883,7 +883,7 @@ public class ListExtensionsTests
 
 //    [DataTestMethod]
 //    [DynamicData(nameof(GetValueTupleTestData), DynamicDataSourceType.Method)]
-//    public void ValueTupleSelectWhereTest(TestValueTuple toSelect)
+//    public void ValueTupleWhereSelectTest(TestValueTuple toSelect)
 //    {
 //        List<TestValueTuple> anonymous = new();
 
@@ -903,7 +903,7 @@ public class ListExtensionsTests
 
 //    [DataTestMethod]
 //    [DynamicData(nameof(GetTestDataMethodsTestData), DynamicDataSourceType.Method)]
-//    public void ValueTupleSelectWhereMultipleTest(ValueTuple<object[], int> tuple)
+//    public void ValueTupleWhereSelectMultipleTest(ValueTuple<object[], int> tuple)
 //    {
 //        List<TestValueTuple> list = tuple.Item1.Cast<TestValueTuple>().ToList();
 
@@ -918,7 +918,7 @@ public class ListExtensionsTests
 
 //    [DataTestMethod]
 //    [DynamicData(nameof(GetTestDataMethodsTestData), DynamicDataSourceType.Method)]
-//    public void ValueTupleSelectWhereTakeTest(ValueTuple<object[], int> tuple)
+//    public void ValueTupleWhereSelectTakeTest(ValueTuple<object[], int> tuple)
 //    {
 //        List<TestValueTuple> list = tuple.Item1.Cast<TestValueTuple>().ToList();
 
@@ -942,7 +942,7 @@ public class ListExtensionsTests
 
 //    [DataTestMethod]
 //    [DynamicData(nameof(GetTestDataMethodsTestData), DynamicDataSourceType.Method)]
-//    public void ValueTupleSelectWhereTakeLastTest(ValueTuple<object[], int> tuple)
+//    public void ValueTupleWhereSelectTakeLastTest(ValueTuple<object[], int> tuple)
 //    {
 //        List<TestValueTuple> list = tuple.Item1.Cast<TestValueTuple>().ToList();
 //        var first = list.Count - 2;
@@ -965,9 +965,9 @@ public class ListExtensionsTests
 //        result[1].Item2.Should().Be(list[last].Item2);
 //        result[1].Item3.Should().Be(list[last].Item3);
 //    }
-//    #endregion SelectWhere Tests
+//    #endregion WhereSelect Tests
 
-//    #region SelectWhere Tests
+//    #region WhereSelect Tests
 //    [DataTestMethod]
 //    [DynamicData(nameof(GetAnonymousTestData), DynamicDataSourceType.Method)]
 //    public void AnonymousSelectTest(object toSelect)
@@ -1072,7 +1072,7 @@ public class ListExtensionsTests
 //        result[1].Item2.Should().Be(list[last].Item2);
 //        result[1].Item3.Should().Be(list[last].Item3);
 //    }
-//    #endregion SelectWhere Tests
+//    #endregion WhereSelect Tests
 
 //    #region Take & TakeLast
 //    [DataTestMethod]

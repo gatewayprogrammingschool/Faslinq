@@ -7,19 +7,19 @@ public class RangeExtensionsTests
     [DynamicData(nameof(GetRangeData), DynamicDataSourceType.Method)]
     public void ContainsTest(Range[] ranges)
     {
-        PositionCollection positions = new (0,0);
+        PositionCollection positions = new(0, 0);
 
-        foreach(var r in ranges)
+        foreach (var r in ranges)
         {
             positions.Add(r);
         }
 
         positions.Contains(ranges[0]).Should().BeTrue();
         positions.Contains(ranges[0].Start).Should().BeTrue();
-        positions.Contains(ranges[0].End.Value-1).Should().BeTrue();
+        positions.Contains(ranges[0].End.Value - 1).Should().BeTrue();
         positions.Contains(ranges[^1]).Should().BeTrue();
         positions.Contains(ranges[^1].Start).Should().BeTrue();
-        positions.Contains(ranges[^1].End.Value-1).Should().BeTrue();
+        positions.Contains(ranges[^1].End.Value - 1).Should().BeTrue();
     }
 
     [DataTestMethod]
@@ -102,7 +102,7 @@ public class RangeExtensionsTests
     [DynamicData(nameof(GetRangeData), DynamicDataSourceType.Method)]
     public void ToSpanTest(Range[] ranges)
     {
-        foreach(var range in ranges)
+        foreach (var range in ranges)
         {
             var array = range.ToArray();
 
@@ -122,7 +122,7 @@ public class RangeExtensionsTests
             var array = range.ToArray();
 
             var expectedArray = new Index[range.End.Value - range.Start.Value];
-            for(int i = range.Start.Value; i < range.End.Value; i++)
+            for (int i = range.Start.Value; i < range.End.Value; i++)
             {
                 expectedArray[i - range.Start.Value] = new Index(i);
             }
@@ -133,8 +133,15 @@ public class RangeExtensionsTests
 
     public static IEnumerable<object[]> GetRangeData()
     {
-        yield return new object[] { new[] { new Range(0, 5) } };
-        yield return new object[] { new[] { new Range(0, 3) } };
-        yield return new object[] { new[] { new Range(0, 3), new Range(5, 15) } };
+        var r1 = new Range(0, 5); Debug.WriteLine(r1);
+        var r2 = new Range(0, 3); Debug.WriteLine(r2);
+        var r3 = new Range(5, 15); Debug.WriteLine(r3);
+
+        Debugger.Break();
+        yield return new object[] { new[] { r1 } };
+        //Debugger.Break();
+        //yield return new object[] { new[] { r2 } };
+        //Debugger.Break();
+        //yield return new object[] { new[] { r2, r3 } };
     }
 }

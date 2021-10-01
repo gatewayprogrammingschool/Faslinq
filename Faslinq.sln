@@ -9,18 +9,38 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Faslinq.Tests", "Faslinq.Te
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Benchmarks|Any CPU = Benchmarks|Any CPU
+		Benchmarks|x64 = Benchmarks|x64
 		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
 		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{08FDC69F-0821-42F9-BFD6-53DC72BD8147}.Benchmarks|Any CPU.ActiveCfg = Benchmarks|Any CPU
+		{08FDC69F-0821-42F9-BFD6-53DC72BD8147}.Benchmarks|Any CPU.Build.0 = Benchmarks|Any CPU
+		{08FDC69F-0821-42F9-BFD6-53DC72BD8147}.Benchmarks|x64.ActiveCfg = Benchmarks|x64
+		{08FDC69F-0821-42F9-BFD6-53DC72BD8147}.Benchmarks|x64.Build.0 = Benchmarks|x64
 		{08FDC69F-0821-42F9-BFD6-53DC72BD8147}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{08FDC69F-0821-42F9-BFD6-53DC72BD8147}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{08FDC69F-0821-42F9-BFD6-53DC72BD8147}.Debug|x64.ActiveCfg = Debug|x64
+		{08FDC69F-0821-42F9-BFD6-53DC72BD8147}.Debug|x64.Build.0 = Debug|x64
 		{08FDC69F-0821-42F9-BFD6-53DC72BD8147}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{08FDC69F-0821-42F9-BFD6-53DC72BD8147}.Release|Any CPU.Build.0 = Release|Any CPU
+		{08FDC69F-0821-42F9-BFD6-53DC72BD8147}.Release|x64.ActiveCfg = Release|x64
+		{08FDC69F-0821-42F9-BFD6-53DC72BD8147}.Release|x64.Build.0 = Release|x64
+		{6A2292A4-5791-4F54-A203-08146670C386}.Benchmarks|Any CPU.ActiveCfg = Benchmarks|Any CPU
+		{6A2292A4-5791-4F54-A203-08146670C386}.Benchmarks|Any CPU.Build.0 = Benchmarks|Any CPU
+		{6A2292A4-5791-4F54-A203-08146670C386}.Benchmarks|x64.ActiveCfg = Benchmarks|x64
+		{6A2292A4-5791-4F54-A203-08146670C386}.Benchmarks|x64.Build.0 = Benchmarks|x64
 		{6A2292A4-5791-4F54-A203-08146670C386}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6A2292A4-5791-4F54-A203-08146670C386}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A2292A4-5791-4F54-A203-08146670C386}.Debug|x64.ActiveCfg = Debug|x64
+		{6A2292A4-5791-4F54-A203-08146670C386}.Debug|x64.Build.0 = Debug|x64
 		{6A2292A4-5791-4F54-A203-08146670C386}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6A2292A4-5791-4F54-A203-08146670C386}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A2292A4-5791-4F54-A203-08146670C386}.Release|x64.ActiveCfg = Release|x64
+		{6A2292A4-5791-4F54-A203-08146670C386}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
