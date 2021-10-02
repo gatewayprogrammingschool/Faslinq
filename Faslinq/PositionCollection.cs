@@ -1,5 +1,4 @@
-﻿#if NETSTANDARD2_0_OR_GREATER || NETCOREAPP
-namespace Faslinq;
+﻿namespace Faslinq;
 public record PositionCollection : IList<Range>, IList<Index>
 {
     SortedList<int, Range> _ranges = new();
@@ -51,12 +50,12 @@ public record PositionCollection : IList<Range>, IList<Index>
         {
             return _currentRange = AddIndexInternal(Start, new Index(index));
         }
-        
+
         if (index == Start.Value - 1)
         {
             return _currentRange = AddIndexInternal(new Index(index), End);
         }
-        
+
         return _currentRange = AddRangeInternal(index, index);
     }
 
@@ -218,7 +217,7 @@ public record PositionCollection : IList<Range>, IList<Index>
     {
         var flattened = Flatten().OrderBy(v => v.Value);
 
-        foreach(var flat in flattened)
+        foreach (var flat in flattened)
         {
             var index = flat.Value;
 
@@ -260,5 +259,3 @@ public record PositionCollection : IList<Range>, IList<Index>
     List<TData> source)
     => Filter(source).ToList();
 }
-
-#endif

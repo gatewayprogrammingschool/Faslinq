@@ -1,0 +1,35 @@
+{
+    "configurations": [
+        {
+            "name": "Benchmark Release",
+            "type": "PowerShell",
+            "request": "launch",
+            "script": "${workspaceFolder}/bench.ps1",
+            "cwd": "${workspaceFolder}",
+            "args": [
+                "-Configuration",
+                "Release",
+                "-Where",
+                "-Select",
+                "-Take",
+                "-TakeLast"
+            ]
+        },
+        {
+            "name": "Benchmark Debug",
+            "type": "PowerShell",
+            "request": "launch",
+            "script": "${workspaceFolder}/bench.ps1",
+            "cwd": "${workspaceFolder}",
+            "args": [
+                "-Select", "-Configuration", "Debug", "-Once", "-Join", "-Runtime", "net472 net6.0"
+                // "-Configuration",
+                // "Debug",
+                // "-Where",
+                // "-Select",
+                // "-Take",
+                // "-TakeLast"
+            ]
+        }
+    ]
+}

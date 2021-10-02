@@ -1,5 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Xml.Linq;
 
 namespace Faslinq;
@@ -62,8 +63,9 @@ public static partial class ListExtensions
     {
         if (source.Count == 0) return default;
 
-        return source.WhereTake(query, 1).Count > 0
-            ? source[0]
+        var results = source.WhereTake(query, 1);
+        return results.Count > 0
+            ? results[0]
             : default;
     }
 }
@@ -90,8 +92,9 @@ public static partial class ListExtensions
     {
         if (source.Count == 0) return default;
 
-        return source.WhereTakeLast(query, 1).Count > 0
-            ? source[0]
+        var results = source.WhereTakeLast(query, 1);
+        return results.Count > 0
+            ? results[0]
             : default;
     }
 }
@@ -167,40 +170,50 @@ public static partial class ListExtensions
 #region Select
 public static partial class ListExtensions
 {
-    private static ConcurrentDictionary<object, bool> _selectors = new();
-    private static bool SelectsSelf<TData, TResult>(Func<TData, TResult> selector, TData data)
-    {
-        if (selector is null)
-        {
-            return false;
-        }
+    //private static ConcurrentDictionary<object, bool> _selectors = new();
 
-        if(_selectors.TryGetValue(selector, out var value))
-        {
-            return value;
-        }
+    //[MethodImpl(MethodImplOptions.AggressiveInlining)]
+    //private static bool SelectsSelf<TData, TResult>(Func<TData, TResult> selector, TData data)
+    //{
+    //    if (selector is null)
+    //    {
+    //        return false;
+    //    }
 
-        var result = selector(data)?.Equals(data) ?? false;
+    //    if(_selectors.TryGetValue(selector, out var value))
+    //    {
+    //        return value;
+    //    }
 
-        _selectors.AddOrUpdate(selector, result, (_, _) => result);
+    //    var result = selector(data)?.Equals(data) ?? false;
 
-        return result;
-    }
+    //    _selectors.AddOrUpdate(selector, result, (_, _) => result);
 
+    //    return result;
+    //}
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static List<TResult> Select<TData, TResult>(
         this List<TData> source,
         Func<TData, TResult> selector)
     {
         if (source.Count == 0) return new List<TResult>();
 
-        if(SelectsSelf(selector, source[0]))
+        //if(SelectsSelf(selector, source[0]))
+        //{
+        //    return (List<TResult>)(object)source;
+        //}
+
+        List<TResult> result = new();
+        for (int i = 0; i < source.Count; i++)
         {
-            return (List<TResult>)(object)source;
+            result.Add(selector(source[i]));
         }
 
-        return source.SelectTake(selector, source.Count);
+        return result;
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static List<TResult> SelectTake<TData, TResult>(
         this List<TData> source,
         Func<TData, TResult> selector,
@@ -210,15 +223,15 @@ public static partial class ListExtensions
 
         if (takeCount < 1) { takeCount = 0; }
 
-        if (SelectsSelf(selector, source[0]))
-        {
-            if (source.Count == takeCount)
-            {
-                return (List<TResult>)(object)source;
-            }
+        //if (SelectsSelf(selector, source[0]))
+        //{
+        //    if (source.Count == takeCount)
+        //    {
+        //        return (List<TResult>)(object)source;
+        //    }
 
-            return (List<TResult>)(object)source.Take(takeCount);
-        }
+        //    return (List<TResult>)(object)source.Take(takeCount);
+        //}
 
         List<TResult> result = new();
         for (int i = 0; i < source.Count; i++)
@@ -234,6 +247,7 @@ public static partial class ListExtensions
         return result;
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static List<TResult> SelectTakeLast<TData, TResult>(
         this List<TData> source,
         Func<TData, TResult>? selector,
@@ -243,10 +257,10 @@ public static partial class ListExtensions
 
         if (takeCount < 1) { takeCount = 0; }
 
-        if (selector is not null && SelectsSelf(selector, source[0]))
-        {
-            return (List<TResult>)(object)source.TakeLast(takeCount);
-        }
+        //if (selector is not null && SelectsSelf(selector, source[0]))
+        //{
+        //    return (List<TResult>)(object)source.TakeLast(takeCount);
+        //}
 
         List<TResult> result = new();
         for (int i = source.Count - takeCount; i < source.Count; i++)

@@ -33,18 +33,18 @@ public class BenchmarkBase
     protected static Func<TestValueTuple, string> Selector => item => item.Item2;
 
     protected static IEnumerable<object>? _generateRecords1;
-    protected static IEnumerable<object>? _generateRecords10;
-    protected static IEnumerable<object>? _generateRecords100;
-    protected static IEnumerable<object>? _generateRecords1000;
+    protected static IEnumerable<object>? _generateRecords250;
+    protected static IEnumerable<object>? _generateRecords5000;
+    protected static IEnumerable<object>? _generateRecords100000;
 
     public static TestValueTuple FirstGenerateRecords1 { get; set; }
     public static (int, string, double) LastGenerateRecords1 { get; private set; }
-    public static TestValueTuple FirstGenerateRecords10 { get; set; }
-    public static (int, string, double) LastGenerateRecords10 { get; private set; }
-    public static TestValueTuple FirstGenerateRecords100 { get; set; }
-    public static (int, string, double) LastGenerateRecords100 { get; private set; }
-    public static TestValueTuple FirstGenerateRecords1000 { get; set; }
-    public static (int, string, double) LastGenerateRecords1000 { get; private set; }
+    public static TestValueTuple FirstGenerateRecords250 { get; set; }
+    public static (int, string, double) LastGenerateRecords250 { get; private set; }
+    public static TestValueTuple FirstGenerateRecords5000 { get; set; }
+    public static (int, string, double) LastGenerateRecords5000 { get; private set; }
+    public static TestValueTuple FirstGenerateRecords100000 { get; set; }
+    public static (int, string, double) LastGenerateRecords100000 { get; private set; }
 
     public static IEnumerable<object> GenerateRecords1()
     {
@@ -62,52 +62,52 @@ public class BenchmarkBase
         return new[] { _generateRecords1.ToArray() };
     }
 
-    public static IEnumerable<object> GenerateRecords10()
+    public static IEnumerable<object> GenerateRecords250()
     {
-        _generateRecords10 ??= GenerateRecords(10);
-        FirstGenerateRecords10 = _generateRecords10!.First().As<object[]>().First().As<IEnumerable<TestValueTuple>>().First();
-        LastGenerateRecords10 = _generateRecords10!.Last().As<object[]>().First().As<IEnumerable<TestValueTuple>>().First();
-        return _generateRecords10;
+        _generateRecords250 ??= GenerateRecords(10);
+        FirstGenerateRecords250 = _generateRecords250!.First().As<object[]>().First().As<IEnumerable<TestValueTuple>>().First();
+        LastGenerateRecords250 = _generateRecords250!.Last().As<object[]>().First().As<IEnumerable<TestValueTuple>>().First();
+        return _generateRecords250;
     }
 
-    public static IEnumerable<object[]> GenerateTestRecords10()
+    public static IEnumerable<object[]> GenerateTestRecords250()
     {
-        _generateRecords10 ??= GenerateRecords(10);
-        FirstGenerateRecords10 = _generateRecords10!.First().As<object[]>().First().As<IEnumerable<TestValueTuple>>().First();
-        LastGenerateRecords10 = _generateRecords10!.Last().As<object[]>().First().As<IEnumerable<TestValueTuple>>().First();
-        return new[] { _generateRecords10.ToArray() };
+        _generateRecords250 ??= GenerateRecords(10);
+        FirstGenerateRecords250 = _generateRecords250!.First().As<object[]>().First().As<IEnumerable<TestValueTuple>>().First();
+        LastGenerateRecords250 = _generateRecords250!.Last().As<object[]>().First().As<IEnumerable<TestValueTuple>>().First();
+        return new[] { _generateRecords250.ToArray() };
     }
 
-    public static IEnumerable<object> GenerateRecords100()
+    public static IEnumerable<object> GenerateRecords5000()
     {
-        _generateRecords100 ??= GenerateRecords(100);
-        FirstGenerateRecords100 = _generateRecords100!.First().As<object[]>().First().As<IEnumerable<TestValueTuple>>().First();
-        LastGenerateRecords100 = _generateRecords100!.Last().As<object[]>().First().As<IEnumerable<TestValueTuple>>().First();
-        return _generateRecords100;
+        _generateRecords5000 ??= GenerateRecords(100);
+        FirstGenerateRecords5000 = _generateRecords5000!.First().As<object[]>().First().As<IEnumerable<TestValueTuple>>().First();
+        LastGenerateRecords5000 = _generateRecords5000!.Last().As<object[]>().First().As<IEnumerable<TestValueTuple>>().First();
+        return _generateRecords5000;
     }
 
-    public static IEnumerable<object[]> GenerateTestRecords100()
+    public static IEnumerable<object[]> GenerateTestRecords5000()
     {
-        _generateRecords100 ??= GenerateRecords(100);
-        FirstGenerateRecords100 = _generateRecords100!.First().As<object[]>().First().As<IEnumerable<TestValueTuple>>().First();
-        LastGenerateRecords100 = _generateRecords100!.Last().As<object[]>().First().As<IEnumerable<TestValueTuple>>().First();
-        return new[] { _generateRecords100.ToArray() };
+        _generateRecords5000 ??= GenerateRecords(100);
+        FirstGenerateRecords5000 = _generateRecords5000!.First().As<object[]>().First().As<IEnumerable<TestValueTuple>>().First();
+        LastGenerateRecords5000 = _generateRecords5000!.Last().As<object[]>().First().As<IEnumerable<TestValueTuple>>().First();
+        return new[] { _generateRecords5000.ToArray() };
     }
 
-    public static IEnumerable<object> GenerateRecords1000()
+    public static IEnumerable<object> GenerateRecords100000()
     {
-        _generateRecords1000 ??= GenerateRecords(1000);
-        FirstGenerateRecords1000 = _generateRecords1000!.First().As<object[]>().First().As<IEnumerable<TestValueTuple>>().First();
-        LastGenerateRecords1000 = _generateRecords1000!.Last().As<object[]>().First().As<IEnumerable<TestValueTuple>>().First();
-        return _generateRecords1000;
+        _generateRecords100000 ??= GenerateRecords(1000);
+        FirstGenerateRecords100000 = _generateRecords100000!.First().As<object[]>().First().As<IEnumerable<TestValueTuple>>().First();
+        LastGenerateRecords100000 = _generateRecords100000!.Last().As<object[]>().First().As<IEnumerable<TestValueTuple>>().First();
+        return _generateRecords100000;
     }
 
-    public static IEnumerable<object[]> GenerateTestRecords1000()
+    public static IEnumerable<object[]> GenerateTestRecords100000()
     {
-        _generateRecords1000 ??= GenerateRecords(1000);
-        FirstGenerateRecords1000 = _generateRecords1000!.First().As<object[]>().First().As<IEnumerable<TestValueTuple>>().First();
-        LastGenerateRecords1000 = _generateRecords1000!.Last().As<object[]>().First().As<IEnumerable<TestValueTuple>>().First();
-        return new[] { _generateRecords1000.ToArray() };
+        _generateRecords100000 ??= GenerateRecords(1000);
+        FirstGenerateRecords100000 = _generateRecords100000!.First().As<object[]>().First().As<IEnumerable<TestValueTuple>>().First();
+        LastGenerateRecords100000 = _generateRecords100000!.Last().As<object[]>().First().As<IEnumerable<TestValueTuple>>().First();
+        return new[] { _generateRecords100000.ToArray() };
     }
 
     public static IEnumerable<object> GenerateRecords(int count)

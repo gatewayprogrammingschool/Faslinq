@@ -1,14 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <OutputType>exe</OutputType>
+        <OutputType>Library</OutputType>
         <TargetFrameworks>net6.0;net5.0;netcoreapp3.1;net472;net48</TargetFrameworks>
         <!---->
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <LangVersion>10.0</LangVersion>
         <IsPackable>false</IsPackable>
-        <StartupObject>Faslinq.Tests.Benchmarks.Program</StartupObject>
+        <StartupObject></StartupObject>
         <DebugType>embedded</DebugType>
         <Configurations>Debug;Release;Benchmarks</Configurations>
         <Platforms>AnyCPU;x64</Platforms>

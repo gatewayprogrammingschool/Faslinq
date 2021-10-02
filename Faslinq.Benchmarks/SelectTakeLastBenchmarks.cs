@@ -6,35 +6,24 @@ public class SelectTakeLastBenchmarks : BenchmarkBase
 {
     public SelectTakeLastBenchmarks() : base() { }
 
+#if !NO_FASLINQ
     [Benchmark, ArgumentsSource(nameof(GenerateRecords1))]
     public List<object> SelectTakeLast_1_Faslinq(object item) => SelectTakeLast_Faslinq(item, LastGenerateRecords1);
 
-    [Benchmark, ArgumentsSource(nameof(GenerateRecords10))]
+    [Benchmark, ArgumentsSource(nameof(GenerateRecords250))]
     public List<object> SelectTakeLast_10_Faslinq(object item) => SelectTakeLast_Faslinq(item, LastGenerateRecords1);
 
-    [Benchmark, ArgumentsSource(nameof(GenerateRecords100))]
-    public List<object> SelectTakeLast_100_Faslinq(object item) => SelectTakeLast_Faslinq(item, LastGenerateRecords100);
+    [Benchmark, ArgumentsSource(nameof(GenerateRecords5000))]
+    public List<object> SelectTakeLast_100_Faslinq(object item) => SelectTakeLast_Faslinq(item, LastGenerateRecords5000);
 
-    [Benchmark, ArgumentsSource(nameof(GenerateRecords1000))]
-    public List<object> SelectTakeLast_1000_Faslinq(object item) => SelectTakeLast_Faslinq(item, LastGenerateRecords1000);
-
-    [Benchmark, ArgumentsSource(nameof(GenerateRecords1))]
-    public List<object> SelectTakeLast_1_Linq(object item) => SelectTakeLast_Linq(item, LastGenerateRecords1);
-
-    [Benchmark, ArgumentsSource(nameof(GenerateRecords10))]
-    public List<object> SelectTakeLast_10_Linq(object item) => SelectTakeLast_Linq(item, LastGenerateRecords10);
-
-    [Benchmark, ArgumentsSource(nameof(GenerateRecords100))]
-    public List<object> SelectTakeLast_100_Linq(object item) => SelectTakeLast_Linq(item, LastGenerateRecords100);
-
-    [Benchmark, ArgumentsSource(nameof(GenerateRecords1000))]
-    public List<object> SelectTakeLast_1000_Linq(object item) => SelectTakeLast_Linq(item, LastGenerateRecords1000);
+    [Benchmark, ArgumentsSource(nameof(GenerateRecords100000))]
+    public List<object> SelectTakeLast_1000_Faslinq(object item) => SelectTakeLast_Faslinq(item, LastGenerateRecords100000);
 
     [DataTestMethod]
     [DynamicData(nameof(GenerateTestRecords1), DynamicDataSourceType.Method)]
-    [DynamicData(nameof(GenerateTestRecords10), DynamicDataSourceType.Method)]
-    [DynamicData(nameof(GenerateTestRecords100), DynamicDataSourceType.Method)]
-    [DynamicData(nameof(GenerateTestRecords1000), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(GenerateTestRecords250), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(GenerateTestRecords5000), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(GenerateTestRecords100000), DynamicDataSourceType.Method)]
     public void SelectTakeLast_Faslinq(object item) => SelectTakeLast_Faslinq(item, LastGenerateRecords1);
     public List<object> SelectTakeLast_Faslinq(object item, TestValueTuple first)
     {
@@ -61,6 +50,19 @@ public class SelectTakeLastBenchmarks : BenchmarkBase
         }
             throw new ArgumentException($"Unexpected data.  Received {item.GetType()}");
     }
+#endif
+
+    [Benchmark, ArgumentsSource(nameof(GenerateRecords1))]
+    public List<object> SelectTakeLast_1_Linq(object item) => SelectTakeLast_Linq(item, LastGenerateRecords1);
+
+    [Benchmark, ArgumentsSource(nameof(GenerateRecords250))]
+    public List<object> SelectTakeLast_10_Linq(object item) => SelectTakeLast_Linq(item, LastGenerateRecords250);
+
+    [Benchmark, ArgumentsSource(nameof(GenerateRecords5000))]
+    public List<object> SelectTakeLast_100_Linq(object item) => SelectTakeLast_Linq(item, LastGenerateRecords5000);
+
+    [Benchmark, ArgumentsSource(nameof(GenerateRecords100000))]
+    public List<object> SelectTakeLast_1000_Linq(object item) => SelectTakeLast_Linq(item, LastGenerateRecords100000);
 
     public List<object>  SelectTakeLast_Linq(object item, TestValueTuple first)
     {
@@ -87,8 +89,8 @@ public class SelectTakeLastBenchmarks : BenchmarkBase
     }
 
     public static new IEnumerable<object[]> GenerateTestRecords1() => BenchmarkBase.GenerateTestRecords1();
-    public static new IEnumerable<object[]> GenerateTestRecords10() => BenchmarkBase.GenerateTestRecords10();
-    public static new IEnumerable<object[]> GenerateTestRecords100() => BenchmarkBase.GenerateTestRecords100();
-    public static new IEnumerable<object[]> GenerateTestRecords1000() => BenchmarkBase.GenerateTestRecords1000();
+    public static new IEnumerable<object[]> GenerateTestRecords250() => BenchmarkBase.GenerateTestRecords250();
+    public static new IEnumerable<object[]> GenerateTestRecords5000() => BenchmarkBase.GenerateTestRecords5000();
+    public static new IEnumerable<object[]> GenerateTestRecords100000() => BenchmarkBase.GenerateTestRecords100000();
 }
 #endif

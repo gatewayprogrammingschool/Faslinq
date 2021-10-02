@@ -12,32 +12,32 @@ public class WhereTakeBenchmarks : BenchmarkBase
     [Benchmark, ArgumentsSource(nameof(GenerateRecords1))]
     public void WhereTake_1_Faslinq(object item) => WhereTake_Faslinq(item, FirstGenerateRecords1);
 
-    [Benchmark, ArgumentsSource(nameof(GenerateRecords10))]
-    public void WhereTake_10_Faslinq(object item) => WhereTake_Faslinq(item, FirstGenerateRecords10);
+    [Benchmark, ArgumentsSource(nameof(GenerateRecords250))]
+    public void WhereTake_250_Faslinq(object item) => WhereTake_Faslinq(item, FirstGenerateRecords250);
 
-    [Benchmark, ArgumentsSource(nameof(GenerateRecords100))]
-    public void WhereTake_100_Faslinq(object item) => WhereTake_Faslinq(item, FirstGenerateRecords100);
+    [Benchmark, ArgumentsSource(nameof(GenerateRecords5000))]
+    public void WhereTake_5000_Faslinq(object item) => WhereTake_Faslinq(item, FirstGenerateRecords5000);
 
-    [Benchmark, ArgumentsSource(nameof(GenerateRecords1000))]
-    public void WhereTake_1000_Faslinq(object item) => WhereTake_Faslinq(item, FirstGenerateRecords1000);
+    [Benchmark, ArgumentsSource(nameof(GenerateRecords100000))]
+    public void WhereTake_100000_Faslinq(object item) => WhereTake_Faslinq(item, FirstGenerateRecords100000);
 
     [Benchmark, ArgumentsSource(nameof(GenerateRecords1))]
     public void WhereTake_1_Linq(object item) => WhereTake_Linq(item, FirstGenerateRecords1);
 
-    [Benchmark, ArgumentsSource(nameof(GenerateRecords10))]
-    public void WhereTake_10_Linq(object item) => WhereTake_Linq(item, FirstGenerateRecords10);
+    [Benchmark, ArgumentsSource(nameof(GenerateRecords250))]
+    public void WhereTake_250_Linq(object item) => WhereTake_Linq(item, FirstGenerateRecords250);
 
-    [Benchmark, ArgumentsSource(nameof(GenerateRecords100))]
-    public void WhereTake_100_Linq(object item) => WhereTake_Linq(item, FirstGenerateRecords100);
+    [Benchmark, ArgumentsSource(nameof(GenerateRecords5000))]
+    public void WhereTake_5000_Linq(object item) => WhereTake_Linq(item, FirstGenerateRecords5000);
 
-    [Benchmark, ArgumentsSource(nameof(GenerateRecords1000))]
-    public void WhereTake_1000_Linq(object item) => WhereTake_Linq(item, FirstGenerateRecords1000);
+    [Benchmark, ArgumentsSource(nameof(GenerateRecords100000))]
+    public void WhereTake_100000_Linq(object item) => WhereTake_Linq(item, FirstGenerateRecords100000);
 
     [DataTestMethod]
     [DynamicData(nameof(GenerateTestRecords1), DynamicDataSourceType.Method)]
-    [DynamicData(nameof(GenerateTestRecords10), DynamicDataSourceType.Method)]
-    [DynamicData(nameof(GenerateTestRecords100), DynamicDataSourceType.Method)]
-    [DynamicData(nameof(GenerateTestRecords1000), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(GenerateTestRecords250), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(GenerateTestRecords5000), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(GenerateTestRecords100000), DynamicDataSourceType.Method)]
     public void WhereTake_Faslinq(object item) => WhereTake_Faslinq(item, FirstGenerateRecords1);
 
     public void WhereTake_Faslinq(object item, TestValueTuple first)
@@ -92,7 +92,7 @@ public class WhereTakeBenchmarks : BenchmarkBase
     }
 
     public static new IEnumerable<object[]> GenerateTestRecords1() => BenchmarkBase.GenerateTestRecords1();
-    public static new IEnumerable<object[]> GenerateTestRecords10() => BenchmarkBase.GenerateTestRecords10();
-    public static new IEnumerable<object[]> GenerateTestRecords100() => BenchmarkBase.GenerateTestRecords100();
-    public static new IEnumerable<object[]> GenerateTestRecords1000() => BenchmarkBase.GenerateTestRecords1000();
+    public static new IEnumerable<object[]> GenerateTestRecords250() => BenchmarkBase.GenerateTestRecords250();
+    public static new IEnumerable<object[]> GenerateTestRecords5000() => BenchmarkBase.GenerateTestRecords5000();
+    public static new IEnumerable<object[]> GenerateTestRecords100000() => BenchmarkBase.GenerateTestRecords100000();
 }

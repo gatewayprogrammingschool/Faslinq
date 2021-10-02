@@ -1,7 +1,4 @@
-﻿#if NETSTANDARD2_0_OR_GREATER || NETCOREAPP
-
-
-namespace Faslinq;
+﻿namespace Faslinq;
 
 public class IndexComparer : IEqualityComparer<Index>
 {
@@ -19,5 +16,3 @@ public class IndexComparer : IEqualityComparer<Index>
         return obj.GetHashCode();
     }
 }
-
-#endif

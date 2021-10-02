@@ -4,10 +4,10 @@ namespace Faslinq.Tests;
 [TestClass]
 public class PositionCollectionTests
 {
-    private TestContext testContextInstance;
+    private TestContext? testContextInstance;
     public TestContext TestContext
     {
-        get { return testContextInstance; }
+        get { return testContextInstance!; }
         set { testContextInstance = value; }
     }
 

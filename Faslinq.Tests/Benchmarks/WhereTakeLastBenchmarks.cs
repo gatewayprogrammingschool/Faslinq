@@ -9,32 +9,32 @@ public class WhereTakeLastBenchmarks : BenchmarkBase
     [Benchmark, ArgumentsSource(nameof(GenerateRecords1))]
     public void WhereTakeLast_1_Faslinq(object item) => WhereTakeLast_Faslinq(item, LastGenerateRecords1);
 
-    [Benchmark, ArgumentsSource(nameof(GenerateRecords10))]
-    public void WhereTakeLast_10_Faslinq(object item) => WhereTakeLast_Faslinq(item, LastGenerateRecords10);
+    [Benchmark, ArgumentsSource(nameof(GenerateRecords250))]
+    public void WhereTakeLast_250_Faslinq(object item) => WhereTakeLast_Faslinq(item, LastGenerateRecords250);
 
-    [Benchmark, ArgumentsSource(nameof(GenerateRecords100))]
-    public void WhereTakeLast_100_Faslinq(object item) => WhereTakeLast_Faslinq(item, LastGenerateRecords100);
+    [Benchmark, ArgumentsSource(nameof(GenerateRecords5000))]
+    public void WhereTakeLast_5000_Faslinq(object item) => WhereTakeLast_Faslinq(item, LastGenerateRecords5000);
 
-    [Benchmark, ArgumentsSource(nameof(GenerateRecords1000))]
-    public void WhereTakeLast_1000_Faslinq(object item) => WhereTakeLast_Faslinq(item, LastGenerateRecords1000);
+    [Benchmark, ArgumentsSource(nameof(GenerateRecords100000))]
+    public void WhereTakeLast_100000_Faslinq(object item) => WhereTakeLast_Faslinq(item, LastGenerateRecords100000);
 
     [Benchmark, ArgumentsSource(nameof(GenerateRecords1))]
     public void WhereTakeLast_1_Linq(object item) => WhereTakeLast_Linq(item, LastGenerateRecords1);
 
-    [Benchmark, ArgumentsSource(nameof(GenerateRecords10))]
-    public void WhereTakeLast_10_Linq(object item) => WhereTakeLast_Linq(item, LastGenerateRecords10);
+    [Benchmark, ArgumentsSource(nameof(GenerateRecords250))]
+    public void WhereTakeLast_250_Linq(object item) => WhereTakeLast_Linq(item, LastGenerateRecords250);
 
-    [Benchmark, ArgumentsSource(nameof(GenerateRecords100))]
-    public void WhereTakeLast_100_Linq(object item) => WhereTakeLast_Linq(item, LastGenerateRecords100);
+    [Benchmark, ArgumentsSource(nameof(GenerateRecords5000))]
+    public void WhereTakeLast_5000_Linq(object item) => WhereTakeLast_Linq(item, LastGenerateRecords5000);
 
-    [Benchmark, ArgumentsSource(nameof(GenerateRecords1000))]
-    public void WhereTakeLast_1000_Linq(object item) => WhereTakeLast_Linq(item, LastGenerateRecords1000);
+    [Benchmark, ArgumentsSource(nameof(GenerateRecords100000))]
+    public void WhereTakeLast_100000_Linq(object item) => WhereTakeLast_Linq(item, LastGenerateRecords100000);
 
     [DataTestMethod]
     [DynamicData(nameof(GenerateTestRecords1), DynamicDataSourceType.Method)]
-    [DynamicData(nameof(GenerateTestRecords10), DynamicDataSourceType.Method)]
-    [DynamicData(nameof(GenerateTestRecords100), DynamicDataSourceType.Method)]
-    [DynamicData(nameof(GenerateTestRecords1000), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(GenerateTestRecords250), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(GenerateTestRecords5000), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(GenerateTestRecords100000), DynamicDataSourceType.Method)]
     public void WhereTakeLast_Faslinq(object item) => WhereTakeLast_Faslinq(item, LastGenerateRecords1);
 
     public void WhereTakeLast_Faslinq(object item, TestValueTuple first)
@@ -89,8 +89,8 @@ public class WhereTakeLastBenchmarks : BenchmarkBase
     }
 
     public static new IEnumerable<object[]> GenerateTestRecords1() => BenchmarkBase.GenerateTestRecords1();
-    public static new IEnumerable<object[]> GenerateTestRecords10() => BenchmarkBase.GenerateTestRecords10();
-    public static new IEnumerable<object[]> GenerateTestRecords100() => BenchmarkBase.GenerateTestRecords100();
-    public static new IEnumerable<object[]> GenerateTestRecords1000() => BenchmarkBase.GenerateTestRecords1000();
+    public static new IEnumerable<object[]> GenerateTestRecords250() => BenchmarkBase.GenerateTestRecords250();
+    public static new IEnumerable<object[]> GenerateTestRecords5000() => BenchmarkBase.GenerateTestRecords5000();
+    public static new IEnumerable<object[]> GenerateTestRecords100000() => BenchmarkBase.GenerateTestRecords100000();
 }
 #endif

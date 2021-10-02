@@ -10,7 +10,7 @@ public class ArrayExtensionsTests
     #region Any / All Tests
     [DataTestMethod]
     [DynamicData(nameof(GetValueTupleTestData), DynamicDataSourceType.Method)]
-    [DynamicData(nameof(GetEmptValueTupleTestData), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(GetEmptyValueTupleTestData), DynamicDataSourceType.Method)]
     public void ValueTupleAnyTest(TestValueTuple? toSelect = null)
     {
         var tuples = new[] { toSelect ?? default };
@@ -21,7 +21,7 @@ public class ArrayExtensionsTests
 
     [DataTestMethod]
     [DynamicData(nameof(GetValueTupleTestData), DynamicDataSourceType.Method)]
-    [DynamicData(nameof(GetEmptValueTupleTestData), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(GetEmptyValueTupleTestData), DynamicDataSourceType.Method)]
     public void ValueTupleEmptyAnyTest(TestValueTuple? toSelect = null)
     {
         TestValueTuple[] tuples = new[] { toSelect ?? default };
@@ -31,7 +31,7 @@ public class ArrayExtensionsTests
 
     [DataTestMethod]
     [DynamicData(nameof(GetValueTupleTestData), DynamicDataSourceType.Method)]
-    [DynamicData(nameof(GetEmptValueTupleTestData), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(GetEmptyValueTupleTestData), DynamicDataSourceType.Method)]
     public void ValueTupleAllTest(TestValueTuple? toSelect = null)
     {
         var tuples = new[] { toSelect ?? default };
@@ -105,7 +105,7 @@ public class ArrayExtensionsTests
 
     [DataTestMethod]
     [DynamicData(nameof(GetValueTupleTestData), DynamicDataSourceType.Method)]
-    [DynamicData(nameof(GetEmptValueTupleTestData), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(GetEmptyValueTupleTestData), DynamicDataSourceType.Method)]
     public void ValueTupleWhereTest(TestValueTuple? toSelect = null)
     {
         var anonymous = new[] { toSelect };
@@ -205,7 +205,7 @@ public class ArrayExtensionsTests
 
     [DataTestMethod]
     [DynamicData(nameof(GetValueTupleTestData), DynamicDataSourceType.Method)]
-    [DynamicData(nameof(GetEmptValueTupleTestData), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(GetEmptyValueTupleTestData), DynamicDataSourceType.Method)]
     public void ValueTupleWhereSelectTest(TestValueTuple? toSelect = null)
     {
         TestValueTuple[] anonymous = new[] { toSelect ?? default };
@@ -313,7 +313,7 @@ public class ArrayExtensionsTests
 
     [DataTestMethod]
     [DynamicData(nameof(GetValueTupleTestData), DynamicDataSourceType.Method)]
-    [DynamicData(nameof(GetEmptValueTupleTestData), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(GetEmptyValueTupleTestData), DynamicDataSourceType.Method)]
     public void ValueTupleSelectTest(TestValueTuple? toSelect = null)
     {
         TestValueTuple[] anonymous = new[] { toSelect ?? default };
@@ -657,7 +657,7 @@ public class ArrayExtensionsTests
         yield return new object[] { (2, "ParamA-2", Math.Pow(Math.PI, 2)) };
     }
 
-    public static IEnumerable<object[]> GetEmptValueTupleTestData()
+    public static IEnumerable<object[]> GetEmptyValueTupleTestData()
     {
         yield return Array.Empty<TestValueTuple>().Cast<object>().ToArray();
     }

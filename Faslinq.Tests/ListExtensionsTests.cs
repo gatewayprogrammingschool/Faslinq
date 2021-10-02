@@ -7,7 +7,7 @@ public class ListExtensionsTests
     #region Any / All Tests
     [DataTestMethod]
     [DynamicData(nameof(GetValueTupleTestData), DynamicDataSourceType.Method)]
-    [DynamicData(nameof(GetEmptValueTupleTestData), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(GetEmptyValueTupleTestData), DynamicDataSourceType.Method)]
     public void ValueTupleAnyTest(TestValueTuple? toSelect = null)
     {
         var tuples = new List<TestValueTuple>() { toSelect ?? default };
@@ -18,7 +18,7 @@ public class ListExtensionsTests
 
     [DataTestMethod]
     [DynamicData(nameof(GetValueTupleTestData), DynamicDataSourceType.Method)]
-    [DynamicData(nameof(GetEmptValueTupleTestData), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(GetEmptyValueTupleTestData), DynamicDataSourceType.Method)]
     public void ValueTupleEmptyAnyTest(TestValueTuple? toSelect = null)
     {
         var tuples = new List<TestValueTuple>() { toSelect ?? default };
@@ -28,7 +28,7 @@ public class ListExtensionsTests
 
     [DataTestMethod]
     [DynamicData(nameof(GetValueTupleTestData), DynamicDataSourceType.Method)]
-    [DynamicData(nameof(GetEmptValueTupleTestData), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(GetEmptyValueTupleTestData), DynamicDataSourceType.Method)]
     public void ValueTupleAllTest(TestValueTuple? toSelect = null)
     {
         var tuples = new List<TestValueTuple>() { toSelect ?? default };
@@ -90,7 +90,7 @@ public class ListExtensionsTests
     [DynamicData(nameof(GetEmptyAnonymousTestData), DynamicDataSourceType.Method)]
     public void AnonymousWhereTest(object? toSelect = null)
     {
-        var anonymous = new List<dynamic>() { toSelect ?? default };
+        var anonymous = new List<dynamic?>() { toSelect ?? default };
         var expected = ((dynamic?)toSelect)?.Index;
         object? first = ListExtensions.Where(
                 anonymous,
@@ -102,7 +102,7 @@ public class ListExtensionsTests
 
     [DataTestMethod]
     [DynamicData(nameof(GetValueTupleTestData), DynamicDataSourceType.Method)]
-    [DynamicData(nameof(GetEmptValueTupleTestData), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(GetEmptyValueTupleTestData), DynamicDataSourceType.Method)]
     public void ValueTupleWhereTest(TestValueTuple? toSelect = null)
     {
         var anonymous = new List<TestValueTuple>() { toSelect ?? default };
@@ -202,7 +202,7 @@ public class ListExtensionsTests
 
     [DataTestMethod]
     [DynamicData(nameof(GetValueTupleTestData), DynamicDataSourceType.Method)]
-    [DynamicData(nameof(GetEmptValueTupleTestData), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(GetEmptyValueTupleTestData), DynamicDataSourceType.Method)]
     public void ValueTupleWhereSelectTest(TestValueTuple? toSelect = null)
     {
         var anonymous = new List<TestValueTuple>() { toSelect ?? default };
@@ -333,7 +333,7 @@ public class ListExtensionsTests
 
     [DataTestMethod]
     [DynamicData(nameof(GetValueTupleTestData), DynamicDataSourceType.Method)]
-    [DynamicData(nameof(GetEmptValueTupleTestData), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(GetEmptyValueTupleTestData), DynamicDataSourceType.Method)]
     public void ValueTupleSelectTest(TestValueTuple? toSelect = null)
     {
         var anonymous = new List<TestValueTuple>() { toSelect ?? default };
@@ -659,7 +659,7 @@ public class ListExtensionsTests
         yield return new object[] { (2, "ParamA-2", Math.Pow(Math.PI, 2)) };
     }
 
-    public static IEnumerable<object[]> GetEmptValueTupleTestData()
+    public static IEnumerable<object[]> GetEmptyValueTupleTestData()
     {
         yield return new dynamic[0];
     }

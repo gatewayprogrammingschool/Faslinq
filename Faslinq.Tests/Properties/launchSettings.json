@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Faslinq.Tests": {
+      "commandName": "Project",
+      "commandLineArgs": "-Select -TakeFirst"
+    }
+  }
+}
