@@ -106,10 +106,10 @@ Write-Verbose "`$Filter: $Filter"
 
 $md += ''
 $md += "``````powershell"
-$md += ".\Faslinq.Benchmarks.exe $OneIteration $joinParameter ${FF} -r $Runtimes --platform X64 --keepFiles -e GitHub"
+$md += "& .\Faslinq.Benchmarks.exe $OneIteration $joinParameter ${FF} --platform X64"
 $md += "``````"
 $md += ''
-& .\Faslinq.Benchmarks.exe $OneIteration $joinParameter ${FF} -r $Runtimes --platform X64 --keepFiles -e GitHub
+& .\Faslinq.Benchmarks.exe $OneIteration $joinParameter ${FF} --platform X64
 
 Set-Location "$root\Faslinq.Benchmarks\bin\$Configuration\net6.0\win-x64\publish\BenchmarkDotNet.Artifacts\results"
 
@@ -134,10 +134,10 @@ if ($NoFaslinq) {
 
     $md += ''
     $md += "``````powershell"
-    $md += ".\Faslinq.Benchmarks.exe $OneIteration $joinParameter ${FF} -r $Runtimes --platform X64 --keepFiles -e GitHub"
+    $md += "& .\Faslinq.Benchmarks.exe $OneIteration $joinParameter ${FF} --platform X64"
     $md += "``````"
     $md += ''
-    & .\Faslinq.Benchmarks.exe $OneIteration $joinParameter ${FF} -r $Runtimes --platform X64 --keepFiles -e GitHub
+    & .\Faslinq.Benchmarks.exe $OneIteration $joinParameter ${FF} --platform X64
 
     Set-Location "$root\Faslinq.Benchmarks\bin\$Configuration\net6.0\win-x64\publish\BenchmarkDotNet.Artifacts\results"
 

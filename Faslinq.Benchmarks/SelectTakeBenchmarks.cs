@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Faslinq.Tests.Benchmarks;
+namespace Faslinq.Benchmarks;
 
 [TestClass]
 public class SelectTakeBenchmarks : BenchmarkBase

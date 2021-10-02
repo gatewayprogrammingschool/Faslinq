@@ -184,6 +184,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="SelectTakeLastBenchmarks.cs" />
+    <Compile Remove="TakeLastBenchmarks.cs" />
+    <Compile Remove="WhereSelectTakeLastBenchmarks.cs" />
+    <Compile Remove="WhereTakeLastBenchmarks.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="BenchmarkDotNet" Version="0.13.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0-rc.1.21451.13" />
     <PackageReference Include="Netstandard20.Range.Bridge" Version="1.0.0" Condition="'$(TargetFramework)'=='netstandard2.0' or '$(TargetFramework)'=='net472' or '$(TargetFramework)'=='net48' " />

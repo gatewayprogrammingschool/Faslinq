@@ -1,4 +1,4 @@
-﻿namespace Faslinq.Tests.Benchmarks;
+﻿namespace Faslinq.Benchmarks;
 
 public abstract class BenchmarkBase
 {

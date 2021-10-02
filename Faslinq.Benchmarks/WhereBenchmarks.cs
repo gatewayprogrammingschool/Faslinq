@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Reflection;
 
-namespace Faslinq.Tests.Benchmarks;
+namespace Faslinq.Benchmarks;
 
 [TestClass]
 public class WhereBenchmarks : BenchmarkBase

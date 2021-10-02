@@ -1,4 +1,4 @@
-﻿namespace Faslinq.Tests.Benchmarks;
+﻿namespace Faslinq.Benchmarks;
 
 #if !NETFRAMEWORK
 [TestClass]
@@ -11,13 +11,13 @@ public class SelectTakeLastBenchmarks : BenchmarkBase
     public List<object> SelectTakeLast_1_Faslinq(object item) => SelectTakeLast_Faslinq(item, LastGenerateRecords1);
 
     [Benchmark, ArgumentsSource(nameof(GenerateRecords250))]
-    public List<object> SelectTakeLast_10_Faslinq(object item) => SelectTakeLast_Faslinq(item, LastGenerateRecords1);
+    public List<object> SelectTakeLast_250_Faslinq(object item) => SelectTakeLast_Faslinq(item, LastGenerateRecords1);
 
     [Benchmark, ArgumentsSource(nameof(GenerateRecords5000))]
-    public List<object> SelectTakeLast_100_Faslinq(object item) => SelectTakeLast_Faslinq(item, LastGenerateRecords5000);
+    public List<object> SelectTakeLast_5000_Faslinq(object item) => SelectTakeLast_Faslinq(item, LastGenerateRecords5000);
 
     [Benchmark, ArgumentsSource(nameof(GenerateRecords100000))]
-    public List<object> SelectTakeLast_1000_Faslinq(object item) => SelectTakeLast_Faslinq(item, LastGenerateRecords100000);
+    public List<object> SelectTakeLast_100000_Faslinq(object item) => SelectTakeLast_Faslinq(item, LastGenerateRecords100000);
 
     [DataTestMethod]
     [DynamicData(nameof(GenerateTestRecords1), DynamicDataSourceType.Method)]
@@ -56,13 +56,13 @@ public class SelectTakeLastBenchmarks : BenchmarkBase
     public List<object> SelectTakeLast_1_Linq(object item) => SelectTakeLast_Linq(item, LastGenerateRecords1);
 
     [Benchmark, ArgumentsSource(nameof(GenerateRecords250))]
-    public List<object> SelectTakeLast_10_Linq(object item) => SelectTakeLast_Linq(item, LastGenerateRecords250);
+    public List<object> SelectTakeLast_250_Linq(object item) => SelectTakeLast_Linq(item, LastGenerateRecords250);
 
     [Benchmark, ArgumentsSource(nameof(GenerateRecords5000))]
-    public List<object> SelectTakeLast_100_Linq(object item) => SelectTakeLast_Linq(item, LastGenerateRecords5000);
+    public List<object> SelectTakeLast_5000_Linq(object item) => SelectTakeLast_Linq(item, LastGenerateRecords5000);
 
     [Benchmark, ArgumentsSource(nameof(GenerateRecords100000))]
-    public List<object> SelectTakeLast_1000_Linq(object item) => SelectTakeLast_Linq(item, LastGenerateRecords100000);
+    public List<object> SelectTakeLast_100000_Linq(object item) => SelectTakeLast_Linq(item, LastGenerateRecords100000);
 
     public List<object>  SelectTakeLast_Linq(object item, TestValueTuple first)
     {

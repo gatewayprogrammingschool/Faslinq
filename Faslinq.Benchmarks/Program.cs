@@ -1,51 +1,142 @@
-﻿using BenchmarkDotNet.Order;
+﻿using BenchmarkDotNet.Diagnosers;
+using BenchmarkDotNet.Order;
+using BenchmarkDotNet.Running;
 
 namespace Faslinq.Benchmarks;
 
-public class Program
+public class Program 
 {
-    private class Config :
-#if DEBUG
-        DebugConfig
-#else
-        ManualConfig
-#endif
+    private class Config : IConfig
     {
+        private IConfig _cfg;
+        public IOrderer Orderer => _cfg.Orderer;
+        public SummaryStyle SummaryStyle => _cfg.SummaryStyle;
+        public ConfigUnionRule UnionRule => _cfg.UnionRule;
+        public string ArtifactsPath => _cfg.ArtifactsPath;
+        public CultureInfo CultureInfo => _cfg.CultureInfo;
+        public ConfigOptions Options => ConfigOptions.StopOnFirstError;
+
         public Config()
         {
+            _cfg =
+#if DEBUG
+                new DebugBuildConfig();
+#else
+                ManualConfig.CreateMinimumViable();
+#endif
         }
 
         internal static string GetPart(string name, char separator, int index)
             => name.Split(separator)[index];
 
-        public override IEnumerable<Job> GetJobs()
+        public IEnumerable<Job> GetJobs()
         {
-            yield return new Job(Job.Dry.WithRuntime(ClrRuntime.Net48));
-            yield return new Job(Job.Dry.WithRuntime(CoreRuntime.Core60));
+#if DEBUG
+            yield return new Job(Job.Dry.WithRuntime(ClrRuntime.Net48).WithBaseline(true));
+            yield return new Job(Job.Dry.WithRuntime(CoreRuntime.Core60).WithBaseline(false));
+#else
+            yield return new Job(Job.Default.WithRuntime(ClrRuntime.Net48).WithBaseline(true));
+            yield return new Job(Job.Default.WithRuntime(CoreRuntime.Core60).WithBaseline(false));
+#endif
         }
 
-        public class FastestToSlowestOrderer : IOrderer
+        public IEnumerable<IColumnProvider> GetColumnProviders()
+        {
+            yield return new FaslinqColumnProvider();
+        }
+
+        public IEnumerable<IExporter> GetExporters()
+        {
+            yield return MarkdownExporter.GitHub;
+        }
+
+        public IEnumerable<ILogger> GetLoggers()
+        {
+            yield return ConsoleLogger.Unicode;
+        }
+
+        public IEnumerable<IDiagnoser> GetDiagnosers()
+        {
+            return _cfg.GetDiagnosers();
+        }
+
+        public IEnumerable<IAnalyser> GetAnalysers()
+        {
+            return _cfg.GetAnalysers();
+        }
+
+        public IEnumerable<IValidator> GetValidators()
+        {
+            return _cfg.GetValidators();
+        }
+
+        public IEnumerable<HardwareCounter> GetHardwareCounters()
+        {
+            return _cfg.GetHardwareCounters();
+        }
+
+        public IEnumerable<IFilter> GetFilters()
+        {
+            return _cfg.GetFilters();
+        }
+
+        public IEnumerable<BenchmarkLogicalGroupRule> GetLogicalGroupRules()
+        {
+            yield return BenchmarkLogicalGroupRule.ByMethod;
+        }
+
+        public class FaslinqOrderer : IOrderer
         {
             public IEnumerable<BenchmarkCase> GetExecutionOrder(ImmutableArray<BenchmarkCase> benchmarksCase) =>
                 from benchmark in benchmarksCase
                 orderby benchmark.Parameters["X"] descending,
                     benchmark.Descriptor?.WorkloadMethodDisplayInfo
+                        .Substring(0,(benchmark.Descriptor?.WorkloadMethodDisplayInfo.LastIndexOf("_") ?? 0))
                 select benchmark;
 
             public IEnumerable<BenchmarkCase> GetSummaryOrder(ImmutableArray<BenchmarkCase> benchmarksCase, Summary summary) =>
                 from benchmark in benchmarksCase
-                orderby summary[benchmark]?.ResultStatistics?.Mean
+                orderby benchmark.Descriptor?.WorkloadMethodDisplayInfo
+                        .Substring(0, (benchmark.Descriptor?.WorkloadMethodDisplayInfo.LastIndexOf("_") ?? 0)),
+                    summary[benchmark]?.ResultStatistics?.Mean
                 select benchmark;
 
             public string? GetHighlightGroupKey(BenchmarkCase benchmarkCase) => null;
 
             public string GetLogicalGroupKey(ImmutableArray<BenchmarkCase> allBenchmarksCases, BenchmarkCase benchmarkCase) =>
-                benchmarkCase?.Job?.DisplayInfo + "_" + benchmarkCase?.Parameters?.DisplayInfo;
+                //benchmarkCase?.Job?.DisplayInfo + "_" + benchmarkCase?.Parameters?.DisplayInfo;
+                benchmarkCase?.Descriptor?.WorkloadMethodDisplayInfo
+                        .Substring(0, (benchmarkCase?.Descriptor?.WorkloadMethodDisplayInfo.LastIndexOf("_") ?? 0)) ?? "";
 
             public IEnumerable<IGrouping<string, BenchmarkCase>> GetLogicalGroupOrder(IEnumerable<IGrouping<string, BenchmarkCase>> logicalGroups) =>
                 logicalGroups.OrderBy(it => it.Key);
 
             public bool SeparateLogicalGroups => true;
+        }
+
+        public class FaslinqColumnProvider : IColumnProvider
+        {
+            public IEnumerable<IColumn> GetColumns(Summary summary)
+            {
+                //yield return new TagColumn("Method", name => Config.GetPart(name, '_', 0));
+                //yield return new TagColumn("Size", name => Config.GetPart(name, '_', 1));
+                yield return LogicalGroupColumn.Default;
+                yield return new TagColumn("API", name => Config.GetPart(name, '_', 2));
+                yield return StatisticColumn.Median;
+                yield return StatisticColumn.Mean;
+                yield return BaselineRatioColumn.RatioMean;
+                yield return StatisticColumn.StdDev;
+                yield return StatisticColumn.Min;
+                yield return StatisticColumn.Max;
+                var names = JobCharacteristicColumn.AllColumns.Select(c => c.ColumnName);
+                foreach (var col in JobCharacteristicColumn.AllColumns)
+                {
+                    if(col.ColumnName is "Platform" or "BuildConfiguration" or "Runtime")
+                    {
+                        yield return col;
+                    }
+                }
+            }
         }
     }
 
@@ -64,41 +155,10 @@ public class Program
         var filters = ProcessFilters(aa);
 
         var config =
-#if DEBUG
             new Config()
-                //AddJob(Job.Dry.WithRuntime(ClrRuntime.Net472));
-                //.AddJob(Job.Dry.WithRuntime(ClrRuntime.Net48))
-                //AddJob(Job.Dry.WithRuntime(CoreRuntime.Core50));
-                //.AddJob(Job.Dry.WithRuntime(CoreRuntime.Core60))
-                .AddColumn(new TagColumn("Method", name => Config.GetPart(name, '_', 0)))
-                .AddColumn(new TagColumn("Size", name => Config.GetPart(name, '_', 1)))
-                .AddColumn(new TagColumn("API", name => Config.GetPart(name, '_', 2)))
-                .AddColumn(StatisticColumn.Median, StatisticColumn.Mean, StatisticColumn.StdDev, StatisticColumn.Min, StatisticColumn.Max)
-                .AddLogger(ConsoleLogger.Unicode)
-                .WithOrderer(new Config.FastestToSlowestOrderer())
-        //AddExporter(MarkdownExporter.GitHub, CsvExporter.Default);
-        //AddAnalyser(EnvironmentAnalyser.Default, MultimodalDistributionAnalyzer.Default);
-
-#else
-            new Config()
-                //AddJob(Job.Dry.WithRuntime(ClrRuntime.Net472));
-                .AddJob(Job.Dry.WithRuntime(ClrRuntime.Net48))
-                //AddJob(Job.Dry.WithRuntime(CoreRuntime.Core50));
-                .AddJob(Job.Dry.WithRuntime(CoreRuntime.Core60))
                 .KeepBenchmarkFiles()
-                .WithOptions(ConfigOptions.StopOnFirstError)
-                //.WithUnionRule(ConfigUnionRule.Union)
-                //.WithSummaryStyle(new (CultureInfo.CurrentCulture, true, SizeUnit.MB, TimeUnit.Millisecond, true, true, 30, RatioStyle.Percentage))
-                //.AddValidator(ExecutionValidator.FailOnError)
-#endif
-
+                .WithOrderer(new Config.FaslinqOrderer())
         ;
-
-        config.GetJobs().ToList().ForEach(job =>
-        {
-            Job newJob = new(Job.Default.WithRuntime(ClrRuntime.Net48));
-            config.AddJob(newJob);
-        });
 
         var counter = 1;
         foreach (var filter in filters)
@@ -156,16 +216,20 @@ public class Program
                 f.Add("Take");
             }
 
-            if (TakeLast)
-            {
-                var takeLast = args.IndexOf(args.FirstOrDefault(a => a.Equals("-takelast", StringComparison.OrdinalIgnoreCase)) ?? "");
-                args.RemoveAt(takeLast);
+            //if (TakeLast)
+            //{
+            //    var takeLast = args.IndexOf(args.FirstOrDefault(a => a.Equals("-takelast", StringComparison.OrdinalIgnoreCase)) ?? "");
+            //    args.RemoveAt(takeLast);
 
-                f.Add("WhereSelectTakeLast");
-                f.Add("WhereTakeLast");
-                f.Add("SelectTakeLast");
-                f.Add("TakeLast");
-            }
+            //    f.Add("WhereSelectTakeLast");
+            //    f.Add("WhereTakeLast");
+            //    f.Add("SelectTakeLast");
+            //    f.Add("TakeLast");
+            //}
+
+            f.Add("WhereSelect");
+            f.Add("Where");
+            f.Add("Select");
 
             var where = args.IndexOf(args.FirstOrDefault(a => a.Equals("-where", StringComparison.OrdinalIgnoreCase)) ?? "");
             args.RemoveAt(where);
@@ -184,14 +248,14 @@ public class Program
                 f.Add("Take");
             }
 
-            if (TakeLast)
-            {
-                var takeLast = args.IndexOf(args.FirstOrDefault(a => a.Equals("-takelast", StringComparison.OrdinalIgnoreCase)) ?? "");
-                args.RemoveAt(takeLast);
+            //if (TakeLast)
+            //{
+            //    var takeLast = args.IndexOf(args.FirstOrDefault(a => a.Equals("-takelast", StringComparison.OrdinalIgnoreCase)) ?? "");
+            //    args.RemoveAt(takeLast);
 
-                f.Add("WhereTakeLast");
-                f.Add("TakeLast");
-            }
+            //    f.Add("WhereTakeLast");
+            //    f.Add("TakeLast");
+            //}
 
             f.Add("Where");
 
@@ -209,15 +273,15 @@ public class Program
                 f.Add("Take");
             }
 
-            if (TakeLast)
-            {
-                var takeLastArg = args.FirstOrDefault(a => a.Equals("-takelast", StringComparison.InvariantCultureIgnoreCase));
-                var takeLast = args.IndexOf(takeLastArg);
-                args.RemoveAt(takeLast);
+            //if (TakeLast)
+            //{
+            //    var takeLastArg = args.FirstOrDefault(a => a.Equals("-takelast", StringComparison.InvariantCultureIgnoreCase));
+            //    var takeLast = args.IndexOf(takeLastArg ?? "");
+            //    args.RemoveAt(takeLast);
 
-                f.Add("SelectTakeLast");
-                f.Add("TakeLast");
-            }
+            //    f.Add("SelectTakeLast");
+            //    f.Add("TakeLast");
+            //}
 
             f.Add("Select");
 
@@ -234,13 +298,13 @@ public class Program
                 f.Add("Take");
             }
 
-            if (TakeLast)
-            {
-                var takeLast = args.IndexOf(args.FirstOrDefault(a => a.Equals("-takelast", StringComparison.OrdinalIgnoreCase)) ?? "");
-                args.RemoveAt(takeLast);
+            //if (TakeLast)
+            //{
+            //    var takeLast = args.IndexOf(args.FirstOrDefault(a => a.Equals("-takelast", StringComparison.OrdinalIgnoreCase)) ?? "");
+            //    args.RemoveAt(takeLast);
 
-                f.Add("TakeLast");
-            }
+            //    f.Add("TakeLast");
+            //}
         }
 
         if ((!Take) && (!TakeLast))

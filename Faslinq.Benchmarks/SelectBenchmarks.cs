@@ -1,4 +1,4 @@
-﻿namespace Faslinq.Tests.Benchmarks;
+﻿namespace Faslinq.Benchmarks;
 
 [TestClass]
 public class SelectBenchmarks : BenchmarkBase
@@ -22,36 +22,36 @@ public class SelectBenchmarks : BenchmarkBase
     }
 
     [Benchmark, ArgumentsSource(nameof(GenerateRecords250))]
-    public List<object> Select_10_Faslinq(object item)
+    public List<object> Select_250_Faslinq(object item)
     {
         _result = Select_Faslinq(item, FirstGenerateRecords250);
 
 #if DEBUG
-        //Console.WriteLine($"Select_10_Faslinq: result.Count: {_result.Count}, result.LastOrDefault(): {_result.LastOrDefault()}");
+        //Console.WriteLine($"Select_250_Faslinq: result.Count: {_result.Count}, result.LastOrDefault(): {_result.LastOrDefault()}");
 #endif
 
         return _result;
     }
 
     [Benchmark, ArgumentsSource(nameof(GenerateRecords5000))]
-    public List<object> Select_100_Faslinq(object item)
+    public List<object> Select_5000_Faslinq(object item)
     {
         _result = Select_Faslinq(item, FirstGenerateRecords5000);
 
 #if DEBUG
-        //Console.WriteLine($"Select_100_Faslinq: result.Count: {_result.Count}, result.LastOrDefault(): {_result.LastOrDefault()}");
+        //Console.WriteLine($"Select_5000_Faslinq: result.Count: {_result.Count}, result.LastOrDefault(): {_result.LastOrDefault()}");
 #endif
 
         return _result;
     }
 
     [Benchmark, ArgumentsSource(nameof(GenerateRecords100000))]
-    public List<object> Select_1000_Faslinq(object item)
+    public List<object> Select_100000_Faslinq(object item)
     {
         _result = Select_Faslinq(item, FirstGenerateRecords100000);
 
 #if DEBUG
-        //Console.WriteLine($"Select_1000_Faslinq: result.Count: {_result.Count}, result.LastOrDefault(): {_result.LastOrDefault()}");
+        //Console.WriteLine($"Select_100000_Faslinq: result.Count: {_result.Count}, result.LastOrDefault(): {_result.LastOrDefault()}");
 #endif
 
         return _result;
@@ -96,36 +96,36 @@ public class SelectBenchmarks : BenchmarkBase
     }
 
     [Benchmark, ArgumentsSource(nameof(GenerateRecords250))]
-    public List<object> Select_10_Linq(object item)
+    public List<object> Select_250_Linq(object item)
     {
         _result = Select_Linq(item, FirstGenerateRecords250);
 
 #if DEBUG
-        //Console.WriteLine($"Select_10_Linq: result.Count: {_result.Count}, result.LastOrDefault(): {_result.LastOrDefault()}");
+        //Console.WriteLine($"Select_250_Linq: result.Count: {_result.Count}, result.LastOrDefault(): {_result.LastOrDefault()}");
 #endif
 
         return _result;
     }
 
     [Benchmark, ArgumentsSource(nameof(GenerateRecords5000))]
-    public List<object> Select_100_Linq(object item)
+    public List<object> Select_5000_Linq(object item)
     {
         _result = Select_Linq(item, FirstGenerateRecords5000);
 
 #if DEBUG
-        //Console.WriteLine($"Select_100_Linq: result.Count: {_result.Count}, result.LastOrDefault(): {_result.LastOrDefault()}");
+        //Console.WriteLine($"Select_5000_Linq: result.Count: {_result.Count}, result.LastOrDefault(): {_result.LastOrDefault()}");
 #endif
 
         return _result;
     }
 
     [Benchmark, ArgumentsSource(nameof(GenerateRecords100000))]
-    public List<object> Select_1000_Linq(object item)
+    public List<object> Select_100000_Linq(object item)
     {
         _result = Select_Linq(item, FirstGenerateRecords1);
 
 #if DEBUG
-        //Console.WriteLine($"Select_1000_Linq: result.Count: {_result.Count}, result.LastOrDefault(): {_result.LastOrDefault()}");
+        //Console.WriteLine($"Select_100000_Linq: result.Count: {_result.Count}, result.LastOrDefault(): {_result.LastOrDefault()}");
 #endif
 
         return _result;
