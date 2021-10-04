@@ -1,5 +1,7 @@
 # Faslinq
 
+[Documentation](https://gatewayprogrammingschool.github.io/Faslinq/)
+
 High-Performance Linq-Like extension methods for arrays and List<T> that avoid unnecessary allocations.
 
 This is nowhere near ready for production, but I was recently reading about how Linq does allocations all over the places as well as multiple enumerations and that marshalling List<T> through IEnumerable<T> causes Enumerators that live in the stack to be pushed to the heap and thus cause more garbage collection.  The solution is to use List<T> whenever possible and T[] to avoid unnecessary heap allocations. 
