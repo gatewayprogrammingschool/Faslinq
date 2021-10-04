@@ -29,6 +29,9 @@ jobs:
 
         echo "Updated benchmark results." > commit.txt
         
+        git config user.email "ninja@thesharp.ninja"
+        git config user.name "GitHub Actions"
+        
         git commit --message=commit.txt **/results.md
         git remote set-url --push origin https://sharpninja:${env:GITHUB_TOKEN}@github.com/gatewayprogrammingschool/Faslinq
         git push origin
