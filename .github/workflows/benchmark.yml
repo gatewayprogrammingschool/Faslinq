@@ -26,7 +26,7 @@ jobs:
       uses: github-actions-x/commit@v2.8
       with:
         # Github Token with commit access
-        github-token: ${{ secret.GITHUB_TOKEN }}
+        github-token: ${{ secrets.GITHUB_TOKEN }}
         # Override branch to push to
         commit-message: "Updated Benchmarks."
         files: ./results.md
