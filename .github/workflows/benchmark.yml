@@ -1,4 +1,4 @@
-name: Benchmark
+hmname: Benchmark
 
 on:
 #   push:
@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  Benchmark:
 
     runs-on: windows-latest
 
@@ -22,8 +22,12 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         .\bench.ps1 -Select -Where -Once -Join
+        
+        copy ./results.md ./docs
+        
+        git add ./docs/results.md
 
         git commit "Updated benchmark results."
-        git remote set-url --push origin https://sharpninja:${env:GITHUB_TOKEN}@github.com/your/repo
+        git remote set-url --push origin https://sharpninja:${env:GITHUB_TOKEN}@github.com/gatewayprogrammingschool/Faslinq
         git push origin
         
