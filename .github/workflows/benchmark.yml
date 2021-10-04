@@ -29,7 +29,7 @@ jobs:
 
         echo "Updated benchmark results." > commit.txt
         
-        git commit --message=commit.txt --all **/results.md
+        git commit --message=commit.txt **/results.md
         git remote set-url --push origin https://sharpninja:${env:GITHUB_TOKEN}@github.com/gatewayprogrammingschool/Faslinq
         git push origin
         
