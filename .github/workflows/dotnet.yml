@@ -43,7 +43,7 @@ jobs:
       if: ${{ github.event_name == 'push.tags' }}
       run: dotnet build -c Release --no-restore 
     - name: Tests
-      run: dotnet test --no-build
+      run: dotnet test --no-build -f net6.0
     - name: Publish
       if: ${{ github.event_name == 'push.tags' }}
       run: | 

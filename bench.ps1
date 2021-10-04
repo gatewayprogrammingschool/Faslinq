@@ -161,6 +161,10 @@ $md | Out-File $resultsFile -Force
 
 $edge = Get-Command *edge.exe
 
-& $edge $resultsFile
+
+if($edge)
+{
+    & $edge $resultsFile
+}
 
 Pop-Location

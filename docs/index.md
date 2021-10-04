@@ -1,0 +1,3 @@
+# Faslinq
+
+[Benchmarks](./results.md)

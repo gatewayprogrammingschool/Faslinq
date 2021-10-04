@@ -1,0 +1,35 @@
+name: Benchmark
+
+on:
+#   push:
+#     branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  Benchmark:
+
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.x
+        include-prerelease: true
+    - name: Benchmark
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        .\bench.ps1 -Select -Where -Once -Join
+        
+        copy ./results.md ./docs -Verbose
+        
+        git add -v --all **/results.md
+
+        echo "Updated benchmark results." > commit.txt
+        
+        git commit -v --message=commit.txt --all **/results.md
+        git remote set-url --push origin https://sharpninja:${env:GITHUB_TOKEN}@github.com/gatewayprogrammingschool/Faslinq -v
+        git push origin -v
+        
