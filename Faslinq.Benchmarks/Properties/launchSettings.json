@@ -2,7 +2,7 @@
   "profiles": {
     "Faslinq.Benchmarks": {
       "commandName": "Project",
-      "commandLineArgs": "--runOncePerIteration --join -Where -Select --platform X64 --keepFiles -e GitHub"
+      "commandLineArgs": "-FirstWhere -First -LastWhere -Last"
     }
   }
 }

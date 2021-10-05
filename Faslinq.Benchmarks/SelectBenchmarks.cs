@@ -1,4 +1,8 @@
-﻿namespace Faslinq.Benchmarks;
+﻿// ReSharper disable InvokeAsExtensionMethod
+using System;
+using System.Collections.Generic;
+
+namespace Faslinq.Benchmarks;
 
 [TestClass]
 public class SelectBenchmarks : BenchmarkBase
@@ -9,148 +13,111 @@ public class SelectBenchmarks : BenchmarkBase
     private List<object>? _result;
 
 #if !NO_FASLINQ
-    [Benchmark, ArgumentsSource(nameof(GenerateRecords1))]
-    public List<object> Select_1_Faslinq(object item)
-    {
-        _result = Select_Faslinq(item, FirstGenerateRecords1);
-
-#if DEBUG
-        //Console.WriteLine($"Select_1_Faslinq: result.Count: {_result.Count}, result.LastOrDefault(): {_result.LastOrDefault()}");
-#endif
-
-        return _result;
-    }
-
-    [Benchmark, ArgumentsSource(nameof(GenerateRecords250))]
-    public List<object> Select_250_Faslinq(object item)
-    {
-        _result = Select_Faslinq(item, FirstGenerateRecords250);
-
-#if DEBUG
-        //Console.WriteLine($"Select_250_Faslinq: result.Count: {_result.Count}, result.LastOrDefault(): {_result.LastOrDefault()}");
-#endif
-
-        return _result;
-    }
-
-    [Benchmark, ArgumentsSource(nameof(GenerateRecords5000))]
-    public List<object> Select_5000_Faslinq(object item)
-    {
-        _result = Select_Faslinq(item, FirstGenerateRecords5000);
-
-#if DEBUG
-        //Console.WriteLine($"Select_5000_Faslinq: result.Count: {_result.Count}, result.LastOrDefault(): {_result.LastOrDefault()}");
-#endif
-
-        return _result;
-    }
-
-    [Benchmark, ArgumentsSource(nameof(GenerateRecords100000))]
-    public List<object> Select_100000_Faslinq(object item)
-    {
-        _result = Select_Faslinq(item, FirstGenerateRecords100000);
-
-#if DEBUG
-        //Console.WriteLine($"Select_100000_Faslinq: result.Count: {_result.Count}, result.LastOrDefault(): {_result.LastOrDefault()}");
-#endif
-
-        return _result;
-    }
-
     [DataTestMethod]
     [DynamicData(nameof(GenerateTestRecords1), DynamicDataSourceType.Method)]
     [DynamicData(nameof(GenerateTestRecords250), DynamicDataSourceType.Method)]
     [DynamicData(nameof(GenerateTestRecords5000), DynamicDataSourceType.Method)]
     [DynamicData(nameof(GenerateTestRecords100000), DynamicDataSourceType.Method)]
-    public void Select_Faslinq(object item) => Select_Faslinq(item, FirstGenerateRecords1);
-
-    public List<object> Select_Faslinq(object item, TestValueTuple first)
-    {
-        if (item is object[] array and { Length: 1 })
-        {
-            if (array[0] is List<TestValueTuple> list)
-            {
-                var result = list.Select(Selector);
-                return result.Cast<object>().ToList();
-            }
-        }
-        else if (item is List<TestValueTuple> list)
-        {
-            var result = list.Select(Selector);
-            return result.Cast<object>().ToList();
-        }
-            throw new ArgumentException($"Unexpected data.  Received {item.GetType()}");
-    }
-#endif
+    public void Select_Faslinq(object item) => ProcessCollection(Tests.List, item, FirstGenerateRecords1);
 
     [Benchmark, ArgumentsSource(nameof(GenerateRecords1))]
-    public List<object> Select_1_Linq(object item)
-    {
-        _result = Select_Linq(item, FirstGenerateRecords1);
+    public IEnumerable<TestValueTuple> Select_1_Faslinq(object item) => ProcessCollection(Tests.List, item, FirstGenerateRecords1);
+    [Benchmark, ArgumentsSource(nameof(GenerateRecords250))]
+    public IEnumerable<TestValueTuple> Select_250_Faslinq(object item) => ProcessCollection(Tests.List, item, FirstGenerateRecords250);
+    [Benchmark, ArgumentsSource(nameof(GenerateRecords5000))]
+    public IEnumerable<TestValueTuple> Select_5000_Faslinq(object item) => ProcessCollection(Tests.List, item, FirstGenerateRecords5000);
+    [Benchmark, ArgumentsSource(nameof(GenerateRecords100000))]
+    public IEnumerable<TestValueTuple> Select_100000_Faslinq(object item) => ProcessCollection(Tests.List, item, FirstGenerateRecords100000);
 
-#if DEBUG
-        //Console.WriteLine($"Select_1_Linq: result.Count: {_result.Count}, result.LastOrDefault(): {_result.LastOrDefault()}");
-#endif
-
-        return _result;
-    }
+    [Benchmark, ArgumentsSource(nameof(GenerateArray1))]
+    public IEnumerable<TestValueTuple> Select_1_Faslinq(object[] item) => ProcessCollection(Tests.Array, item, FirstGenerateRecords1);
+    [Benchmark, ArgumentsSource(nameof(GenerateArray250))]
+    public IEnumerable<TestValueTuple> Select_250_Faslinq(object[] item) => ProcessCollection(Tests.Array, item, FirstGenerateRecords250);
+    [Benchmark, ArgumentsSource(nameof(GenerateArray5000))]
+    public IEnumerable<TestValueTuple> Select_5000_Faslinq(object[] item) => ProcessCollection(Tests.Array, item, FirstGenerateRecords5000);
+    [Benchmark, ArgumentsSource(nameof(GenerateArray100000))]
+    public IEnumerable<TestValueTuple> Select_100000_Faslinq(object[] item) => ProcessCollection(Tests.Array, item, FirstGenerateRecords100000);
 
     [Benchmark, ArgumentsSource(nameof(GenerateRecords250))]
-    public List<object> Select_250_Linq(object item)
-    {
-        _result = Select_Linq(item, FirstGenerateRecords250);
-
-#if DEBUG
-        //Console.WriteLine($"Select_250_Linq: result.Count: {_result.Count}, result.LastOrDefault(): {_result.LastOrDefault()}");
-#endif
-
-        return _result;
-    }
-
+    public IEnumerable<TestValueTuple> Select_1_Linq(object item) => ProcessCollection(Tests.IEnumerable, item, FirstGenerateRecords1);
+    [Benchmark, ArgumentsSource(nameof(GenerateRecords250))]
+    public IEnumerable<TestValueTuple> Select_250_Linq(object item) => ProcessCollection(Tests.IEnumerable, item, FirstGenerateRecords250);
     [Benchmark, ArgumentsSource(nameof(GenerateRecords5000))]
-    public List<object> Select_5000_Linq(object item)
-    {
-        _result = Select_Linq(item, FirstGenerateRecords5000);
-
-#if DEBUG
-        //Console.WriteLine($"Select_5000_Linq: result.Count: {_result.Count}, result.LastOrDefault(): {_result.LastOrDefault()}");
-#endif
-
-        return _result;
-    }
-
+    public IEnumerable<TestValueTuple> Select_5000_Linq(object item) => ProcessCollection(Tests.IEnumerable, item, FirstGenerateRecords5000);
     [Benchmark, ArgumentsSource(nameof(GenerateRecords100000))]
-    public List<object> Select_100000_Linq(object item)
+    public IEnumerable<TestValueTuple> Select_100000_Linq(object item) => ProcessCollection(Tests.IEnumerable, item, FirstGenerateRecords100000);
+
+    public new static IEnumerable<object[]> GenerateTestRecords1() => BenchmarkBase.GenerateTestRecords1();
+    public new static IEnumerable<object[]> GenerateTestRecords250() => BenchmarkBase.GenerateTestRecords250();
+    public new static IEnumerable<object[]> GenerateTestRecords5000() => BenchmarkBase.GenerateTestRecords5000();
+    public new static IEnumerable<object[]> GenerateTestRecords100000() => BenchmarkBase.GenerateTestRecords100000();
+
+    protected override TResult GetScalarByFaslinq<TResult>(List<TResult> list, params object[] values)
+        where TResult : default
     {
-        _result = Select_Linq(item, FirstGenerateRecords1);
-
-#if DEBUG
-        //Console.WriteLine($"Select_100000_Linq: result.Count: {_result.Count}, result.LastOrDefault(): {_result.LastOrDefault()}");
-#endif
-
-        return _result;
+        throw new NotImplementedException();
     }
 
-    public List<object>  Select_Linq(object item, TestValueTuple first)
+    protected override TResult GetScalarStructByFaslinq<TResult>(List<TResult> list, params object[] values)
+        where TResult : struct
     {
-        if (item is object[] array and { Length: 1 })
-        {
-            if (array[0] is IEnumerable<TestValueTuple> enumerable)
-            {
-                var result = enumerable.Select(Selector).ToList();
-                return result.Cast<object>().ToList();
-            }
-        }
-        else if (item is IEnumerable<TestValueTuple> enumerable)
-        {
-            var result = enumerable.Select(Selector).ToList();
-            return result.Cast<object>().ToList();
-        }
-        throw new ArgumentException($"Unexpected data.  Received {item.GetType()} length: {(item as object[])?.Length}");
+        throw new NotImplementedException();
     }
 
-    public static new IEnumerable<object[]> GenerateTestRecords1() => BenchmarkBase.GenerateTestRecords1();
-    public static new IEnumerable<object[]> GenerateTestRecords250() => BenchmarkBase.GenerateTestRecords250();
-    public static new IEnumerable<object[]> GenerateTestRecords5000() => BenchmarkBase.GenerateTestRecords5000();
-    public static new IEnumerable<object[]> GenerateTestRecords100000() => BenchmarkBase.GenerateTestRecords100000();
+    protected override TResult GetScalarByFaslinq<TResult>(TResult[] array, params object[] values)
+        where TResult : default
+    {
+        throw new NotImplementedException();
+    }
+
+    protected override TResult GetScalarStructByFaslinq<TResult>(TResult[] array, params object[] values)
+        where TResult : struct
+    {
+        throw new NotImplementedException();
+    }
+
+    protected override TResult GetScalarByLinq<TResult>(IEnumerable<TResult> enumerable, params object[] values)
+        where TResult : default
+    {
+        throw new NotImplementedException();
+    }
+
+    protected override TResult GetScalarStructByLinq<TResult>(IEnumerable<TResult> enumerable, params object[] values)
+        where TResult : struct
+    {
+        throw new NotImplementedException();
+    }
+
+    protected override List<TestValueTuple> GetStructListByFaslinq(List<TestValueTuple> list, params object[] values)
+    {
+        return ListExtensions.Select(list, i => i);
+    }
+
+    protected override TestValueTuple[] GetStructArrayByFaslinq(TestValueTuple[] array, params object[] values)
+    {
+        return ArrayExtensions.Select(array, i => i);
+    }
+
+    protected override IEnumerable<TestValueTuple> GetEnumerableStructByLinq(IEnumerable<TestValueTuple> enumerable,
+        params object[] values)
+    {
+        return Enumerable.Select(enumerable, i => i);
+    }
+
+    protected override List<object> GetListByFaslinq(List<object> list, params object[] values)
+    {
+        return ListExtensions.Select(list, i => i);
+    }
+
+    protected override object[] GetArrayByFaslinq(object[] array, params object[] values)
+    {
+        return ArrayExtensions.Select(array, i => i);
+    }
+
+    protected override IEnumerable<object> GetEnumerableByLinq(IEnumerable<object> enumerable, params object[] values)
+    {
+        return Enumerable.Select(enumerable, i => i);
+    }
+
 }
+#endif
