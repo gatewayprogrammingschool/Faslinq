@@ -47,26 +47,39 @@ public static partial class ListExtensions
 {
     public static TData First<TData>(
         this List<TData> source,
-        Predicate<TData> query)
+        Predicate<TData>? query = null)
     {
         if (source.Count == 0) throw new ArgumentException("List does not contain a matching value.");
 
+        if (query is null)
+        {
+            return source[0];
+        }
+
         var result = source.WhereTake(query, 1);
-        return result.Count > 0
-            ? result[0]
-            : throw new ArgumentException("List does not contain a matching value.");
+
+        return result[0];
     }
 
     public static TData? FirstOrDefault<TData>(
         this List<TData> source,
-        Predicate<TData> query)
+        Predicate<TData>? query = null,
+        TData? defaultValue = default)
     {
-        if (source.Count == 0) return default;
+        if (source.Count == 0) return defaultValue;
 
-        var results = source.WhereTake(query, 1);
-        return results.Count > 0
-            ? results[0]
-            : default;
+        if (query is null)
+        {
+            return source is { Count: > 0 } 
+                ? source[0] 
+                : defaultValue;
+        }
+        
+        var result = source.WhereTake(query, 1);
+
+        return result is { Count: > 0 }
+            ? result[0]
+            : defaultValue;
     }
 }
 #endregion First
@@ -76,26 +89,39 @@ public static partial class ListExtensions
 {
     public static TData Last<TData>(
         this List<TData> source,
-        Predicate<TData> query)
+        Predicate<TData>? query = null)
     {
         if (source.Count == 0) throw new ArgumentException("List does not contain a matching value.");
 
+        if (query is null)
+        {
+            return source[^1];
+        }
+
         var result = source.WhereTakeLast(query, 1);
-        return result.Count > 0
-            ? result[0]
-            : throw new ArgumentException("List does not contain a matching value.");
+
+        return result[^1];
     }
 
     public static TData? LastOrDefault<TData>(
         this List<TData> source,
-        Predicate<TData> query)
+        Predicate<TData>? query = null,
+        TData? defaultValue = default)
     {
-        if (source.Count == 0) return default;
+        if (source.Count == 0) return defaultValue;
 
-        var results = source.WhereTakeLast(query, 1);
-        return results.Count > 0
-            ? results[0]
-            : default;
+        if (query is null)
+        {
+            return source is { Count: > 0 } 
+                ? source[^1] 
+                : defaultValue;
+        }
+        
+        var result = source.WhereTakeLast(query, 1);
+
+        return result is { Count: > 0 }
+            ? result[^1]
+            : defaultValue;
     }
 }
 #endregion Last
@@ -395,6 +421,26 @@ public static partial class ListExtensions
 
         return result;
     }
+
+#if NETSTANDARD2_0
+    public static IEnumerable<TData> TakeLast<TData>(
+        this IEnumerable<TData> source,
+        int takeCount)
+    {
+        var count = source.Count();
+        if (count == 0) return source;
+
+        if (takeCount < 1) { takeCount = 0; }
+
+        List<TData> result = new();
+        for (int i = count - takeCount; i < count; i++)
+        {
+            result.Add(source.ElementAt(i));
+        }
+
+        return result;
+    }
+#endif
 }
 #endregion Take / TakeLast
 

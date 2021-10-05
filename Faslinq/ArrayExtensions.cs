@@ -44,25 +44,39 @@ public static partial class ArrayExtensions
 {
     public static TData First<TData>(
         this TData[] source,
-        Predicate<TData> query)
+        Predicate<TData>? query = null)
     {
         if (source.Length == 0) throw new ArgumentException("List does not contain a matching value.");
 
+        if (query is null)
+        {
+            return source[0];
+        }
+
         var result = source.WhereTake(query, 1);
-        return result.Length > 0
-            ? result[0]
-            : throw new ArgumentException("List does not contain a matching value.");
+
+        return result[0];
     }
 
     public static TData? FirstOrDefault<TData>(
         this TData[] source,
-        Predicate<TData> query)
+        Predicate<TData>? query = null,
+        TData? defaultValue = default)
     {
-        if (source.Length == 0) return default;
+        if (source.Length == 0) return defaultValue;
 
-        return source.WhereTake(query, 1).Length > 0
-            ? source[0]
-            : default;
+        if (query is null)
+        {
+            return source is { Length: > 0 } 
+                ? source[0] 
+                : defaultValue;
+        }
+        
+        var result = source.WhereTake(query, 1);
+
+        return result is { Length: > 0 }
+            ? result[0]
+            : defaultValue;
     }
 }
 #endregion First
@@ -72,25 +86,39 @@ public static partial class ArrayExtensions
 {
     public static TData Last<TData>(
         this TData[] source,
-        Predicate<TData> query)
+        Predicate<TData>? query = null)
     {
         if (source.Length == 0) throw new ArgumentException("List does not contain a matching value.");
 
+        if (query is null)
+        {
+            return source[^1];
+        }
+
         var result = source.WhereTakeLast(query, 1);
-        return result.Length > 0
-            ? result[0]
-            : throw new ArgumentException("List does not contain a matching value.");
+
+        return result[^1];
     }
 
     public static TData? LastOrDefault<TData>(
         this TData[] source,
-        Predicate<TData> query)
+        Predicate<TData>? query = null,
+        TData? defaultValue = default)
     {
-        if (source.Length == 0) return default;
+        if (source.Length == 0) return defaultValue;
 
-        return source.WhereTakeLast(query, 1).Length > 0
-            ? source[0]
-            : default;
+        if (query is null)
+        {
+            return source is { Length: > 0 } 
+                ? source[^1] 
+                : defaultValue;
+        }
+        
+        var result = source.WhereTakeLast(query, 1);
+
+        return result is { Length: > 0 }
+            ? result[^1]
+            : defaultValue;
     }
 }
 #endregion Last
