@@ -6,8 +6,6 @@ name: Build Doks
 # or API.
 on:
   push: 
-    branches: 
-      - main
     paths: 
       - doks/**      
   workflow_dispatch:
