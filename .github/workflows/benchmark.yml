@@ -37,7 +37,7 @@ jobs:
         $semver = & gitversion /showvariable SemVer
         $commit = & git rev-parse HEAD
 
-        $mds = get-content .\bench.ps1
+        $mds = get-content .\results.md
 
         $mds += ""
         $mds += "> Benchmarked Version: $semver ($commit)"
