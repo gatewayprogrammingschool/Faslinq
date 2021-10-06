@@ -44,6 +44,7 @@ jobs:
       if: ${{ github.event_name == 'release' }}
       run: dotnet build -c Release --no-restore 
     - name: Debug Tests 
+      if: ${{ github.event_name != 'release' }}
       run: dotnet test --no-build -f net6.0 -c Debug
     - name: Release Tests 
       if: ${{ github.event_name == 'release' }}
