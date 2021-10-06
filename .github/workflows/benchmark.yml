@@ -42,7 +42,7 @@ jobs:
         $mds += ""
         $mds += "> Benchmarked Version: $semver ($commit)"
 
-        $mds | out-file .\bench.ps1
+        $mds | out-file .\results.md
 
         # -Where -Take -TakeLast -First -FirstWhere -Last -LastWhere -Join -Configuration Configuration
 
