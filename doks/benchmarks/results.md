@@ -5,7 +5,6 @@ keywords: Linq Dotnet
 ---
 # Benchmark Run at 10/6/2021 9:36:48 AM
 
-
 ```powershell
 dotnet publish -c Debug  -f net6.0 -a x64 --self-contained
 ```
