@@ -22,7 +22,7 @@
             "script": "${workspaceFolder}/bench.ps1",
             "cwd": "${workspaceFolder}",
             "args": [
-                "-Select", "-Configuration", "Debug", "-Once", "-Join", "-Runtime", "net472 net6.0"
+                "-Select", "-Configuration", "Debug", "-Once", "-Join"
                 // "-Configuration",
                 // "Debug",
                 // "-Where",

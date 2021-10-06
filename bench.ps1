@@ -95,7 +95,6 @@ try {
     $md += "``````powershell"
     $md += "dotnet publish -c $Configuration $NoFaslinqOption -f net6.0 -a x64 --self-contained"
     $md += "``````"
-    $md += ''
     & dotnet publish -c $Configuration $NoFaslinqOption -f net6.0 -a x64 --self-contained
 
     Set-Location "$root\Faslinq.Benchmarks\bin\$Configuration\net6.0\win-x64\publish\"
@@ -108,15 +107,21 @@ try {
     $md += "``````powershell"
     $md += "& .\Faslinq.Benchmarks.exe $OneIteration $joinParameter ${FF} --platform X64"
     $md += "``````"
-    $md += ''
     & .\Faslinq.Benchmarks.exe $OneIteration $joinParameter ${FF} --platform X64
 
     Set-Location "$root\Faslinq.Benchmarks\bin\$Configuration\net6.0\win-x64\publish\BenchmarkDotNet.Artifacts\results"
 
-    $mds = Get-ChildItem '*github.md' -ErrorAction Stop
+    $mds = Get-ChildItem '*github.md' -ErrorAction Stop | Get-Content
+
+    for ($i = 0; $i -lt $mds.Count; $i += 1) {
+        $line = $mds[$i]
+        if ($line -eq "``````") {
+            $mds[$i] = $line + [System.Environment]::NewLine
+        }
+    }
 
     $md += '', "## ${Title}", ''
-    $md += $mds | Get-Content
+    $md += $mds
 
     if ($NoFaslinq) {
         Remove-Item *github.md
@@ -152,6 +157,7 @@ try {
 
         $md += $mds | Get-Content
     }
+
 
     foreach ($name in $Names) {
         $Key = $name[0] + '|'
