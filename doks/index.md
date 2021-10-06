@@ -1,0 +1,29 @@
+---
+# Page settings
+layout: homepage
+keywords: Linq Dotnet
+
+# Hero section
+title: Faslinq
+description: Faster. Linq.
+buttons:
+    - icon: github
+      content: Source
+      url: 'https://github.com/gatewayprogrammingschool/Faslinq'
+      external_url: true
+
+# Grid navigation
+grid_navigation:
+    - title: Why Faslinq?
+      excerpt: The motivation for creating Faslinq.
+      cta: Read more
+      url: '/why/'
+    - title: Is Faslinq Fast?
+      excerpt: Benchmark Results
+      cta: Read more
+      url: '/benchmarks/results/'
+    - title: Faslinq API
+      excerpt: Faslinq API Documentation
+      cta: Read more
+      url: '/api/'
+---
