@@ -1,14 +1,15 @@
 ﻿namespace Faslinq.Benchmarks.Collections;
 
-[BenchmarkCategory("SelectTake", "Linq")]
 public class SelectTakeLinq : SelectTakeBenchmarks
 {
     [Benchmark]
+    [BenchmarkCategory("SelectTake", "1", "Linq")]
     [ArgumentsSource(nameof(GenerateRecords1))]
     public void SelectTake_1_Linq(object item)
         => ProcessCollection(Tests.IEnumerable, item, FirstGenerateRecords1).Consume(new ());
 
     [Benchmark]
+    [BenchmarkCategory("SelectTake", "1", "Linq")]
     [ArgumentsSource(nameof(GenerateRecords250))]
     public void SelectTake_250_Linq(object item)
         => ProcessCollection(Tests.IEnumerable, item, FirstGenerateRecords250).Consume(new ());

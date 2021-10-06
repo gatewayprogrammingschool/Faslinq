@@ -3,7 +3,6 @@
 namespace Faslinq.Benchmarks.Scalar;
 #if !NO_FASLINQ
 [TestClass]
-[BenchmarkCategory("First", "List")]
 public class FirstList : FirstBenchmarks
 {
     [DataTestMethod]
@@ -18,25 +17,25 @@ public class FirstList : FirstBenchmarks
 
     // Lists
     [Benchmark]
-    [BenchmarkCategory("First", "List")]
+    [BenchmarkCategory("First", "1", "List")]
     [ArgumentsSource(nameof(GenerateRecords1))]
     public TestValueTuple First_1_Faslinq(object item)
         => ProcessScalar(item, FirstGenerateRecords1);
 
     [Benchmark]
-    [BenchmarkCategory("First", "List")]
+    [BenchmarkCategory("First", "250", "List")]
     [ArgumentsSource(nameof(GenerateRecords250))]
     public TestValueTuple First_250_Faslinq(object item)
         => ProcessScalar(item, FirstGenerateRecords250);
 
     [Benchmark]
-    [BenchmarkCategory("First", "List")]
+    [BenchmarkCategory("First", "5000", "List")]
     [ArgumentsSource(nameof(GenerateRecords5000))]
     public TestValueTuple First_5000_Faslinq(object item)
         => ProcessScalar(item, FirstGenerateRecords5000);
 
     [Benchmark]
-    [BenchmarkCategory("First", "List")]
+    [BenchmarkCategory("First", "100000", "List")]
     [ArgumentsSource(nameof(GenerateRecords100000))]
     public TestValueTuple First_100000_Faslinq(object item)
         => ProcessScalar(item, FirstGenerateRecords100000);

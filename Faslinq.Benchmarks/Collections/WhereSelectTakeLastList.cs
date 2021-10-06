@@ -1,7 +1,6 @@
 ﻿namespace Faslinq.Benchmarks.Collections;
 
 [TestClass]
-[BenchmarkCategory("WhereSelectTakeLast", "List")]
 public class WhereSelectTakeLastList : WhereSelectTakeLastBenchmarks
 {
     [DataTestMethod]
@@ -15,21 +14,25 @@ public class WhereSelectTakeLastList : WhereSelectTakeLastBenchmarks
     }
 
     [Benchmark]
+    [BenchmarkCategory("WhereSelectTakeLast", "1", "List")]
     [ArgumentsSource(nameof(GenerateRecords1))]
     public void WhereSelectTakeLast_1_Faslinq(object item)
         => ProcessCollection(Tests.List, item, LastGenerateRecords1).Consume(new ());
 
     [Benchmark]
+    [BenchmarkCategory("WhereSelectTakeLast", "250", "List")]
     [ArgumentsSource(nameof(GenerateRecords250))]
     public void WhereSelectTakeLast_250_Faslinq(object item)
         => ProcessCollection(Tests.List, item, LastGenerateRecords250).Consume(new ());
 
     [Benchmark]
+    [BenchmarkCategory("WhereSelectTakeLast", "5000", "List")]
     [ArgumentsSource(nameof(GenerateRecords5000))]
     public void WhereSelectTakeLast_5000_Faslinq(object item)
         => ProcessCollection(Tests.List, item, LastGenerateRecords5000).Consume(new ());
 
     [Benchmark]
+    [BenchmarkCategory("WhereSelectTakeLast", "100000", "List")]
     [ArgumentsSource(nameof(GenerateRecords100000))]
     public void WhereSelectTakeLast_100000_Faslinq(object item)
         => ProcessCollection(Tests.List, item, LastGenerateRecords100000).Consume(new ());

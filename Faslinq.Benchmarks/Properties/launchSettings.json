@@ -2,7 +2,7 @@
   "profiles": {
     "Faslinq.Benchmarks": {
       "commandName": "Project",
-      "commandLineArgs": "-Select -Where -TakeLast -Join"
+      "commandLineArgs": "-Select -Join"
     }
   }
 }

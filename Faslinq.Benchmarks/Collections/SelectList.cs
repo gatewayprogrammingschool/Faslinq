@@ -3,7 +3,7 @@
 namespace Faslinq.Benchmarks.Collections;
 
 [TestClass]
-[BenchmarkCategory("Select", "List")]
+//[BenchmarkCategory("Select")]
 public class SelectList : SelectBenchmarks
 {
     [DataTestMethod]
@@ -18,6 +18,7 @@ public class SelectList : SelectBenchmarks
     }
 
     [Benchmark]
+    [BenchmarkCategory("Select", "1", "List")]
     [ArgumentsSource(nameof(GenerateRecords1))]
     public void Select_1_Faslinq(object item)
     {
@@ -26,6 +27,7 @@ public class SelectList : SelectBenchmarks
     }
 
     [Benchmark]
+    [BenchmarkCategory("Select", "250", "List")]
     [ArgumentsSource(nameof(GenerateRecords250))]
     public void Select_250_Faslinq(object item)
     {
@@ -33,6 +35,7 @@ public class SelectList : SelectBenchmarks
     }
 
     [Benchmark]
+    [BenchmarkCategory("Select", "5000", "List")]
     [ArgumentsSource(nameof(GenerateRecords5000))]
     public void Select_5000_Faslinq(object item)
     {
@@ -40,6 +43,7 @@ public class SelectList : SelectBenchmarks
     }
 
     [Benchmark]
+    [BenchmarkCategory("Select", "100000", "List")]
     [ArgumentsSource(nameof(GenerateRecords100000))]
     public void Select_100000_Faslinq(object item)
     {

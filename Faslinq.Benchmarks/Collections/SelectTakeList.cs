@@ -1,7 +1,6 @@
 ﻿namespace Faslinq.Benchmarks.Collections;
 
 [TestClass]
-[BenchmarkCategory("SelectTake", "List")]
 public class SelectTakeList : SelectTakeBenchmarks
 {
     [DataTestMethod]
@@ -15,11 +14,13 @@ public class SelectTakeList : SelectTakeBenchmarks
     }
 
     [Benchmark]
+    [BenchmarkCategory("SelectTake", "1", "List")]
     [ArgumentsSource(nameof(GenerateRecords1))]
     public void SelectTake_1_Faslinq(object item)
         => ProcessCollection(Tests.List, item, FirstGenerateRecords1).Consume(new ());
 
     [Benchmark]
+    [BenchmarkCategory("SelectTake", "1", "List")]
     [ArgumentsSource(nameof(GenerateRecords250))]
     public void SelectTake_250_Faslinq(object item)
         => ProcessCollection(Tests.List, item, FirstGenerateRecords250).Consume(new ());

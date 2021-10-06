@@ -1,9 +1,9 @@
 ﻿namespace Faslinq.Benchmarks.Collections;
 
-[BenchmarkCategory("WhereSelectTakeLast", "Linq")]
 public class WhereSelectTakeLastLinq : WhereSelectTakeLastBenchmarks
 {
     [Benchmark]
+    [BenchmarkCategory("WhereSelectTakeLast", "Linq")]
     [ArgumentsSource(nameof(GenerateRecords1))]
     public void WhereSelectTakeLast_1_Linq(object item)
         => ProcessCollection(Tests.IEnumerable, item, LastGenerateRecords1).Consume(new ());

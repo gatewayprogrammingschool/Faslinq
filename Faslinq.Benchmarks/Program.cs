@@ -1,4 +1,6 @@
 ﻿using BenchmarkDotNet.Diagnosers;
+using BenchmarkDotNet.Reports;
+using BenchmarkDotNet.Running;
 
 namespace Faslinq.Benchmarks;
 
@@ -381,26 +383,26 @@ public class Program
 
         public IEnumerable<Job> GetJobs()
         {
-#if DEBUG
+#if !DEBUG
             yield return new Job(
-                Job.Dry.WithRuntime(ClrRuntime.Net472)
+                Job.Default.WithRuntime(ClrRuntime.Net472)
                     .WithBaseline(false)
             );
             yield return new Job(
-                Job.Dry.WithRuntime(ClrRuntime.Net48)
+                Job.Default.WithRuntime(ClrRuntime.Net48)
                     .WithBaseline(false)
             );
             yield return new Job(
-                Job.Dry.WithRuntime(CoreRuntime.Core50)
+                Job.Default.WithRuntime(CoreRuntime.Core50)
                     .WithBaseline(false)
             );
             yield return new Job(
-                Job.Dry.WithRuntime(CoreRuntime.Core60)
+                Job.Default.WithRuntime(CoreRuntime.Core60)
                     .WithBaseline(true)
             );
 #else
-            yield return new Job(Job.Default.WithRuntime(ClrRuntime.Net48).WithBaseline(true));
-            yield return new Job(Job.Default.WithRuntime(CoreRuntime.Core60).WithBaseline(false));
+            yield return new Job(Job.Dry.WithRuntime(ClrRuntime.Net48).WithBaseline(false));
+            yield return new Job(Job.Dry.WithRuntime(CoreRuntime.Core60).WithBaseline(true));
 #endif
         }
 
@@ -445,43 +447,33 @@ public class Program
         public class FaslinqOrderer : IOrderer
         {
             public IEnumerable<BenchmarkCase> GetExecutionOrder(ImmutableArray<BenchmarkCase> benchmarksCase)
-                =>
-                    from benchmark in benchmarksCase
-                    orderby benchmark.Parameters["X"] descending,
-                        benchmark.Descriptor?.WorkloadMethodDisplayInfo
-                            .Substring(0, benchmark.Descriptor?.WorkloadMethodDisplayInfo.LastIndexOf("_") ?? 0)
-                    select benchmark;
+                => benchmarksCase.OrderBy(benchmark => benchmark.Descriptor.Categories[0])
+                    .ThenBy(benchmark => benchmark.Descriptor.Categories[1]);
+                    //.ThenBy(benchmark => int.TryParse(GetPart(benchmark.Descriptor?.WorkloadMethodDisplayInfo ?? "a_0_b", '_', 1), out int value) ? value : throw new ApplicationException($"Cannot parse {GetPart(benchmark.Descriptor?.WorkloadMethodDisplayInfo ?? "a_0_b", '_', 1)} to int."));
 
             public IEnumerable<BenchmarkCase> GetSummaryOrder(
                 ImmutableArray<BenchmarkCase> benchmarksCase,
                 Summary summary
             )
-                =>
-                    from benchmark in benchmarksCase
-                    orderby benchmark.Descriptor?.WorkloadMethodDisplayInfo
-                            .Substring(0, benchmark.Descriptor?.WorkloadMethodDisplayInfo.LastIndexOf("_") ?? 0),
-                        summary[benchmark]
-                            ?.ResultStatistics?.Mean
-                    select benchmark;
+                => benchmarksCase.OrderBy(benchmark => benchmark.Descriptor.Categories[0])
+                    .ThenBy(benchmark => int.Parse(benchmark.Descriptor.Categories[1]))
+                    .ThenBy(benchmark => summary[benchmark].ResultStatistics.Mean);
 
             public string? GetHighlightGroupKey(BenchmarkCase benchmarkCase)
                 => null;
 
             public string GetLogicalGroupKey(
-                    ImmutableArray<BenchmarkCase> allBenchmarksCases,
-                    BenchmarkCase benchmarkCase
-                )
-                //benchmarkCase?.Job?.DisplayInfo + "_" + benchmarkCase?.Parameters?.DisplayInfo;
-                => benchmarkCase?.Descriptor?.WorkloadMethodDisplayInfo
-                       .Substring(0, benchmarkCase?.Descriptor?.WorkloadMethodDisplayInfo.LastIndexOf("_") ?? 0)
-                   ?? "";
+                ImmutableArray<BenchmarkCase> allBenchmarksCases,
+                BenchmarkCase benchmark
+            )
+                => $"{benchmark.Descriptor.Categories[0]}"
+                   + $":{int.Parse(benchmark.Descriptor.Categories[1]):000000}";
+                   //+ $"_{GetPart(benchmark.Descriptor?.WorkloadMethodDisplayInfo ?? "a_0_b", '_', 1)}";
 
             public IEnumerable<IGrouping<string, BenchmarkCase>> GetLogicalGroupOrder(
                 IEnumerable<IGrouping<string, BenchmarkCase>> logicalGroups
             )
-            {
-                return logicalGroups.OrderBy(it => it.Key);
-            }
+                => logicalGroups.OrderBy(group => group.Key);
 
             public bool SeparateLogicalGroups
                 => true;
@@ -491,17 +483,15 @@ public class Program
         {
             public IEnumerable<IColumn> GetColumns(Summary summary)
             {
-                //yield return new TagColumn("Method", name => Config.GetPart(name, '_', 0));
-                //yield return new TagColumn("Size", name => Config.GetPart(name, '_', 1));
-                //yield return LogicalGroupColumn.Default;
-                yield return new TagColumn("Size", name => GetPart(name, '_', 1));
+                yield return new TagColumn("Method", name => GetPart(name, '_', 0));
+                yield return new TagColumn("Count", name => GetPart(name, '_', 1));
+                yield return LogicalGroupColumn.Default;
                 yield return StatisticColumn.Median;
                 yield return StatisticColumn.Mean;
                 yield return BaselineRatioColumn.RatioMean;
                 yield return StatisticColumn.StdDev;
                 yield return StatisticColumn.Min;
                 yield return StatisticColumn.Max;
-                yield return CategoriesColumn.Default;
                 foreach (var col in JobCharacteristicColumn.AllColumns)
                 {
                     if (col.ColumnName is "Platform" or "BuildConfiguration" or "Runtime")

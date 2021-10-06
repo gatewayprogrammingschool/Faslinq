@@ -1,7 +1,6 @@
 ﻿namespace Faslinq.Benchmarks.Collections;
 
 [TestClass]
-[BenchmarkCategory("WhereSelect", "List")]
 public class WhereSelectList : WhereSelectBenchmarks
 {
     [DataTestMethod]
@@ -15,21 +14,25 @@ public class WhereSelectList : WhereSelectBenchmarks
     }
 
     [Benchmark]
+    [BenchmarkCategory("WhereSelect", "1", "List")]
     [ArgumentsSource(nameof(GenerateRecords1))]
     public void WhereSelect_1_Faslinq(object item)
         => ProcessCollection(Tests.List, item, FirstGenerateRecords1).Consume(new ());
 
     [Benchmark]
+    [BenchmarkCategory("WhereSelect", "1", "List")]
     [ArgumentsSource(nameof(GenerateRecords250))]
     public void WhereSelect_250_Faslinq(object item)
         => ProcessCollection(Tests.List, item, FirstGenerateRecords250).Consume(new ());
 
     [Benchmark]
+    [BenchmarkCategory("WhereSelect", "1", "List")]
     [ArgumentsSource(nameof(GenerateRecords5000))]
     public void WhereSelect_5000_Faslinq(object item)
         => ProcessCollection(Tests.List, item, FirstGenerateRecords5000).Consume(new ());
 
     [Benchmark]
+    [BenchmarkCategory("WhereSelect", "100000", "List")]
     [ArgumentsSource(nameof(GenerateRecords100000))]
     public void WhereSelect_100000_Faslinq(object item)
         => ProcessCollection(Tests.List, item, FirstGenerateRecords100000).Consume(new ());

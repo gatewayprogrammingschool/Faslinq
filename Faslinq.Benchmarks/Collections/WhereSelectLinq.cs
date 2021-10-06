@@ -1,9 +1,9 @@
 ﻿namespace Faslinq.Benchmarks.Collections;
 
-[BenchmarkCategory("WhereSelect", "Linq")]
 public class WhereSelectLinq : WhereSelectBenchmarks
 {
     [Benchmark]
+    [BenchmarkCategory("WhereSelect", "1", "Linq")]
     [ArgumentsSource(nameof(GenerateRecords1))]
     public void WhereSelect_1_Linq(object item)
         => ProcessCollection(Tests.IEnumerable, item, FirstGenerateRecords1).Consume(new ());
