@@ -29,6 +29,7 @@ Intel Xeon Platinum 8171M CPU 2.60GHz, 1 CPU, 2 logical and 2 physical cores
 Platform=X64  Categories=Select,Array  
 
 ```
+
 |              Runtime |     Mean |   StdDev |   Median |      Min |      Max | Ratio | Size |
 |--------------------- |---------:|---------:|---------:|---------:|---------:|------:|----- |
 |             .NET 5.0 |       NA |       NA |       NA |       NA |       NA |     ? |    1 |
