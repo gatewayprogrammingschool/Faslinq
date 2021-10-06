@@ -12,6 +12,11 @@
         <DebugType>embedded</DebugType>
         <Configurations>Debug;Release;Benchmarks</Configurations>
         <Platforms>AnyCPU;x64</Platforms>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageTags>LINQ Array List</PackageTags>
+        <RepositoryType>git</RepositoryType>
+        <RepositoryUrl>https://github.com/gatewayprogrammingschool/Faslinq</RepositoryUrl>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Benchmarks|net6.0|AnyCPU'">
@@ -152,6 +157,13 @@
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net48|x64'">
       <DefineConstants>$(DefineConstants)TRACE</DefineConstants>
     </PropertyGroup>
+
+    <ItemGroup>
+      <None Include="..\README.md">
+        <Pack>True</Pack>
+        <PackagePath></PackagePath>
+      </None>
+    </ItemGroup>
 
     <!--<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0|AnyCPU'">
       <Optimize>True</Optimize>

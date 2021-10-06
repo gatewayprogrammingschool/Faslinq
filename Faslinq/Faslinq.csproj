@@ -8,6 +8,15 @@
         <DebugType>embedded</DebugType>
         <Configurations>Debug;Release;Benchmarks</Configurations>
         <Platforms>AnyCPU;x64</Platforms>
+        <GenerateDocumentationFile>True</GenerateDocumentationFile>
+        <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+        <Copyright>©️ 2021 - Gateway Programming School, Inc.</Copyright>
+        <PackageProjectUrl>https://github.com/gatewayprogrammingschool/Faslinq</PackageProjectUrl>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <RepositoryUrl>https://github.com/gatewayprogrammingschool/Faslinq</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PackageTags>LINQ</PackageTags>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0|AnyCPU'">
@@ -133,6 +142,13 @@
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|x64'">
       <DefineConstants>$(DefineConstants)TRACE;DEBUG</DefineConstants>
     </PropertyGroup>
+
+    <ItemGroup>
+      <None Include="..\README.md">
+        <Pack>True</Pack>
+        <PackagePath></PackagePath>
+      </None>
+    </ItemGroup>
 
     <ItemGroup>
         <PackageReference Include="BenchmarkDotNet" Version="0.13.1" />
