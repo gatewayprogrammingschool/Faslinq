@@ -8,6 +8,7 @@ on:
   pull_request:
     branches: [ main, master ]
   workflow_dispatch:
+  release:
 
 jobs:
   build:
@@ -37,15 +38,15 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
     - name: Build Debug
-      if: ${{ github.event_name != 'push.tags' }}
+      if: ${{ github.event_name != 'release' }}
       run: dotnet build -c Debug --no-restore 
     - name: Build Release
-      if: ${{ github.event_name == 'push.tags' }}
+      if: ${{ github.event_name == 'release' }}
       run: dotnet build -c Release --no-restore 
     - name: Tests
       run: dotnet test --no-build -f net6.0
     - name: Publish
-      if: ${{ github.event_name == 'push.tags' }}
+      if: ${{ github.event_name == 'release' }}
       run: | 
         $outPath = (Join-Path . -Child packages)
         dotnet pack -c Release --no-restore --include-source --no-build -o $outPath 
