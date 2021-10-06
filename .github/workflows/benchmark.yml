@@ -32,13 +32,9 @@ jobs:
         
         # -Where -Take -TakeLast -First -FirstWhere -Last -LastWhere -Join -Configuration Configuration
         
-        mv ./results.md ..
+        mv ./results.md ./doks/benchmarks/results.md
         
-        git checkout gh-pages
-        
-        mv ../results.md ./benchmarks/results.md
-        
-        git add -v benchmarks/results.md
+        git add -v ./doks/benchmarks/results.md
 
         git commit -m "Updated benchmark results."
 
