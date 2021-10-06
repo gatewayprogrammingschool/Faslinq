@@ -1,4 +1,5 @@
-﻿namespace Faslinq.Tests;
+﻿// ReSharper disable InvokeAsExtensionMethod
+namespace Faslinq.Tests;
 
 
 [TestClass()]
@@ -48,7 +49,7 @@ public class ListExtensionsTests
         ListExtensions.First(anonymous, a => true)!.Should().Be(toSelect ?? default);
 
         Action a = () => ListExtensions.First(anonymous, a => false);
-        a.Should().Throw<ArgumentException>();
+        a.Should().Throw<IndexOutOfRangeException>();
     }
 
     [DataTestMethod]
@@ -60,7 +61,7 @@ public class ListExtensionsTests
         ListExtensions.Last(anonymous, a => true)!.Should().Be(toSelect ?? default);
 
         Action a = () => ListExtensions.Last(anonymous, a => false);
-        a.Should().Throw<ArgumentException>();
+        a.Should().Throw<IndexOutOfRangeException>();
     }
 
     [DataTestMethod]
@@ -735,7 +736,7 @@ public class ListExtensionsTests
 //        ListExtensions.First(anonymous, a => true)!.Should().Be(toSelect ?? default);
 
 //        Action a = () => ListExtensions.First(anonymous, a => false);
-//        a.Should().Throw<ArgumentException>();
+//        a.Should().Throw<IndexOutOfRangeException>();
 //    }
 
 //    [DataTestMethod]
@@ -748,7 +749,7 @@ public class ListExtensionsTests
 //        ListExtensions.Last(anonymous, a => true)!.Should().Be(toSelect ?? default);
 
 //        Action a = () => ListExtensions.Last(anonymous, a => false);
-//        a.Should().Throw<ArgumentException>();
+//        a.Should().Throw<IndexOutOfRangeException>();
 //    }
 
 //    [DataTestMethod]

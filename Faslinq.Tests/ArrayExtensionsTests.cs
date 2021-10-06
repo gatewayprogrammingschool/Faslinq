@@ -1,4 +1,5 @@
-﻿namespace Faslinq.Tests;
+﻿// ReSharper disable InvokeAsExtensionMethod
+namespace Faslinq.Tests;
 
 using System.Collections.Generic;
 
@@ -51,7 +52,7 @@ public class ArrayExtensionsTests
         ArrayExtensions.First(anonymous, a => true)!.Should().Be(toSelect ?? default);
 
         Action a = () => ArrayExtensions.First(anonymous, a => false);
-        a.Should().Throw<ArgumentException>();
+        a.Should().Throw<IndexOutOfRangeException>();
     }
 
     [DataTestMethod]
@@ -63,7 +64,7 @@ public class ArrayExtensionsTests
         ArrayExtensions.Last(anonymous, a => true)!.Should().Be(toSelect);
 
         Action a = () => ArrayExtensions.Last(anonymous, a => false);
-        a.Should().Throw<ArgumentException>();
+        a.Should().Throw<IndexOutOfRangeException>();
     }
 
     [DataTestMethod]
@@ -125,7 +126,7 @@ public class ArrayExtensionsTests
         var result = ArrayExtensions.Where(list.ToArray(), i => i.Item1 == list[0].Item1);
 
         result.Should().NotBeNull();
-        result!.Length.Should().Be(Math.Min(1, list.Count));
+        result.Length.Should().Be(list.Count);
         if (result.Length == 0) return;
         result[0].Item1.Should().Be(list![0].Item1);
         result[0].Item2.Should().Be(list[0].Item2);

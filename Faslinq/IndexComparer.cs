@@ -2,17 +2,14 @@
 
 public class IndexComparer : IEqualityComparer<Index>
 {
-    private static IndexComparer _instance = new();
+    private static readonly IndexComparer _instance = new();
 
-    public static IEqualityComparer<Index> Default => _instance;
+    public static IEqualityComparer<Index> Default
+        => _instance;
 
     public bool Equals(Index x, Index y)
-    {
-        return x.Equals(y);
-    }
+        => x.Equals(y);
 
     public int GetHashCode(Index obj)
-    {
-        return obj.GetHashCode();
-    }
+        => obj.GetHashCode();
 }

@@ -1,26 +1,27 @@
-﻿using System.Collections;
-
-namespace Faslinq;
+﻿namespace Faslinq;
 
 public struct ArrayEnumerator<TType> : IEnumerator<TType?>
 {
-    private TType[] _array;
+    private readonly TType[] _array;
 
-    public TType? Current => _index > -1 ? _array[_index] : default(TType); 
-    
-    object? IEnumerator.Current => Current;
+    public TType? Current
+        => _index > -1
+            ? _array[_index]
+            : default;
 
-    int _index = -1;
-    public ArrayEnumerator(TType[] array) => _array = array;
+    object? IEnumerator.Current
+        => Current;
+
+    private int _index = -1;
+
+    public ArrayEnumerator(TType[] array)
+        => _array = array;
 
     public ArrayEnumerator(TType[] array, int index) : this(array)
-    {
-        _index = index;
-    }
+        => _index = index;
 
     public void Dispose()
-    {
-    }
+    { }
 
     public bool MoveNext()
     {
@@ -34,5 +35,6 @@ public struct ArrayEnumerator<TType> : IEnumerator<TType?>
         return true;
     }
 
-    public void Reset() => _index = -1;
+    public void Reset()
+        => _index = -1;
 }
