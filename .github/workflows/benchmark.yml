@@ -38,7 +38,7 @@ jobs:
         
         mv ../results.md ./benchmarks/results.md
         
-        git add -v ./results.md
+        git add -v benchmarks/results.md
 
         git commit -m "Updated benchmark results."
 
