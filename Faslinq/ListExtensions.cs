@@ -17,6 +17,7 @@ public static partial class ListExtensions
     /// <param name="source"></param>
     /// <typeparam name="TData"></typeparam>
     /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool Any<TData>(this List<TData> source)
         => source.Count > 0;
 
@@ -27,6 +28,7 @@ public static partial class ListExtensions
     /// <param name="query"></param>
     /// <typeparam name="TData"></typeparam>
     /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool Any<TData>(
         this List<TData> source,
         Predicate<TData> query
@@ -56,6 +58,7 @@ public static partial class ListExtensions
     /// <param name="query"></param>
     /// <typeparam name="TData"></typeparam>
     /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool All<TData>(
         this List<TData> source,
         Predicate<TData> query
@@ -93,6 +96,7 @@ public static partial class ListExtensions
     /// <typeparam name="TData"></typeparam>
     /// <returns></returns>
     /// <exception cref="IndexOutOfRangeException"></exception>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TData First<TData>(
         this List<TData> source,
         Predicate<TData>? query = null
@@ -127,6 +131,7 @@ public static partial class ListExtensions
     /// <param name="defaultValue"></param>
     /// <typeparam name="TData"></typeparam>
     /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TData? FirstOrDefault<TData>(
         this List<TData> source,
         Predicate<TData>? query = null,
@@ -171,6 +176,7 @@ public static partial class ListExtensions
     /// <typeparam name="TData"></typeparam>
     /// <returns></returns>
     /// <exception cref="IndexOutOfRangeException"></exception>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TData Last<TData>(
         this List<TData> source,
         Predicate<TData>? query = null
@@ -205,6 +211,7 @@ public static partial class ListExtensions
     /// <param name="defaultValue"></param>
     /// <typeparam name="TData"></typeparam>
     /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TData? LastOrDefault<TData>(
         this List<TData> source,
         Predicate<TData>? query = null,
@@ -248,6 +255,7 @@ public static partial class ListExtensions
     /// <param name="query"></param>
     /// <typeparam name="TData"></typeparam>
     /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static List<TData> Where<TData>(
         this List<TData> source,
         Predicate<TData> query
@@ -269,6 +277,7 @@ public static partial class ListExtensions
     /// <param name="takeCount"></param>
     /// <typeparam name="TData"></typeparam>
     /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static List<TData> WhereTake<TData>(
         this List<TData> source,
         Predicate<TData> query,
@@ -308,6 +317,7 @@ public static partial class ListExtensions
     /// <param name="takeCount"></param>
     /// <typeparam name="TData"></typeparam>
     /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static List<TData> WhereTakeLast<TData>(
         this List<TData> source,
         Predicate<TData> query,
@@ -457,6 +467,7 @@ public static partial class ListExtensions
     /// <typeparam name="TData"></typeparam>
     /// <typeparam name="TResult"></typeparam>
     /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static List<TResult> WhereSelect<TData, TResult>(
         this List<TData> source,
         Predicate<TData> query,
@@ -476,6 +487,7 @@ public static partial class ListExtensions
     /// <typeparam name="TData"></typeparam>
     /// <typeparam name="TResult"></typeparam>
     /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static List<TResult> WhereSelectTake<TData, TResult>(
         this List<TData> source,
         Predicate<TData> query,
@@ -515,6 +527,7 @@ public static partial class ListExtensions
     /// <typeparam name="TData"></typeparam>
     /// <typeparam name="TResult"></typeparam>
     /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static List<TResult> WhereSelectTakeLast<TData, TResult>(
         this List<TData> source,
         Predicate<TData> query,
@@ -559,6 +572,7 @@ public static partial class ListExtensions
     /// <param name="takeCount"></param>
     /// <typeparam name="TData"></typeparam>
     /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static List<TData> Take<TData>(
         this List<TData> source,
         int takeCount
@@ -590,6 +604,7 @@ public static partial class ListExtensions
     /// <param name="takeCount"></param>
     /// <typeparam name="TData"></typeparam>
     /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static List<TData> TakeLast<TData>(
         this List<TData> source,
         int takeCount
@@ -622,6 +637,7 @@ public static partial class ListExtensions
     /// <param name="takeCount"></param>
     /// <typeparam name="TData"></typeparam>
     /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static IEnumerable<TData> TakeLast<TData>(
         this IEnumerable<TData> source,
         int takeCount)
@@ -660,6 +676,7 @@ public static partial class ListExtensions
     /// <typeparam name="TData"></typeparam>
     /// <typeparam name="TKey"></typeparam>
     /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static List<TData> OrderBy<TData, TKey>(
         this List<TData> source,
         Func<TData, TKey> comparison
@@ -675,6 +692,7 @@ public static partial class ListExtensions
     /// <typeparam name="TData"></typeparam>
     /// <typeparam name="TKey"></typeparam>
     /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static List<TData> OrderByTake<TData, TKey>(
         this List<TData> source,
         Func<TData, TKey> comparison,
@@ -725,6 +743,7 @@ public static partial class ListExtensions
     /// <typeparam name="TData"></typeparam>
     /// <typeparam name="TKey"></typeparam>
     /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static List<TData> OrderByTakeLast<TData, TKey>(
         this List<TData> source,
         Func<TData, TKey> comparison,
@@ -779,6 +798,7 @@ public static partial class ListExtensions
     /// <typeparam name="TData"></typeparam>
     /// <typeparam name="TKey"></typeparam>
     /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static List<TData> OrderByDescending<TData, TKey>(
         this List<TData> source,
         Func<TData, TKey> comparison
@@ -794,6 +814,7 @@ public static partial class ListExtensions
     /// <typeparam name="TData"></typeparam>
     /// <typeparam name="TKey"></typeparam>
     /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static List<TData> OrderByDescendingTakeLast<TData, TKey>(
         this List<TData> source,
         Func<TData, TKey> comparison,
@@ -845,6 +866,7 @@ public static partial class ListExtensions
     /// <typeparam name="TData"></typeparam>
     /// <typeparam name="TKey"></typeparam>
     /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static List<TData> OrderByDescendingTake<TData, TKey>(
         this List<TData> source,
         Func<TData, TKey> comparison,
@@ -901,6 +923,7 @@ public static partial class ListExtensions
     /// <param name="comparison"></param>
     /// <typeparam name="TData"></typeparam>
     /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static PositionCollection PositionsWhere<TData>(
         this List<TData> source,
         Predicate<TData> comparison

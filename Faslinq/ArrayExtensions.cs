@@ -1,15 +1,33 @@
 ﻿// ReSharper disable ForCanBeConvertedToForeach
 // ReSharper disable LoopCanBeConvertedToQuery
 
+using System;
+using System.Runtime.CompilerServices;
+
 namespace Faslinq;
 
 #region Any / All
 
 public static partial class ArrayExtensions
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="source"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool Any<TData>(this TData[] source)
         => source.Length > 0;
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="query"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool Any<TData>(
         this TData[] source,
         Predicate<TData> query
@@ -32,6 +50,15 @@ public static partial class ArrayExtensions
         return false;
     }
 
+    /// <summary>
+    /// Enumerate all items and return `true` if
+    /// they all resolve to `true`.
+    /// </summary>
+    /// <param name="source"><see cref="Array"/>Array of TData</param>
+    /// <param name="query"><see cref="Predicate{TData}"/> to filter the array with.</param>
+    /// <typeparam name="TData">Type held in the source array.</typeparam>
+    /// <returns>True if all values match the query.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool All<TData>(
         this TData[] source,
         Predicate<TData> query
@@ -72,6 +99,7 @@ public static partial class ArrayExtensions
     /// <typeparam name="TData"></typeparam>
     /// <returns></returns>
     /// <exception cref="IndexOutOfRangeException"></exception>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TData First<TData>(
         this TData[] source,
         Predicate<TData>? query = null
@@ -106,6 +134,7 @@ public static partial class ArrayExtensions
     /// <param name="defaultValue"></param>
     /// <typeparam name="TData"></typeparam>
     /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TData? FirstOrDefault<TData>(
         this TData[] source,
         Predicate<TData>? query = null,
@@ -150,6 +179,7 @@ public static partial class ArrayExtensions
     /// <typeparam name="TData"></typeparam>
     /// <returns></returns>
     /// <exception cref="IndexOutOfRangeException"></exception>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TData Last<TData>(
         this TData[] source,
         Predicate<TData>? query = null
@@ -184,6 +214,7 @@ public static partial class ArrayExtensions
     /// <param name="defaultValue"></param>
     /// <typeparam name="TData"></typeparam>
     /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TData? LastOrDefault<TData>(
         this TData[] source,
         Predicate<TData>? query = null,
@@ -227,6 +258,7 @@ public static partial class ArrayExtensions
     /// <param name="query"></param>
     /// <typeparam name="TData"></typeparam>
     /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TData[] Where<TData>(
         this TData[] source,
         Predicate<TData> query
@@ -241,6 +273,7 @@ public static partial class ArrayExtensions
     /// <param name="takeCount"></param>
     /// <typeparam name="TData"></typeparam>
     /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TData[] WhereTake<TData>(
         this TData[] source,
         Predicate<TData> query,
@@ -279,6 +312,7 @@ public static partial class ArrayExtensions
     /// <param name="takeCount"></param>
     /// <typeparam name="TData"></typeparam>
     /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TData[] WhereTakeLast<TData>(
         this TData[] source,
         Predicate<TData> query,
@@ -323,6 +357,7 @@ public static partial class ArrayExtensions
     /// <typeparam name="TData"></typeparam>
     /// <typeparam name="TResult"></typeparam>
     /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TResult[] Select<TData, TResult>(
         this TData[] source,
         Func<TData, TResult> selector
@@ -338,6 +373,7 @@ public static partial class ArrayExtensions
     /// <typeparam name="TData"></typeparam>
     /// <typeparam name="TResult"></typeparam>
     /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TResult[] SelectTake<TData, TResult>(
         this TData[] source,
         Func<TData, TResult> selector,
@@ -373,6 +409,7 @@ public static partial class ArrayExtensions
     /// <typeparam name="TData"></typeparam>
     /// <typeparam name="TResult"></typeparam>
     /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TResult[] SelectTakeLast<TData, TResult>(
         this TData[] source,
         Func<TData, TResult> selector,
@@ -415,6 +452,7 @@ public static partial class ArrayExtensions
     /// <typeparam name="TData"></typeparam>
     /// <typeparam name="TResult"></typeparam>
     /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TResult[] WhereSelect<TData, TResult>(
         this TData[] source,
         Predicate<TData> query,
@@ -432,6 +470,7 @@ public static partial class ArrayExtensions
     /// <typeparam name="TData"></typeparam>
     /// <typeparam name="TResult"></typeparam>
     /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TResult[] WhereSelectTake<TData, TResult>(
         this TData[] source,
         Predicate<TData> query,
@@ -472,6 +511,7 @@ public static partial class ArrayExtensions
     /// <typeparam name="TData"></typeparam>
     /// <typeparam name="TResult"></typeparam>
     /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TResult[] WhereSelectTakeLast<TData, TResult>(
         this TData[] source,
         Predicate<TData> query,
@@ -516,6 +556,7 @@ public static partial class ArrayExtensions
     /// <param name="takeCount"></param>
     /// <typeparam name="TData"></typeparam>
     /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TData[] Take<TData>(
         this TData[] source,
         int takeCount
@@ -529,6 +570,7 @@ public static partial class ArrayExtensions
     /// <param name="takeCount"></param>
     /// <typeparam name="TData"></typeparam>
     /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TData[] TakeLast<TData>(
         this TData[] source,
         int takeCount
@@ -550,6 +592,7 @@ public static partial class ArrayExtensions
     /// <typeparam name="TData"></typeparam>
     /// <typeparam name="TKey"></typeparam>
     /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TData[] OrderBy<TData, TKey>(
         this TData[] source,
         Func<TData, TKey> comparison
@@ -565,6 +608,7 @@ public static partial class ArrayExtensions
     /// <typeparam name="TData"></typeparam>
     /// <typeparam name="TKey"></typeparam>
     /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TData[] OrderByTake<TData, TKey>(
         this TData[] source,
         Func<TData, TKey> comparison,
@@ -615,6 +659,7 @@ public static partial class ArrayExtensions
     /// <typeparam name="TData"></typeparam>
     /// <typeparam name="TKey"></typeparam>
     /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TData[] OrderByTakeLast<TData, TKey>(
         this TData[] source,
         Func<TData, TKey> comparison,
@@ -673,6 +718,7 @@ public static partial class ArrayExtensions
     /// <typeparam name="TData"></typeparam>
     /// <typeparam name="TKey"></typeparam>
     /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TData[] OrderByDescending<TData, TKey>(
         this TData[] source,
         Func<TData, TKey> comparison
@@ -688,6 +734,7 @@ public static partial class ArrayExtensions
     /// <typeparam name="TData"></typeparam>
     /// <typeparam name="TKey"></typeparam>
     /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TData[] OrderByDescendingTakeLast<TData, TKey>(
         this TData[] source,
         Func<TData, TKey> comparison,
@@ -743,6 +790,7 @@ public static partial class ArrayExtensions
     /// <typeparam name="TData"></typeparam>
     /// <typeparam name="TKey"></typeparam>
     /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TData[] OrderByDescendingTake<TData, TKey>(
         this TData[] source,
         Func<TData, TKey> comparison,
@@ -801,6 +849,7 @@ public static partial class ArrayExtensions
     // Sort algorithm used to sort key/value lists. After this has been called, the indices
     // will have been placed in sorted order based on the keys provided.
     //
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal static void QuickSort<TKey>(
         int left,
         int right,
@@ -989,6 +1038,7 @@ public static partial class ArrayExtensions
     /// <param name="comparison"></param>
     /// <typeparam name="TData"></typeparam>
     /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static PositionCollection PositionsWhere<TData>(
         this TData[] source,
         Predicate<TData> comparison
