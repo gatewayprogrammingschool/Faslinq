@@ -16,8 +16,8 @@ jobs:
       - name: Build & Deploy to GitHub Pages
         env: 
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_REPOSITORY: ${{ secrets.GITHUB_REPOSITORY }}
-          GITHUB_ACTOR: ${{ secrets.GITHUB_ACTOR }}
+          GITHUB_REPOSITORY: ${{ secrets.REPOSITORY }}
+          GITHUB_ACTOR: ${{ secrets.ACTOR }}
         uses: BryanSchuetz/jekyll-deploy-gh-pages@master
 
 #   build:
