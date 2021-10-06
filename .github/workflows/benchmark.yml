@@ -32,7 +32,8 @@ jobs:
 
         git checkout main
 
-        .\bench.ps1 -Select -Once -Configuration Debug
+        # . .\bench.ps1 -Select -Once -Configuration Debug
+        . .\bench.ps1 -Select -Where -Take -TakeLast -First -FirstWhere -Last -LastWhere -Join -Configuration Release
 
         $semver = & gitversion /showvariable SemVer
         $commit = & git rev-parse HEAD
@@ -43,8 +44,6 @@ jobs:
         $mds += "> Benchmarked Version: $semver ($commit)"
 
         $mds | out-file .\results.md
-
-        # -Where -Take -TakeLast -First -FirstWhere -Last -LastWhere -Join -Configuration Configuration
 
         gc .\doks\benchmarks\results.yaml,.\results.md | out-file .\doks\benchmarks\results.md
 
