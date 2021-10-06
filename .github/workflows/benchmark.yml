@@ -25,17 +25,20 @@ jobs:
         git config user.email "ninja@thesharp.ninja"
         git config user.name "GitHub Actions"
         
-        git checkout -b benchmarks
+        git checkout -b main
         
-        .\bench.ps1 -Select -Where -Take -TakeLast -First -FirstWhere -Last -LastWhere -Join -Configuration Configuration
+        .\bench.ps1 -Select -Once -Configuration Debug 
         
-        copy ./results.md ./docs/benchmarks/ -Verbose
+        # -Where -Take -TakeLast -First -FirstWhere -Last -LastWhere -Join -Configuration Configuration
         
-        git add -v **/results.md
+        git add --branch gh-pages -v ./results.md
 
         echo "Updated benchmark results." > commit.txt
         
-        git commit --message=commit.txt **/results.md
+        git commit --branch gh-pages --file=commit.txt ./results.md
+
+        git checkout -b gh-pages
+        
         git remote set-url --push origin https://sharpninja:${env:GITHUB_TOKEN}@github.com/gatewayprogrammingschool/Faslinq
         git push origin
         
