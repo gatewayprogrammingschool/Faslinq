@@ -32,13 +32,8 @@ jobs:
         
         # -Where -Take -TakeLast -First -FirstWhere -Last -LastWhere -Join -Configuration Configuration
         
-        # mv ./results.md ./doks/benchmarks/results.md
-        
         gc .\doks\benchmarks\results.yaml,.\results.md | out-file .\doks\benchmarks\results.md
         
         git add -v ./doks/benchmarks/results.md
-
         git commit -m "Updated benchmark results."
-
         git push origin
-        
