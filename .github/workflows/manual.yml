@@ -9,35 +9,44 @@ on:
    
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "greet"
-  build:
-    # The type of runner that the job will run on
+  build_and_deploy:
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-    - name: Checkout
-      uses: actions/checkout@v1
+      - uses: actions/checkout@v1
+      - name: Build & Deploy to GitHub Pages
+        env: 
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ secrets.GITHUB_REPOSITORY }}
+          GITHUB_ACTOR: ${{ secrets.GITHUB_ACTOR }}
+        uses: BryanSchuetz/jekyll-deploy-gh-pages@master
+
+#   build:
+#     runs-on: ubuntu-latest
+
+#     # Steps represent a sequence of tasks that will be executed as part of the job
+#     steps:
+#     - name: Checkout
+#       uses: actions/checkout@v1
       
-    - run: |
-        git config user.email "ninja@thesharp.ninja"
-        git config user.name "GitHub Actions"
-        git checkout -b benchmarks        
-        cd doks
+#     - run: |
+#         git config user.email "ninja@thesharp.ninja"
+#         git config user.name "GitHub Actions"
+#         git checkout -b benchmarks        
+#         cd doks
         
-    - name: Build Jekyll
-      uses: jerryjvl/jekyll-build-action@v1
+#     - name: Build Jekyll
+#       uses: jerryjvl/jekyll-build-action@v1
       
-    - name: Commit
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: |        
-        mv ./_site/* -t ../docs/ -f
-        cd ../docs
+#     - name: Commit
+#       env:
+#         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#       run: |        
+#         mv ./_site/* -t ../docs/ -f
+#         cd ../docs
         
-        git add .
+#         git add .
         
-        git commit --message=commit.txt **/results.md
-        git remote set-url --push origin https://sharpninja:${env:GITHUB_TOKEN}@github.com/gatewayprogrammingschool/Faslinq
-        git push origin
+#         git commit --message=commit.txt **/results.md
+#         git remote set-url --push origin https://sharpninja:${env:GITHUB_TOKEN}@github.com/gatewayprogrammingschool/Faslinq
+#         git push origin
         
