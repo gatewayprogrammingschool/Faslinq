@@ -16,12 +16,28 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+      
     - run: |
-        pwd
-        ls -al
+        git config user.email "ninja@thesharp.ninja"
+        git config user.name "GitHub Actions"
+        git checkout -b benchmarks        
         cd doks
         
     - name: Build Jekyll
       uses: jerryjvl/jekyll-build-action@v1
       
-    - run: mv ./_site/* -t ../docs/ -f
+    - name: Commit
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |        
+        mv ./_site/* -t ../docs/ -f
+        cd ../docs
+        
+        git add .
+        
+        git commit --message=commit.txt **/results.md
+        git remote set-url --push origin https://sharpninja:${env:GITHUB_TOKEN}@github.com/gatewayprogrammingschool/Faslinq
+        git push origin
+        
