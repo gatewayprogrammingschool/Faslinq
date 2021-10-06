@@ -26,15 +26,21 @@ jobs:
         git config user.email "ninja@thesharp.ninja"
         git config user.name "GitHub Actions"
         
-        git checkout -b main
+        git checkout main
         
         .\bench.ps1 -Select -Once -Configuration Debug 
         
         # -Where -Take -TakeLast -First -FirstWhere -Last -LastWhere -Join -Configuration Configuration
         
+        mv ./results.md ..
+        
+        git checkout gh-pages
+        
+        mv ../results.md ./benchmarks/results.md
+        
         git add -v ./results.md
 
         git commit -m "Updated benchmark results."
 
-        git push origin main:gh-pages
+        git push origin
         
