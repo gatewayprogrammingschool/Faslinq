@@ -106,7 +106,7 @@ var _ = agents.FirstOrDefault(agent => agent.CanBeatNeo);
 
 // Faslinq Way
 var agents = Matrix.GetAgentsList();
-var sacrificialLamb = agents.FirstOrDefault
+var sacrificialLamb = agents.FirstOrDefault(
                         agent => agent.CanBeatNeo,
                         agents.Last());
 // Polyfill .Net 6 Default Behavior to all targets.
