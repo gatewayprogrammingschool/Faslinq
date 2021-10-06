@@ -30,10 +30,21 @@ jobs:
         
         .\bench.ps1 -Select -Once -Configuration Debug 
         
+        $semver = & gitversion /showvariable SemVer
+        $commit = & git rev-parse HEAD
+        
+        $mds = get-content .\bench.ps1
+        
+        $mds += ""
+        $mds += "Benchmarked Version: $semver ($commit)"
+        
+        $mds | out-file .\bench.ps1
+        
         # -Where -Take -TakeLast -First -FirstWhere -Last -LastWhere -Join -Configuration Configuration
         
         gc .\doks\benchmarks\results.yaml,.\results.md | out-file .\doks\benchmarks\results.md
         
         git add -v ./doks/benchmarks/results.md
-        git commit -m "Updated benchmark results."
+        git commit -m "Updated benchmark results."        
+        git tag -a "b.$semver" -m "Benchmark $semver"
         git push origin
