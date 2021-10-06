@@ -21,6 +21,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
+        git fetch --unshallow
         git config user.email "ninja@thesharp.ninja"
         git config user.name "GitHub Actions"
         
