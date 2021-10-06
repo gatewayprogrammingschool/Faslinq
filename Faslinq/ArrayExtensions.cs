@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
-// ReSharper disable ForCanBeConvertedToForeach
+﻿// ReSharper disable ForCanBeConvertedToForeach
 // ReSharper disable LoopCanBeConvertedToQuery
 
 namespace Faslinq;
@@ -61,8 +59,19 @@ public static partial class ArrayExtensions
 
 #region First
 
+/// <summary>
+/// 
+/// </summary>
 public static partial class ArrayExtensions
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="query"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <returns></returns>
+    /// <exception cref="IndexOutOfRangeException"></exception>
     public static TData First<TData>(
         this TData[] source,
         Predicate<TData>? query = null
@@ -89,6 +98,14 @@ public static partial class ArrayExtensions
         throw new IndexOutOfRangeException("List does not contain a matching value.");
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="query"></param>
+    /// <param name="defaultValue"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <returns></returns>
     public static TData? FirstOrDefault<TData>(
         this TData[] source,
         Predicate<TData>? query = null,
@@ -125,6 +142,14 @@ public static partial class ArrayExtensions
 
 public static partial class ArrayExtensions
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="query"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <returns></returns>
+    /// <exception cref="IndexOutOfRangeException"></exception>
     public static TData Last<TData>(
         this TData[] source,
         Predicate<TData>? query = null
@@ -151,6 +176,14 @@ public static partial class ArrayExtensions
         throw new IndexOutOfRangeException("List does not contain a matching value.");
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="query"></param>
+    /// <param name="defaultValue"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <returns></returns>
     public static TData? LastOrDefault<TData>(
         this TData[] source,
         Predicate<TData>? query = null,
@@ -187,12 +220,27 @@ public static partial class ArrayExtensions
 
 public static partial class ArrayExtensions
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="query"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <returns></returns>
     public static TData[] Where<TData>(
         this TData[] source,
         Predicate<TData> query
     )
         => source.WhereSelectTake(query, i => i, source.Length);
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="query"></param>
+    /// <param name="takeCount"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <returns></returns>
     public static TData[] WhereTake<TData>(
         this TData[] source,
         Predicate<TData> query,
@@ -223,6 +271,14 @@ public static partial class ArrayExtensions
         return result;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="query"></param>
+    /// <param name="takeCount"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <returns></returns>
     public static TData[] WhereTakeLast<TData>(
         this TData[] source,
         Predicate<TData> query,
@@ -259,12 +315,29 @@ public static partial class ArrayExtensions
 
 public static partial class ArrayExtensions
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="selector"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <typeparam name="TResult"></typeparam>
+    /// <returns></returns>
     public static TResult[] Select<TData, TResult>(
         this TData[] source,
         Func<TData, TResult> selector
     )
         => source.SelectTake(selector, source.Length);
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="selector"></param>
+    /// <param name="takeCount"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <typeparam name="TResult"></typeparam>
+    /// <returns></returns>
     public static TResult[] SelectTake<TData, TResult>(
         this TData[] source,
         Func<TData, TResult> selector,
@@ -291,6 +364,15 @@ public static partial class ArrayExtensions
         return result;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="selector"></param>
+    /// <param name="takeCount"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <typeparam name="TResult"></typeparam>
+    /// <returns></returns>
     public static TResult[] SelectTakeLast<TData, TResult>(
         this TData[] source,
         Func<TData, TResult> selector,
@@ -324,6 +406,15 @@ public static partial class ArrayExtensions
 
 public static partial class ArrayExtensions
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="query"></param>
+    /// <param name="selector"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <typeparam name="TResult"></typeparam>
+    /// <returns></returns>
     public static TResult[] WhereSelect<TData, TResult>(
         this TData[] source,
         Predicate<TData> query,
@@ -331,6 +422,16 @@ public static partial class ArrayExtensions
     )
         => source.WhereSelectTake(query, selector, source.Length);
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="query"></param>
+    /// <param name="selector"></param>
+    /// <param name="takeCount"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <typeparam name="TResult"></typeparam>
+    /// <returns></returns>
     public static TResult[] WhereSelectTake<TData, TResult>(
         this TData[] source,
         Predicate<TData> query,
@@ -361,6 +462,16 @@ public static partial class ArrayExtensions
         return result;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="query"></param>
+    /// <param name="selector"></param>
+    /// <param name="takeCount"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <typeparam name="TResult"></typeparam>
+    /// <returns></returns>
     public static TResult[] WhereSelectTakeLast<TData, TResult>(
         this TData[] source,
         Predicate<TData> query,
@@ -398,12 +509,26 @@ public static partial class ArrayExtensions
 
 public static partial class ArrayExtensions
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="takeCount"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <returns></returns>
     public static TData[] Take<TData>(
         this TData[] source,
         int takeCount
     )
         => SelectTake(source, i => i, takeCount);
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="takeCount"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <returns></returns>
     public static TData[] TakeLast<TData>(
         this TData[] source,
         int takeCount
@@ -417,12 +542,29 @@ public static partial class ArrayExtensions
 
 public static partial class ArrayExtensions
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="comparison"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <typeparam name="TKey"></typeparam>
+    /// <returns></returns>
     public static TData[] OrderBy<TData, TKey>(
         this TData[] source,
         Func<TData, TKey> comparison
     )
         => OrderByTake(source, comparison, source.Length);
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="comparison"></param>
+    /// <param name="takeCount"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <typeparam name="TKey"></typeparam>
+    /// <returns></returns>
     public static TData[] OrderByTake<TData, TKey>(
         this TData[] source,
         Func<TData, TKey> comparison,
@@ -464,6 +606,15 @@ public static partial class ArrayExtensions
         return result.ToArray();
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="comparison"></param>
+    /// <param name="takeCount"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <typeparam name="TKey"></typeparam>
+    /// <returns></returns>
     public static TData[] OrderByTakeLast<TData, TKey>(
         this TData[] source,
         Func<TData, TKey> comparison,
@@ -514,12 +665,29 @@ public static partial class ArrayExtensions
 
 public static partial class ArrayExtensions
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="comparison"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <typeparam name="TKey"></typeparam>
+    /// <returns></returns>
     public static TData[] OrderByDescending<TData, TKey>(
         this TData[] source,
         Func<TData, TKey> comparison
     )
         => OrderByDescendingTake(source, comparison, source.Length);
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="comparison"></param>
+    /// <param name="takeCount"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <typeparam name="TKey"></typeparam>
+    /// <returns></returns>
     public static TData[] OrderByDescendingTakeLast<TData, TKey>(
         this TData[] source,
         Func<TData, TKey> comparison,
@@ -566,6 +734,15 @@ public static partial class ArrayExtensions
         return result;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="comparison"></param>
+    /// <param name="takeCount"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <typeparam name="TKey"></typeparam>
+    /// <returns></returns>
     public static TData[] OrderByDescendingTake<TData, TKey>(
         this TData[] source,
         Func<TData, TKey> comparison,
@@ -805,6 +982,13 @@ public static partial class ArrayExtensions
 
 public static partial class ArrayExtensions
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="comparison"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <returns></returns>
     public static PositionCollection PositionsWhere<TData>(
         this TData[] source,
         Predicate<TData> comparison

@@ -6,11 +6,27 @@ namespace Faslinq;
 
 #region Any / All
 
+/// <summary>
+/// 
+/// </summary>
 public static partial class ListExtensions
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="source"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <returns></returns>
     public static bool Any<TData>(this List<TData> source)
         => source.Count > 0;
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="query"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <returns></returns>
     public static bool Any<TData>(
         this List<TData> source,
         Predicate<TData> query
@@ -33,6 +49,13 @@ public static partial class ListExtensions
         return false;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="query"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <returns></returns>
     public static bool All<TData>(
         this List<TData> source,
         Predicate<TData> query
@@ -62,6 +85,14 @@ public static partial class ListExtensions
 
 public static partial class ListExtensions
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="query"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <returns></returns>
+    /// <exception cref="IndexOutOfRangeException"></exception>
     public static TData First<TData>(
         this List<TData> source,
         Predicate<TData>? query = null
@@ -88,6 +119,14 @@ public static partial class ListExtensions
         throw new IndexOutOfRangeException("List does not contain a matching value.");
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="query"></param>
+    /// <param name="defaultValue"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <returns></returns>
     public static TData? FirstOrDefault<TData>(
         this List<TData> source,
         Predicate<TData>? query = null,
@@ -124,6 +163,14 @@ public static partial class ListExtensions
 
 public static partial class ListExtensions
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="query"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <returns></returns>
+    /// <exception cref="IndexOutOfRangeException"></exception>
     public static TData Last<TData>(
         this List<TData> source,
         Predicate<TData>? query = null
@@ -150,6 +197,14 @@ public static partial class ListExtensions
         throw new IndexOutOfRangeException("List does not contain a matching value.");
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="query"></param>
+    /// <param name="defaultValue"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <returns></returns>
     public static TData? LastOrDefault<TData>(
         this List<TData> source,
         Predicate<TData>? query = null,
@@ -186,6 +241,13 @@ public static partial class ListExtensions
 
 public static partial class ListExtensions
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="query"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <returns></returns>
     public static List<TData> Where<TData>(
         this List<TData> source,
         Predicate<TData> query
@@ -199,6 +261,14 @@ public static partial class ListExtensions
         return source.WhereTake(query, source.Count);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="query"></param>
+    /// <param name="takeCount"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <returns></returns>
     public static List<TData> WhereTake<TData>(
         this List<TData> source,
         Predicate<TData> query,
@@ -230,6 +300,14 @@ public static partial class ListExtensions
         return result;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="query"></param>
+    /// <param name="takeCount"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <returns></returns>
     public static List<TData> WhereTakeLast<TData>(
         this List<TData> source,
         Predicate<TData> query,
@@ -265,6 +343,14 @@ public static partial class ListExtensions
 
 public static partial class ListExtensions
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="selector"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <typeparam name="TResult"></typeparam>
+    /// <returns></returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static List<TResult> Select<TData, TResult>(
         this List<TData> source,
@@ -285,6 +371,15 @@ public static partial class ListExtensions
         return result;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="selector"></param>
+    /// <param name="takeCount"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <typeparam name="TResult"></typeparam>
+    /// <returns></returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static List<TResult> SelectTake<TData, TResult>(
         this List<TData> source,
@@ -311,6 +406,15 @@ public static partial class ListExtensions
         return result;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="selector"></param>
+    /// <param name="takeCount"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <typeparam name="TResult"></typeparam>
+    /// <returns></returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static List<TResult> SelectTakeLast<TData, TResult>(
         this List<TData> source,
@@ -344,6 +448,15 @@ public static partial class ListExtensions
 
 public static partial class ListExtensions
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="query"></param>
+    /// <param name="selector"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <typeparam name="TResult"></typeparam>
+    /// <returns></returns>
     public static List<TResult> WhereSelect<TData, TResult>(
         this List<TData> source,
         Predicate<TData> query,
@@ -353,6 +466,16 @@ public static partial class ListExtensions
         return source.WhereSelectTake(query, selector, source.Count);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="query"></param>
+    /// <param name="selector"></param>
+    /// <param name="takeCount"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <typeparam name="TResult"></typeparam>
+    /// <returns></returns>
     public static List<TResult> WhereSelectTake<TData, TResult>(
         this List<TData> source,
         Predicate<TData> query,
@@ -382,6 +505,16 @@ public static partial class ListExtensions
         return result;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="query"></param>
+    /// <param name="selector"></param>
+    /// <param name="takeCount"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <typeparam name="TResult"></typeparam>
+    /// <returns></returns>
     public static List<TResult> WhereSelectTakeLast<TData, TResult>(
         this List<TData> source,
         Predicate<TData> query,
@@ -419,6 +552,13 @@ public static partial class ListExtensions
 
 public static partial class ListExtensions
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="takeCount"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <returns></returns>
     public static List<TData> Take<TData>(
         this List<TData> source,
         int takeCount
@@ -443,6 +583,13 @@ public static partial class ListExtensions
         return result;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="takeCount"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <returns></returns>
     public static List<TData> TakeLast<TData>(
         this List<TData> source,
         int takeCount
@@ -468,6 +615,13 @@ public static partial class ListExtensions
     }
 
 #if NETSTANDARD2_0
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="takeCount"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <returns></returns>
     public static IEnumerable<TData> TakeLast<TData>(
         this IEnumerable<TData> source,
         int takeCount)
@@ -498,12 +652,29 @@ public static partial class ListExtensions
 
 public static partial class ListExtensions
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="comparison"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <typeparam name="TKey"></typeparam>
+    /// <returns></returns>
     public static List<TData> OrderBy<TData, TKey>(
         this List<TData> source,
         Func<TData, TKey> comparison
     )
         => OrderByTake(source, comparison, source.Count);
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="comparison"></param>
+    /// <param name="takeCount"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <typeparam name="TKey"></typeparam>
+    /// <returns></returns>
     public static List<TData> OrderByTake<TData, TKey>(
         this List<TData> source,
         Func<TData, TKey> comparison,
@@ -545,6 +716,15 @@ public static partial class ListExtensions
         return result;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="comparison"></param>
+    /// <param name="takeCount"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <typeparam name="TKey"></typeparam>
+    /// <returns></returns>
     public static List<TData> OrderByTakeLast<TData, TKey>(
         this List<TData> source,
         Func<TData, TKey> comparison,
@@ -591,12 +771,29 @@ public static partial class ListExtensions
 
 public static partial class ListExtensions
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="comparison"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <typeparam name="TKey"></typeparam>
+    /// <returns></returns>
     public static List<TData> OrderByDescending<TData, TKey>(
         this List<TData> source,
         Func<TData, TKey> comparison
     )
         => OrderByDescendingTake(source, comparison, source.Count);
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="comparison"></param>
+    /// <param name="takeCount"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <typeparam name="TKey"></typeparam>
+    /// <returns></returns>
     public static List<TData> OrderByDescendingTakeLast<TData, TKey>(
         this List<TData> source,
         Func<TData, TKey> comparison,
@@ -639,6 +836,15 @@ public static partial class ListExtensions
         return result;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="comparison"></param>
+    /// <param name="takeCount"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <typeparam name="TKey"></typeparam>
+    /// <returns></returns>
     public static List<TData> OrderByDescendingTake<TData, TKey>(
         this List<TData> source,
         Func<TData, TKey> comparison,
@@ -688,6 +894,13 @@ public static partial class ListExtensions
 
 public static partial class ListExtensions
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="comparison"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <returns></returns>
     public static PositionCollection PositionsWhere<TData>(
         this List<TData> source,
         Predicate<TData> comparison
