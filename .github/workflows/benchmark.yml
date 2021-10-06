@@ -35,15 +35,8 @@ jobs:
         
         $mds = get-content .\bench.ps1
         
-        for($i=0; $i<$mds.Count; $i += 1) {
-          $line = $mds[$i]
-          if($line -eq "```") {
-            $mds[$i] = $line + "`n"
-          }
-        }       
-        
         $mds += ""
-        $mds += "Benchmarked Version: $semver ($commit)"
+        $mds += "> Benchmarked Version: $semver ($commit)"
         
         $mds | out-file .\bench.ps1
         
