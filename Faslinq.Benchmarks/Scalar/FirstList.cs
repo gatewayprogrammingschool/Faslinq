@@ -10,7 +10,7 @@ public class FirstList : FirstBenchmarks
     [DynamicData(nameof(GenerateTestRecords250), DynamicDataSourceType.Method)]
     [DynamicData(nameof(GenerateTestRecords5000), DynamicDataSourceType.Method)]
     [DynamicData(nameof(GenerateTestRecords100000), DynamicDataSourceType.Method)]
-    public void First_Faslinq(object item)
+    public void First_List(object item)
     {
         ProcessScalar(item, FirstGenerateRecords1);
     }
@@ -19,25 +19,25 @@ public class FirstList : FirstBenchmarks
     [Benchmark]
     [BenchmarkCategory("First", "1", "List")]
     [ArgumentsSource(nameof(GenerateRecords1))]
-    public TestValueTuple First_1_Faslinq(object item)
+    public TestValueTuple First_1_List(object item)
         => ProcessScalar(item, FirstGenerateRecords1);
 
     [Benchmark]
     [BenchmarkCategory("First", "250", "List")]
     [ArgumentsSource(nameof(GenerateRecords250))]
-    public TestValueTuple First_250_Faslinq(object item)
+    public TestValueTuple First_250_List(object item)
         => ProcessScalar(item, FirstGenerateRecords250);
 
     [Benchmark]
     [BenchmarkCategory("First", "5000", "List")]
     [ArgumentsSource(nameof(GenerateRecords5000))]
-    public TestValueTuple First_5000_Faslinq(object item)
+    public TestValueTuple First_5000_List(object item)
         => ProcessScalar(item, FirstGenerateRecords5000);
 
     [Benchmark]
     [BenchmarkCategory("First", "100000", "List")]
     [ArgumentsSource(nameof(GenerateRecords100000))]
-    public TestValueTuple First_100000_Faslinq(object item)
+    public TestValueTuple First_100000_List(object item)
         => ProcessScalar(item, FirstGenerateRecords100000);
 
     public new static IEnumerable<object[]> GenerateTestRecords1()

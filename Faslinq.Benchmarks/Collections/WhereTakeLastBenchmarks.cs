@@ -53,7 +53,7 @@ public class WhereTakeLastBenchmarks : BenchmarkBase
         return list.WhereTakeLast(i => list[0] == i, (int)(list.Count * 0.2m));
     }
 
-    protected override object[] GetArrayByFaslinq(object[] array, params object[] values)
+    protected override object[] GetArrayByArray(object[] array, params object[] values)
     {
         return array.WhereTakeLast(i => array[0] == i, (int)(array.Length * 0.2m));
     }

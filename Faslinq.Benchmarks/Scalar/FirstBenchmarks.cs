@@ -43,7 +43,7 @@ public abstract class FirstBenchmarks : BenchmarkBase
     protected override List<object> GetListByFaslinq(List<object> list, params object[] values)
         => throw new NotImplementedException();
 
-    protected override object[] GetArrayByFaslinq(object[] array, params object[] values)
+    protected override object[] GetArrayByArray(object[] array, params object[] values)
         => throw new NotImplementedException();
 
     protected override IEnumerable<object> GetEnumerableByLinq(IEnumerable<object> enumerable, params object[] values)

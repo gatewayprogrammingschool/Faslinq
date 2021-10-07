@@ -53,7 +53,7 @@ public class WhereSelectBenchmarks : BenchmarkBase
         return list.WhereSelect(i => list[0] == i, i => i);
     }
 
-    protected override object[] GetArrayByFaslinq(object[] array, params object[] values)
+    protected override object[] GetArrayByArray(object[] array, params object[] values)
     {
         return array.WhereSelect(i => array[0] == i, i => i);
     }

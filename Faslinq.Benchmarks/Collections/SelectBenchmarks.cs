@@ -51,7 +51,7 @@ public abstract class SelectBenchmarks : BenchmarkBase
         return list.Select(i => i);
     }
 
-    protected override object[] GetArrayByFaslinq(object[] array, params object[] values)
+    protected override object[] GetArrayByArray(object[] array, params object[] values)
     {
         return array.Select(i => i);
     }

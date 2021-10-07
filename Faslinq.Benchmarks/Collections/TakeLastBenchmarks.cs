@@ -44,7 +44,7 @@ public class TakeLastBenchmarks : BenchmarkBase
     protected override List<object> GetListByFaslinq(List<object> list, params object[] values)
         => list.TakeLast((int)(list.Count * 0.2m));
 
-    protected override object[] GetArrayByFaslinq(object[] array, params object[] values)
+    protected override object[] GetArrayByArray(object[] array, params object[] values)
         => array.TakeLast((int)(array.Length * 0.2m));
 
     protected override IEnumerable<object> GetEnumerableByLinq(IEnumerable<object> enumerable, params object[] values)

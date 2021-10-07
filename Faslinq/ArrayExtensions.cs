@@ -291,8 +291,8 @@ public static partial class ArrayExtensions
         }
 
         var takeIndex = 0;
-        var result = new TData[takeCount];
         var targetLength = Math.Min(source.Length, takeCount);
+        var result = new TData[targetLength];
         for (var i = 0; i < source.Length && takeIndex < targetLength; i++)
         {
             if (query(source[i]))
@@ -488,13 +488,14 @@ public static partial class ArrayExtensions
             takeCount = 0;
         }
 
+        takeCount = Math.Min(takeCount, source.Length);
         var takeIndex = 0;
         var result = new TResult[takeCount];
         for (var i = 0; i < source.Length && takeIndex < takeCount; i++)
         {
             if (query(source[i]))
             {
-                result[takeIndex] = selector(source[i]);
+                result[takeIndex++] = selector(source[i]);
             }
         }
 

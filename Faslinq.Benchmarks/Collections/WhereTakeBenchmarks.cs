@@ -53,7 +53,7 @@ public abstract class WhereTakeBenchmarks : BenchmarkBase
         return list.WhereTake(i => list[0] == i, (int)(list.Count * 0.2m));
     }
 
-    protected override object[] GetArrayByFaslinq(object[] array, params object[] values)
+    protected override object[] GetArrayByArray(object[] array, params object[] values)
     {
         return array.WhereTake(i => array[0] == i, (int)(array.Length * 0.2m));
     }

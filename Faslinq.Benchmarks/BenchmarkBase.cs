@@ -290,7 +290,7 @@ public abstract class BenchmarkBase
 
     protected abstract List<object> GetListByFaslinq(List<object> list, params object[] values);
     protected abstract List<TestValueTuple> GetStructListByFaslinq(List<TestValueTuple> list, params object[] values);
-    protected abstract object[] GetArrayByFaslinq(object[] array, params object[] values);
+    protected abstract object[] GetArrayByArray(object[] array, params object[] values);
     protected abstract TestValueTuple[] GetStructArrayByFaslinq(TestValueTuple[] array, params object[] values);
     protected abstract IEnumerable<object> GetEnumerableByLinq(IEnumerable<object> enumerable, params object[] values);
 

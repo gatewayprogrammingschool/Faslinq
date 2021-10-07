@@ -294,19 +294,18 @@ public static partial class ListExtensions
             takeCount = 0;
         }
 
-        List<TData> result = new();
-        var targetLength = Math.Min(takeCount, source.Count);
-        for (var i = 0; i < source.Count && result.Count < targetLength; i++)
+        var takeIndex = 0;
+        var targetLength = Math.Min(source.Count, takeCount);
+        var result = new TData[targetLength];
+        for (var i = 0; i < source.Count && takeIndex < targetLength; i++)
         {
-            var found = query(source[i]);
-
-            if (found)
+            if (query(source[i]))
             {
-                result.Add(source[i]);
+                result[takeIndex++] = source[i];
             }
         }
 
-        return result;
+        return new (result);
     }
 
     /// <summary>
@@ -505,16 +504,18 @@ public static partial class ListExtensions
             takeCount = 0;
         }
 
-        List<TResult> result = new();
-        for (var i = 0; i < source.Count && result.Count < takeCount; i++)
+        takeCount = Math.Min(takeCount, source.Count);
+        var takeIndex = 0;
+        var result = new TResult[takeCount];
+        for (var i = 0; i < source.Count && takeIndex < takeCount; i++)
         {
             if (query(source[i]))
             {
-                result.Add(selector(source[i]));
+                result[takeIndex++] = selector(source[i]);
             }
         }
 
-        return result;
+        return new (result);
     }
 
     /// <summary>

@@ -1,4 +1,6 @@
 ﻿using BenchmarkDotNet.Diagnosers;
+using BenchmarkDotNet.Exporters.Json;
+using BenchmarkDotNet.Extensions;
 using BenchmarkDotNet.Reports;
 using BenchmarkDotNet.Running;
 
@@ -414,6 +416,7 @@ public class Program
         public IEnumerable<IExporter> GetExporters()
         {
             yield return MarkdownExporter.GitHub;
+            yield return JsonExporter.Full;
         }
 
         public IEnumerable<ILogger> GetLoggers()
@@ -422,7 +425,14 @@ public class Program
         }
 
         public IEnumerable<IDiagnoser> GetDiagnosers()
-            => _cfg.GetDiagnosers();
+        {
+            foreach (var item in _cfg.GetDiagnosers())
+            {
+                yield return item;
+            }
+
+            yield return new MemoryDiagnoser(new (true));
+        }
 
         public IEnumerable<IAnalyser> GetAnalysers()
             => _cfg.GetAnalysers();
@@ -447,16 +457,16 @@ public class Program
         public class FaslinqOrderer : IOrderer
         {
             public IEnumerable<BenchmarkCase> GetExecutionOrder(ImmutableArray<BenchmarkCase> benchmarksCase)
-                => benchmarksCase.OrderBy(benchmark => benchmark.Descriptor.Categories[0])
-                    .ThenBy(benchmark => benchmark.Descriptor.Categories[1]);
+                => benchmarksCase.OrderBy(benchmark => benchmark.Descriptor.Categories.ElementAtOrDefault(0))
+                    .ThenBy(benchmark => int.Parse(benchmark.Descriptor.Categories.ElementAtOrDefault(1) ?? "0"));
                     //.ThenBy(benchmark => int.TryParse(GetPart(benchmark.Descriptor?.WorkloadMethodDisplayInfo ?? "a_0_b", '_', 1), out int value) ? value : throw new ApplicationException($"Cannot parse {GetPart(benchmark.Descriptor?.WorkloadMethodDisplayInfo ?? "a_0_b", '_', 1)} to int."));
 
             public IEnumerable<BenchmarkCase> GetSummaryOrder(
                 ImmutableArray<BenchmarkCase> benchmarksCase,
                 Summary summary
             )
-                => benchmarksCase.OrderBy(benchmark => benchmark.Descriptor.Categories[0])
-                    .ThenBy(benchmark => int.Parse(benchmark.Descriptor.Categories[1]))
+                => benchmarksCase.OrderBy(benchmark => benchmark.Descriptor.Categories.ElementAtOrDefault(0))
+                    .ThenBy(benchmark => int.Parse(benchmark.Descriptor.Categories.ElementAtOrDefault(1) ?? "0"))
                     .ThenBy(benchmark => summary[benchmark].ResultStatistics.Mean);
 
             public string? GetHighlightGroupKey(BenchmarkCase benchmarkCase)
@@ -483,7 +493,7 @@ public class Program
         {
             public IEnumerable<IColumn> GetColumns(Summary summary)
             {
-                yield return new TagColumn("Method", name => GetPart(name, '_', 0));
+                yield return new TagColumn("Use Case", name => $"{GetPart(name, '_', 2)}:{GetPart(name, '_', 0)}");
                 yield return new TagColumn("Count", name => GetPart(name, '_', 1));
                 yield return LogicalGroupColumn.Default;
                 yield return StatisticColumn.Median;
@@ -492,6 +502,9 @@ public class Program
                 yield return StatisticColumn.StdDev;
                 yield return StatisticColumn.Min;
                 yield return StatisticColumn.Max;
+                var metric = summary.Reports[0]
+                    .Metrics.Values.FirstOrDefault();
+                yield return new MetricColumn(metric?.Descriptor);
                 foreach (var col in JobCharacteristicColumn.AllColumns)
                 {
                     if (col.ColumnName is "Platform" or "BuildConfiguration" or "Runtime")

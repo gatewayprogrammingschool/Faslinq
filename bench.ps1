@@ -6,6 +6,10 @@ param(
     [switch]$Where = $false,
     [switch]$Take = $false,
     [switch]$TakeLast = $false,
+    [switch]$First = $false,
+    [switch]$FirstWhere = $false,
+    [switch]$Last = $false,
+    [switch]$LastWhere = $false,
     [switch]$Once = $false,
     [switch]$Join = $false,
     [switch]$NoFaslinq = $false,
@@ -52,6 +56,18 @@ try {
         }
         if ($TakeLast) {
             $f += '-TakeLast'
+        }
+        if ($First) {
+            $f += '-First'
+        }
+        if ($FirstWhere) {
+            $f += '-FirstWhere'
+        }
+        if ($Last) {
+            $f += '-Last'
+        }
+        if ($LastWhere) {
+            $f += '-LastWhere'
         }
     }
 
@@ -171,10 +187,25 @@ try {
 
     $md | Out-File $resultsFile -Force
 
+    $doksFile = "$root\doks\benchmarks\results.md"
+
+    Copy-Item $resultsFile -Destination $doksFile
+
     $edge = Get-Command *edge.exe
 
-    if ($edge) {
-        & $edge $resultsFile
+    $wsl = Get-Command wsl
+
+    if($wsl) {
+        Set-Location doks
+        & $wsl -e "jekyll clean; jekyll build; jekyll serve;"
+
+        if ($edge) {
+            & $edge "http://localhost:4000/"
+        }
+    } else {
+        if ($edge) {
+            & $edge $resultsFile
+        }
     }
 }
 finally {

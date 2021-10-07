@@ -2,7 +2,10 @@
   "profiles": {
     "Faslinq.Benchmarks": {
       "commandName": "Project",
-      "commandLineArgs": "-Select -Join"
+      "commandLineArgs": "-Where -Select --platform X64 --join",
+      "environmentVariables": {
+        "Flags": "\"-First -Last -FirstWhere -LastWhere -Select  -TakeLast \""
+      }
     }
   }
 }

@@ -8,25 +8,25 @@ public class FirstWhereList : FirstWhereBenchmarks
     [Benchmark]
     [BenchmarkCategory("FirstWhere", "1", "List")]
     [ArgumentsSource(nameof(GenerateRecords1))]
-    public TestValueTuple FirstWhere_1_Faslinq(object item)
+    public TestValueTuple FirstWhere_1_List(object item)
         => ProcessScalar(item, FirstGenerateRecords1);
 
     [Benchmark]
     [BenchmarkCategory("FirstWhere", "250", "List")]
     [ArgumentsSource(nameof(GenerateRecords250))]
-    public TestValueTuple FirstWhere_250_Faslinq(object item)
+    public TestValueTuple FirstWhere_250_List(object item)
         => ProcessScalar(item, FirstGenerateRecords250);
 
     [Benchmark]
     [BenchmarkCategory("FirstWhere", "5000", "List")]
     [ArgumentsSource(nameof(GenerateRecords5000))]
-    public TestValueTuple FirstWhere_5000_Faslinq(object item)
+    public TestValueTuple FirstWhere_5000_List(object item)
         => ProcessScalar(item, FirstGenerateRecords5000);
 
     [Benchmark]
     [BenchmarkCategory("FirstWhere", "100000", "List")]
     [ArgumentsSource(nameof(GenerateRecords100000))]
-    public TestValueTuple FirstWhere_100000_Faslinq(object item)
+    public TestValueTuple FirstWhere_100000_List(object item)
         => ProcessScalar(item, FirstGenerateRecords100000);
 
     [DataTestMethod]
@@ -34,7 +34,7 @@ public class FirstWhereList : FirstWhereBenchmarks
     [DynamicData(nameof(GenerateTestRecords250), DynamicDataSourceType.Method)]
     [DynamicData(nameof(GenerateTestRecords5000), DynamicDataSourceType.Method)]
     [DynamicData(nameof(GenerateTestRecords100000), DynamicDataSourceType.Method)]
-    public void FirstWhere_Faslinq(object item)
+    public void FirstWhere_List(object item)
     {
         ProcessScalar(item, FirstGenerateRecords1);
     }

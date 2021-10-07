@@ -53,7 +53,7 @@ public abstract class SelectTakeLastBenchmarks : BenchmarkBase
         return list.SelectTakeLast(i => i, (int)(list.Count * 0.2m));
     }
 
-    protected override object[] GetArrayByFaslinq(object[] array, params object[] values)
+    protected override object[] GetArrayByArray(object[] array, params object[] values)
     {
         return array.SelectTakeLast(i => i, (int)(array.Length * 0.2m));
     }

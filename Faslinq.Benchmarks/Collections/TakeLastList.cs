@@ -8,7 +8,7 @@ public class TakeLastList : TakeLastBenchmarks
     [DynamicData(nameof(GenerateTestRecords250), DynamicDataSourceType.Method)]
     [DynamicData(nameof(GenerateTestRecords5000), DynamicDataSourceType.Method)]
     [DynamicData(nameof(GenerateTestRecords100000), DynamicDataSourceType.Method)]
-    public void TakeLast_Faslinq(object item)
+    public void TakeLast_List(object item)
     {
         ProcessCollection(Tests.List, item, LastGenerateRecords1).Consume(new ());
     }
@@ -16,25 +16,25 @@ public class TakeLastList : TakeLastBenchmarks
     [Benchmark]
     [BenchmarkCategory("TakeLast", "1", "Linq")]
     [ArgumentsSource(nameof(GenerateRecords1))]
-    public void TakeLast_1_Faslinq(object item)
+    public void TakeLast_1_List(object item)
         => ProcessCollection(Tests.List, item, LastGenerateRecords1).Consume(new ());
 
     [Benchmark]
     [BenchmarkCategory("TakeLast", "250", "Linq")]
     [ArgumentsSource(nameof(GenerateRecords250))]
-    public void TakeLast_250_Faslinq(object item)
+    public void TakeLast_250_List(object item)
         => ProcessCollection(Tests.List, item, LastGenerateRecords1).Consume(new ());
 
     [Benchmark]
     [BenchmarkCategory("TakeLast", "5000", "Linq")]
     [ArgumentsSource(nameof(GenerateRecords5000))]
-    public void TakeLast_5000_Faslinq(object item)
+    public void TakeLast_5000_List(object item)
         => ProcessCollection(Tests.List, item, LastGenerateRecords5000).Consume(new ());
 
     [Benchmark]
     [BenchmarkCategory("TakeLast", "100000", "Linq")]
     [ArgumentsSource(nameof(GenerateRecords100000))]
-    public void TakeLast_100000_Faslinq(object item)
+    public void TakeLast_100000_List(object item)
         => ProcessCollection(Tests.List, item, LastGenerateRecords100000).Consume(new ());
 
     public new static IEnumerable<object[]> GenerateTestRecords1()

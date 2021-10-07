@@ -46,7 +46,7 @@ public abstract class WhereBenchmarks : BenchmarkBase
         return list.Where(i => list[0] == i);
     }
 
-    protected override object[] GetArrayByFaslinq(object[] array, params object[] values)
+    protected override object[] GetArrayByArray(object[] array, params object[] values)
     {
         return array.Where(i => array[0] == i);
     }
