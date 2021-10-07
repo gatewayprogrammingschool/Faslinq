@@ -22,7 +22,8 @@
             "script": "${workspaceFolder}/bench.ps1",
             "cwd": "${workspaceFolder}",
             "args": [
-                "-Select", "-Configuration", "Debug", "-Once", "-Join"
+                "-All", "-Join", "-Configuration", "Release"
+                //"-Select", "-Configuration", "Debug", "-Once", "-Join"
                 // "-Configuration",
                 // "Debug",
                 // "-Where",

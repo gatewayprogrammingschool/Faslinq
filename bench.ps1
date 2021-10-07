@@ -40,7 +40,7 @@ function Clean-Folder {
 try {
     [System.Collections.Generic.List[string[]]]$Names = @()
     if ($All) {
-        [string[]]$Filter = @('*')
+        [string[]]$f = @('--filter', '*')
     }
     else {
         $f = @()
