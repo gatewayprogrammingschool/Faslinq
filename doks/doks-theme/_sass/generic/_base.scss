@@ -243,3 +243,129 @@ button {
 		outline: none;
 	}
 }
+
+div.content_row {
+	position: fixed;
+	overflow-y: visible;
+	bottom: 140px;
+	top: 90px;
+	left: 0;
+	right: 0;
+
+	div.flex_container {
+		position: fixed;
+		left: 2px;
+		top: $header-height;
+		bottom: $footer-height;
+		width: $filters-width;
+		padding-right: 2px;
+		overflow-y: scroll;
+		overflow-x: hidden;
+
+		div.flex_card {
+			border-color: $color-table-header-border;
+			border-style: solid;
+			border-width: 1px;
+			width: 100%;
+			margin-bottom: 8px;
+			font-size: $filter_font_size !important;
+
+			label {
+				border-color: $color-table-header-border;
+				background-color: $color-table-header-bg;
+				border-style: solid;
+				border-width: 1px;
+				font-family: $font-family-secondary;
+				font-weight: 700;
+				text-transform: uppercase;
+				width: 100%;
+				display: block;
+				margin:0;
+				text-align: center;
+				font-size: $base_font_size !important;
+
+			}
+
+			select {
+				width: 100%;
+				display: block;
+				margin:0;
+			}
+
+			button {
+				font-family: $font-family-secondary;
+				font-weight: 700;
+				font-size: $base_font_size !important;
+				text-transform: uppercase;
+				width: 100%;
+				display: block;
+				padding: 5px 22px !important;
+			}
+		}
+	}
+
+	 div.table_container {
+		position: fixed;
+		left: $table-left;
+		display: block;
+		bottom: $footer-height;
+		top: $header-height;
+
+		table {
+			position: fixed;
+			top: $header-height;
+			bottom: $footer-height;
+			left: $table-left;
+			right: 0;
+			padding: 0;
+
+			tbody {
+				position: fixed;
+				left: $table-left;
+				bottom: $footer-height;
+				top: $header-height;
+				right: 0;
+				overflow-y: scroll;
+				overflow-x: hidden;
+				margin: 0;
+
+				.header_row {
+					margin: 0;
+
+					th {
+						padding-left: 1.5em;
+						padding-right: 1.5em;
+						position: sticky;
+  						top: 0;
+						margin: 0;
+					}
+
+					th.spring {
+						width: 100%
+					}
+				}
+
+				.body_row{
+					td.truncate
+					{
+						max-width: 0;
+						overflow: hidden;
+						text-overflow: ellipsis;
+						white-space: nowrap;
+					}
+
+					td.stat
+					{
+						white-space: nowrap;
+						text-align: right;
+					}
+
+					td.spring {
+						width: 100%
+					}
+				}
+			}
+		}
+
+	}
+}

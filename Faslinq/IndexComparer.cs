@@ -1,20 +1,20 @@
 ﻿namespace Faslinq;
 
 /// <summary>
-/// 
+///
 /// </summary>
 public class IndexComparer : IEqualityComparer<Index>
 {
     private static readonly IndexComparer Instance = new();
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public static IEqualityComparer<Index> Default
         => Instance;
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="x"></param>
     /// <param name="y"></param>
@@ -23,7 +23,7 @@ public class IndexComparer : IEqualityComparer<Index>
         => x.Equals(y);
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="obj"></param>
     /// <returns></returns>

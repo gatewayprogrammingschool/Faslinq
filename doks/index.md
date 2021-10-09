@@ -21,7 +21,7 @@ grid_navigation:
     - title: Is Faslinq Fast?
       excerpt: Benchmark Results
       cta: Read more
-      url: '/benchmarks/results/'
+      url: '/benchmarks/full-report/'
     - title: Faslinq API
       excerpt: Faslinq API Documentation
       cta: Read more

@@ -82,6 +82,32 @@
                 "reveal": "silent"
             },
             "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build doks",
+            "command": "jekyll",
+            "type": "shell",
+            "args": [
+                "build",
+                "--incremental"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/doks"
+            },
+            "group": "build"
+        },
+        {
+            "label": "jekyll serve",
+            "command": "jekyll",
+            "type": "shell",
+            "args": [
+                "serve",
+                "--incremental"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/doks"
+            },
+            "group": "build"
         }
     ]
 }

@@ -127,7 +127,15 @@ try {
 
     Set-Location "$root\Faslinq.Benchmarks\bin\$Configuration\net6.0\win-x64\publish\BenchmarkDotNet.Artifacts\results"
 
-    $mds = Get-ChildItem '*github.md' -ErrorAction Stop | Get-Content
+    $mds = Get-ChildItem '*github.md' -ErrorAction Stop `
+            | Sort-Object -Property CreationTime -Descending -Top 1 `
+            | Get-Content;
+
+    $json = Get-ChildItem '*report-full.json' -ErrorAction Stop `
+            | Sort-Object -Property CreationTime -Descending -Top 1;
+
+    $faslinqReport = Get-ChildItem 'Faslinq-*.json' -ErrorAction Stop `
+            | Sort-Object -Property CreationTime -Descending -Top 1;
 
     for ($i = 0; $i -lt $mds.Count; $i += 1) {
         $line = $mds[$i]
@@ -188,16 +196,20 @@ try {
     $md | Out-File $resultsFile -Force
 
     $doksFile = "$root\doks\benchmarks\results.md"
+    $jsonFile = "$root\doks\benchmarks\full-report.json"
+    $faslinqFile = "$root\doks\benchmarks\faslinq-report.json"
 
-    Copy-Item $resultsFile -Destination $doksFile
+    Copy-Item $resultsFile -Destination $doksFile -Verbose
+    Copy-Item $json -Destination $jsonFile -Verbose
+    Copy-Item $faslinqReport -Destination $faslinqFile -Verbose
 
     $edge = Get-Command *edge.exe
 
     $wsl = Get-Command wsl
 
     if($wsl) {
-        Set-Location doks
-        & $wsl -e "jekyll clean; jekyll build; jekyll serve;"
+        Set-Location "$root\doks"
+        Start-Process $wsl -NoNewWindow -ArgumentList '--exec', 'jekyll clean; jekyll build; jekyll serve;'
 
         if ($edge) {
             & $edge "http://localhost:4000/"

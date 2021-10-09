@@ -11,7 +11,7 @@ namespace Faslinq;
 public static partial class ArrayExtensions
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="source"></param>
     /// <typeparam name="TData"></typeparam>
@@ -21,7 +21,7 @@ public static partial class ArrayExtensions
         => source.Length > 0;
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="source"></param>
     /// <param name="query"></param>
@@ -33,7 +33,7 @@ public static partial class ArrayExtensions
         Predicate<TData> query
     )
     {
-        if (source.Length == 0)
+        if (source is null or { Length: 0})
         {
             return false;
         }
@@ -64,7 +64,7 @@ public static partial class ArrayExtensions
         Predicate<TData> query
     )
     {
-        if (source.Length == 0)
+        if (source is null or { Length: 0})
         {
             return false;
         }
@@ -87,12 +87,12 @@ public static partial class ArrayExtensions
 #region First
 
 /// <summary>
-/// 
+///
 /// </summary>
 public static partial class ArrayExtensions
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="source"></param>
     /// <param name="query"></param>
@@ -105,7 +105,7 @@ public static partial class ArrayExtensions
         Predicate<TData>? query = null
     )
     {
-        if (source.Length == 0)
+        if (source is null or { Length: 0})
         {
             throw new IndexOutOfRangeException("List does not contain a matching value.");
         }
@@ -127,7 +127,7 @@ public static partial class ArrayExtensions
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="source"></param>
     /// <param name="query"></param>
@@ -141,7 +141,7 @@ public static partial class ArrayExtensions
         TData? defaultValue = default
     )
     {
-        if (source.Length == 0)
+        if (source is null or { Length: 0})
         {
             return defaultValue;
         }
@@ -172,7 +172,7 @@ public static partial class ArrayExtensions
 public static partial class ArrayExtensions
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="source"></param>
     /// <param name="query"></param>
@@ -185,7 +185,7 @@ public static partial class ArrayExtensions
         Predicate<TData>? query = null
     )
     {
-        if (source.Length == 0)
+        if (source is null or { Length: 0})
         {
             throw new IndexOutOfRangeException("List does not contain a matching value.");
         }
@@ -207,7 +207,7 @@ public static partial class ArrayExtensions
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="source"></param>
     /// <param name="query"></param>
@@ -221,7 +221,7 @@ public static partial class ArrayExtensions
         TData? defaultValue = default
     )
     {
-        if (source.Length == 0)
+        if (source is null or { Length: 0})
         {
             return defaultValue;
         }
@@ -252,7 +252,7 @@ public static partial class ArrayExtensions
 public static partial class ArrayExtensions
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="source"></param>
     /// <param name="query"></param>
@@ -266,7 +266,7 @@ public static partial class ArrayExtensions
         => source.WhereSelectTake(query, i => i, source.Length);
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="source"></param>
     /// <param name="query"></param>
@@ -280,7 +280,7 @@ public static partial class ArrayExtensions
         int takeCount
     )
     {
-        if (source.Length == 0)
+        if (source is null or { Length: 0})
         {
             return Array.Empty<TData>();
         }
@@ -305,7 +305,7 @@ public static partial class ArrayExtensions
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="source"></param>
     /// <param name="query"></param>
@@ -319,7 +319,7 @@ public static partial class ArrayExtensions
         int takeCount
     )
     {
-        if (source.Length == 0)
+        if (source is null or { Length: 0})
         {
             return Array.Empty<TData>();
         }
@@ -350,7 +350,7 @@ public static partial class ArrayExtensions
 public static partial class ArrayExtensions
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="source"></param>
     /// <param name="selector"></param>
@@ -365,7 +365,7 @@ public static partial class ArrayExtensions
         => source.SelectTake(selector, source.Length);
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="source"></param>
     /// <param name="selector"></param>
@@ -380,7 +380,7 @@ public static partial class ArrayExtensions
         int takeCount
     )
     {
-        if (source.Length == 0)
+        if (source is null or { Length: 0})
         {
             return Array.Empty<TResult>();
         }
@@ -401,7 +401,7 @@ public static partial class ArrayExtensions
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="source"></param>
     /// <param name="selector"></param>
@@ -416,7 +416,7 @@ public static partial class ArrayExtensions
         int takeCount
     )
     {
-        if (source.Length == 0)
+        if (source is null or { Length: 0})
         {
             return Array.Empty<TResult>();
         }
@@ -444,7 +444,7 @@ public static partial class ArrayExtensions
 public static partial class ArrayExtensions
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="source"></param>
     /// <param name="query"></param>
@@ -461,7 +461,7 @@ public static partial class ArrayExtensions
         => source.WhereSelectTake(query, selector, source.Length);
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="source"></param>
     /// <param name="query"></param>
@@ -478,7 +478,7 @@ public static partial class ArrayExtensions
         int takeCount
     )
     {
-        if (source.Length == 0)
+        if (source is null or { Length: 0})
         {
             return Array.Empty<TResult>();
         }
@@ -503,7 +503,7 @@ public static partial class ArrayExtensions
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="source"></param>
     /// <param name="query"></param>
@@ -520,7 +520,7 @@ public static partial class ArrayExtensions
         int takeCount
     )
     {
-        if (source.Length == 0)
+        if (source is null or { Length: 0})
         {
             return Array.Empty<TResult>();
         }
@@ -551,7 +551,7 @@ public static partial class ArrayExtensions
 public static partial class ArrayExtensions
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="source"></param>
     /// <param name="takeCount"></param>
@@ -565,7 +565,7 @@ public static partial class ArrayExtensions
         => SelectTake(source, i => i, takeCount);
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="source"></param>
     /// <param name="takeCount"></param>
@@ -586,7 +586,7 @@ public static partial class ArrayExtensions
 public static partial class ArrayExtensions
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="source"></param>
     /// <param name="comparison"></param>
@@ -601,7 +601,7 @@ public static partial class ArrayExtensions
         => OrderByTake(source, comparison, source.Length);
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="source"></param>
     /// <param name="comparison"></param>
@@ -616,7 +616,7 @@ public static partial class ArrayExtensions
         int takeCount
     )
     {
-        if (source.Length == 0)
+        if (source is null or { Length: 0})
         {
             return Array.Empty<TData>();
         }
@@ -652,7 +652,7 @@ public static partial class ArrayExtensions
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="source"></param>
     /// <param name="comparison"></param>
@@ -667,7 +667,7 @@ public static partial class ArrayExtensions
         int takeCount
     )
     {
-        if (source.Length == 0)
+        if (source is null or { Length: 0})
         {
             return Array.Empty<TData>();
         }
@@ -679,12 +679,12 @@ public static partial class ArrayExtensions
 
         var indices = Enumerable.Range(0, source.Length)
             .ToArray();
-        
+
         IComparer<TKey> comparer = Comparer<TKey>.Default;
-        
+
         var keys = source.Select(comparison)
             .ToArray();
-        
+
         QuickSort(
             0,
             source.Length - 1,
@@ -712,7 +712,7 @@ public static partial class ArrayExtensions
 public static partial class ArrayExtensions
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="source"></param>
     /// <param name="comparison"></param>
@@ -727,7 +727,7 @@ public static partial class ArrayExtensions
         => OrderByDescendingTake(source, comparison, source.Length);
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="source"></param>
     /// <param name="comparison"></param>
@@ -742,7 +742,7 @@ public static partial class ArrayExtensions
         int takeCount
     )
     {
-        if (source.Length == 0)
+        if (source is null or { Length: 0})
         {
             return Array.Empty<TData>();
         }
@@ -754,9 +754,9 @@ public static partial class ArrayExtensions
 
         var indices = Enumerable.Range(0, source.Length)
             .ToArray();
-        
+
         IComparer<TKey> comparer = Comparer<TKey>.Default;
-        
+
         var keys = source.Select(comparison)
             .ToArray();
 
@@ -771,7 +771,7 @@ public static partial class ArrayExtensions
         var result = new TData[takeCount];
         var takeIndex = 0;
 
-        var start = 0;
+        const int start = 0;
         var end = takeCount;
 
         for (var i = start; i < end && takeIndex < takeCount; ++i)
@@ -783,7 +783,7 @@ public static partial class ArrayExtensions
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="source"></param>
     /// <param name="comparison"></param>
@@ -798,7 +798,7 @@ public static partial class ArrayExtensions
         int takeCount
     )
     {
-        if (source.Length == 0)
+        if (source is null or { Length: 0})
         {
             return Array.Empty<TData>();
         }
@@ -882,7 +882,7 @@ public static partial class ArrayExtensions
             };
         }
 
-        if (!(left <= right))
+        if (left > right)
         {
             throw new ApplicationException($"left {left} <= right {right} (depth: {depth})")
             {
@@ -1033,7 +1033,7 @@ public static partial class ArrayExtensions
 public static partial class ArrayExtensions
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="source"></param>
     /// <param name="comparison"></param>
@@ -1047,7 +1047,7 @@ public static partial class ArrayExtensions
     {
         var positions = new PositionCollection(0, 0);
 
-        if (source.Length == 0)
+        if (source is null or { Length: 0})
         {
             return positions;
         }

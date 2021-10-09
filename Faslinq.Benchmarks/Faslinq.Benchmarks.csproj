@@ -186,8 +186,7 @@
     <ItemGroup>
         <PackageReference Include="BenchmarkDotNet" Version="0.13.1" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0-rc.1.21451.13" />
-        <PackageReference Include="Netstandard20.Range.Bridge" Version="1.0.0"
-                          Condition="'$(TargetFramework)'=='netstandard2.0' or '$(TargetFramework)'=='net472' or '$(TargetFramework)'=='net48' " />
+        <PackageReference Include="Netstandard20.Range.Bridge" Version="1.0.0" Condition="'$(TargetFramework)'=='netstandard2.0' or '$(TargetFramework)'=='net472' or '$(TargetFramework)'=='net48' " />
         <PackageReference Include="FluentAssertions" Version="6.1.0" />
         <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
@@ -197,6 +196,7 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     </ItemGroup>
 
     <ItemGroup>

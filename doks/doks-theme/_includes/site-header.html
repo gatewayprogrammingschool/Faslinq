@@ -12,7 +12,21 @@
 	<header class="site-header">
 		<div class="container">
 			<div class="row">
-				<div class="col-xs-12">
+				{% if site.doks.footer.social_list %}
+				<div class="col-xs-1 align-left">
+					<ul class="social-list">
+						{% for item in site.doks.footer.social_list %}
+						<li>
+							<a href="{{ item.profile_url }}" target="_blank"
+								class="social-list__item social-list__item--{{ item.network_name }}">
+								<i class="icon icon--{{ item.network_name }}"></i>
+							</a>
+						</li>
+						{% endfor %}
+					</ul><!-- /.social-list -->
+				</div><!-- /.col -->
+				{% endif %}
+				<div class="col-xs-11">
 					{% if site.doks.header.logo.text %}
 						<a href="{% if jekyll.environment == 'production' %}{{ site.doks.baseurl }}{% endif %}/" class="site-header__logo">{{ site.doks.header.logo.text }}</a>
 					{% elsif site.doks.header.logo.image %}

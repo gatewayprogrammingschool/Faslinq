@@ -36,7 +36,10 @@ public abstract class WhereSelectTakeLastBenchmarks : BenchmarkBase
 
     protected override TestValueTuple[] GetStructArrayByFaslinq(TestValueTuple[] array, params object[] values)
     {
-        return array.WhereSelectTakeLast(i => array[0] == i, i => i, (int)(array.Length * 0.2m));
+        return array.WhereSelectTakeLast(
+            i => array[0] == i, 
+            i => i, 
+            (int)(array.Length * 0.2m));
     }
 
     protected override IEnumerable<TestValueTuple> GetEnumerableStructByLinq(

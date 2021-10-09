@@ -10,7 +10,7 @@ doks:
             - item_name: API
               item_url: '/api/'
             - item_name: Benchmarks
-              item_url: '/benchmarks/results/'
+              item_url: '/benchmarks/full-report/'
             - item_name: Examples
               item_url: '/docs/'
     footer:
@@ -18,7 +18,7 @@ doks:
             logo:
                 text: Faslinq
                 image:
-            copyright: Copyright &copy; 2021. - Gateway Programming School, Inc. <br>All rights reserved.
+            copyright: Copyright &copy; 2021. - Gateway Programming School, Inc. ◆ All rights reserved.
         social_list:
             - network_name: github
               profile_url: 'https://github.com/gatewayprogrammingschool'

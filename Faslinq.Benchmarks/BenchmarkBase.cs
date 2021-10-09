@@ -16,8 +16,6 @@ public abstract class BenchmarkBase
     public const string _5000 = "5000";
     public const string _100000 = "100000";
 
-    protected static ServiceProvider? Services;
-
     public static ServiceProvider ServiceProvider
         => Services ??= GetServices();
 
@@ -49,6 +47,7 @@ public abstract class BenchmarkBase
     public static TestValueTuple LastGenerateRecords5000 { get; set; }
     public static TestValueTuple FirstGenerateRecords100000 { get; set; }
     public static TestValueTuple LastGenerateRecords100000 { get; set; }
+    protected static ServiceProvider? Services { get; set; }
 
     public static ServiceProvider GetServices()
     {
@@ -395,7 +394,6 @@ public abstract class BenchmarkBase
                 _ => throw new ArgumentException($"Unexpected data.  Received {item.GetType()}"),
             }
             : throw new ArgumentException($"Unexpected data.  Received {item.GetType()}");
-
 
 #pragma warning disable CS8603 // Possible null reference return.
         IEnumerable<TestValueTuple> ProcessEnumerable(object? enumerable, TestValueTuple first)

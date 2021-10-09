@@ -104,5 +104,13 @@ $container-tablet: (720px + $grid-gutter-width) !default;
 $container-sm: $container-tablet !default;
 $container-desktop: (940px + $grid-gutter-width) !default;
 $container-md: $container-desktop !default;
-$container-large-desktop: (1140px + $grid-gutter-width) !default;
+$container-large-desktop: 100% !default;
 $container-lg: $container-large-desktop !default;
+
+$footer-height: 26px !default;
+$header-height: 48px !default;
+$social-padding-top: ($header-height / 2 - 15) !default;
+$filters-width: 170px !default;
+$table-left: ($filters-width +4) !default;
+$base_font_size: 14px !default;
+$filter_font_size: ($base_font_size - 2) !default;

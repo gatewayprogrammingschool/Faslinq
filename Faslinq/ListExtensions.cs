@@ -296,16 +296,19 @@ public static partial class ListExtensions
 
         var takeIndex = 0;
         var targetLength = Math.Min(source.Count, takeCount);
-        var result = new TData[targetLength];
+        var result = new List<TData>(targetLength);
         for (var i = 0; i < source.Count && takeIndex < targetLength; i++)
         {
-            if (query(source[i]))
+            if (!query(source[i]))
             {
-                result[takeIndex++] = source[i];
+                continue;
             }
+
+            result.Add(source[i]);
+            takeIndex++;
         }
 
-        return new (result);
+        return result;
     }
 
     /// <summary>

@@ -6,7 +6,7 @@
 .site-header {
 	position: absolute;
 	width: 100%;
-	height: 5.625rem;
+	height: 3rem;
 	border-bottom: 1px solid rgba($color-dark-blue, .15);
 }
 
@@ -19,7 +19,7 @@
 	font-family: $font-family-secondary;
 	font-weight: bold;
 	font-size: 2em;
-	line-height: 5.625rem;
+	line-height: 3rem;
 
 	&:hover,
 	&:focus,
@@ -28,7 +28,7 @@
 	}
 
 	img {
-		height: calc(5.625rem - 1px);
+		height: calc(3rem - 1px);
 	}
 }
 
@@ -38,6 +38,7 @@
 	@include clearfix;
 	float: right;
 	margin-bottom: 0;
+	height: $header-height;
 
 	li {
 		+ li {
@@ -51,7 +52,7 @@
 		font-size: .875em;
 		font-weight: 500;
 		font-family: $font-family-secondary;
-		line-height: calc(5.625rem - 1px);
+		line-height: $header-height;
 		text-transform: uppercase;
 		border-bottom: 1px solid;
 		border-color: transparent;
@@ -118,7 +119,7 @@
 
 /* ----- Offcanvas toggle ----- */
 .offcanvas-toggle {
-	height: calc(5.625rem - 1px);
+	height: $header-height;
 	width: 5.625rem;
 	cursor: pointer;
 	position: fixed;

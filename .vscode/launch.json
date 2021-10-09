@@ -1,6 +1,27 @@
 {
     "configurations": [
         {
+            "type": "firefox",
+            "request": "launch",
+            "reAttach": true,
+            "name": "Launch Firefox",
+            "url": "http://localhost:4000/benchmarks/full-report/",
+            "webRoot": "${workspaceFolder}/doks/_site",
+            "pathMappings": [
+                {
+                    "url": "http://localhost:4000/benchmarks/benchmarks.js",
+                    "path": "${workspaceFolder}/doks/benchmarks/benchmarks.js"
+                }
+            ]
+        },
+        {
+            "name": "Launch Edge",
+            "request": "launch",
+            "type": "pwa-msedge",
+            "url": "http://localhost:4000/",
+            "webRoot": "${workspaceFolder}/doks/_site"
+        },
+        {
             "name": "Benchmark Release",
             "type": "PowerShell",
             "request": "launch",
@@ -22,14 +43,10 @@
             "script": "${workspaceFolder}/bench.ps1",
             "cwd": "${workspaceFolder}",
             "args": [
-                "-All", "-Join", "-Configuration", "Release"
-                //"-Select", "-Configuration", "Debug", "-Once", "-Join"
-                // "-Configuration",
-                // "Debug",
-                // "-Where",
-                // "-Select",
-                // "-Take",
-                // "-TakeLast"
+                "-All",
+                "-Join",
+                "-Configuration",
+                "Release"
             ]
         }
     ]
