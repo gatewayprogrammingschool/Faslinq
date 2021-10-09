@@ -4,7 +4,8 @@ layout: homepage
 keywords: Linq Dotnet
 
 # Hero section
-title: Faslinq
+#title: Faslinq
+logo: /images/Faslinq.png
 description: Faster. Linq.
 buttons:
     - icon: github
