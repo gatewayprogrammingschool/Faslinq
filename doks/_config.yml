@@ -21,7 +21,7 @@ doks:
             copyright: Copyright &copy; 2021. - Gateway Programming School, Inc. ◆ All rights reserved.
         social_list:
             - network_name: github
-              profile_url: 'https://github.com/gatewayprogrammingschool'
+              profile_url: 'https://github.com/gatewayprogrammingschool/Faslinq/'
     google_analytics:
         tracking_code: # Add your Google Analytics tracking code to activate Google Analytics
     comments:

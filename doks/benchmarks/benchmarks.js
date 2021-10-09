@@ -133,9 +133,15 @@ function ViewModel(report) {
 class Report {
     async getReport() {
         if (!this.report) {
-            const result = await fetch("/benchmarks/faslinq-report.json");
+            let result = await fetch("/benchmarks/faslinq-report.json");
 
-            if (!result.ok) throw new Error(result.statusText);
+            if (!result.ok) {
+                result = await fetch("/Faslinq/benchmarks/faslinq-report.json");
+
+                if (!result.ok) {
+                    throw new Error(result.statusText);
+                }
+            }
 
             const json = await result.json();
 
