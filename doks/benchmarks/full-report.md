@@ -67,6 +67,7 @@ keywords: Linq Dotnet
     </div>
 </div>
 <script type="module" src="/benchmarks/benchmarks.js"></script>
+<script type="module" src="/Faslinq/benchmarks/benchmarks.js"></script>
 <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/knockout/knockout-2.2.1.js"></script>
 <script type="module">
     import { VM } from '/benchmarks/benchmarks.js';
