@@ -326,7 +326,7 @@ div.content_row {
 				top: $header-height;
 				right: 0;
 				overflow-y: scroll;
-				overflow-x: hidden;
+				overflow-x: auto;
 				margin: 0;
 
 				.header_row {

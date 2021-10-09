@@ -8,35 +8,35 @@ keywords: Linq Dotnet
         <div class="flex_card">
             <label for="methods">Methods</label>
             <select name='methods' id='methods' title='Methods' class="form-control"
-                                    data-bind="options: $root.methods, optionsText: 'display', selectedOptions: $root.method" size="8" multiple="true"></select>
-            <button class="btn--dark" data-bind="click: $root.resetMethod.bind()">Reset</button>
+                                     size="8" multiple="true" onclick="document.vm.selectClicked(this)"></select>
+            <button class="btn--dark" onclick="document.vm.resetMethod()">Reset</button>
         </div>
 
         <div class="flex_card">
             <label for="platforms">Platform</label>
             <select name='platforms' id='platforms' title='Platforms'
-                                    data-bind="options: $root.platforms, optionsText: 'display', selectedOptions: $root.platform" size="4" multiple="true"></select>
-            <button class="btn--dark" data-bind="click: $root.resetPlatform.bind()">Reset</button>
+                                     size="4" multiple="true" onclick="vm.selectClicked(this)"></select>
+            <button class="btn--dark" onclick="vm.resetPlatform()">Reset</button>
         </div>
 
         <div class="flex_card">
             <label for="apis">API</label>
             <select name='apis' id='apis' title='APIs'
-                                    data-bind="options: $root.apis, optionsText: 'display', selectedOptions: $root.api" size="3" multiple="true"></select>
-            <button class="btn--dark" data-bind="click: $root.resetApi.bind()">Reset</button>
+                                     size="3" multiple="true" onclick="document.vm.selectClicked(this)"></select>
+            <button class="btn--dark" onclick="document.vm.resetApi()">Reset</button>
         </div>
 
         <div class="flex_card">
             <label for="counts">Batch Size</label>
             <select name='counts' id='counts' title='Counts'
-                                    data-bind="options: $root.counts, optionsText: 'display', selectedOptions: $root.count" size="4" multiple="true"></select>
-            <button class="btn--dark" data-bind="click: $root.resetCount.bind()">Reset</button>
+                                     size="4" multiple="true" onclick="document.vm.selectClicked(this)"></select>
+            <button class="btn--dark" onclick="document.vm.resetCount()">Reset</button>
         </div>
     </div>
     <div class="table_container">
         <table class="table-responsive col-lg-10">
-            <tbody>
-                <tr class="header_row">
+            <tbody id='tbody'>
+                <tr class="header_row" id="header_row">
                     <th>Benchmark</th>
                     <th>Count</th>
                     <th>Api</th>
@@ -48,28 +48,19 @@ keywords: Linq Dotnet
                     <th>Min</th>
                     <th>Max</th>
                 </tr>
-                <!--  ko foreach: $root.benchmarks -->
-                <tr class="body_row">
-                    <td data-bind="text: Method" ></td>
-                    <td class="stat" data-bind="text: $root.Format($data.Size, 0, '')" ></td>
-                    <td data-bind="text: Api" ></td>
-                    <td data-bind="text: Platform"></td>
-                    <td class="stat" data-bind="text: $root.Format($data.Ratio, 3, '')" ></td>
-                    <td class="stat" data-bind="text: $root.Format($data.Mean)" ></td>
-                    <td class="stat" data-bind="text: $root.Format($data.Median)" ></td>
-                    <td class="stat" data-bind="text: $root.Format($data.StandardDeviation)" ></td>
-                    <td class="stat" data-bind="text: $root.Format($data.Min)" ></td>
-                    <td class="stat" data-bind="text: $root.Format($data.Max)" ></td>
-                </tr>
-                <!-- /ko  -->
             </tbody>
         </table>
     </div>
 </div>
 <script type="module" src="/benchmarks/benchmarks.js"></script>
 <script type="module" src="/Faslinq/benchmarks/benchmarks.js"></script>
-<script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/knockout/knockout-2.2.1.js"></script>
 <script type="module">
     import { VM } from '/benchmarks/benchmarks.js';
-    ko.applyBindings(VM);
+    VM.buildTable("tbody");
+    VM.populateSelect("methods", VM.methods);
+    VM.populateSelect("platforms", VM.platforms);
+    VM.populateSelect("apis", VM.apis);
+    VM.populateSelect("counts", VM.counts);
+
+    document.vm = VM;
 </script>
