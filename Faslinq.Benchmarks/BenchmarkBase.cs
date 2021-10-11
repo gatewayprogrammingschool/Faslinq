@@ -89,8 +89,9 @@ public abstract class BenchmarkBase
         => GenerateTestRecords1()
             .ToArray();
 
-    public static object[][] GenerateTestRecords1()
+    public static IEnumerable<object[]> GenerateTestRecords1()
     {
+        //Debugger.Launch();
         GeneratedRecords1 ??= GenerateRecords(1);
         FirstGenerateRecords1 = GeneratedRecords1
             .SelectMany(
@@ -106,10 +107,8 @@ public abstract class BenchmarkBase
             )
             .Last()
             .Last();
-        return new[]
-        {
-            GeneratedRecords1.ToArray(),
-        };
+        var result = new List<object[]> { GeneratedRecords1.ToArray(), };
+        return result;
     }
 
     public static List<object> GenerateRecords250()
@@ -136,7 +135,7 @@ public abstract class BenchmarkBase
         => GenerateTestRecords250()
             .ToArray();
 
-    public static object[][] GenerateTestRecords250()
+    public static IEnumerable<object[]> GenerateTestRecords250()
     {
         GeneratedRecords250 ??= GenerateRecords(250);
         FirstGenerateRecords250 = GeneratedRecords250
@@ -153,10 +152,8 @@ public abstract class BenchmarkBase
             )
             .Last()
             .Last();
-        return new[]
-        {
-            GeneratedRecords250.ToArray(),
-        };
+        var result = new List<object[]> { GeneratedRecords250.ToArray(), };
+        return result;
     }
 
     public static List<object> GenerateRecords5000()
@@ -183,7 +180,7 @@ public abstract class BenchmarkBase
         => GenerateTestRecords5000()
             .ToArray();
 
-    public static object[][] GenerateTestRecords5000()
+    public static IEnumerable<object[]> GenerateTestRecords5000()
     {
         GeneratedRecords5000 ??= GenerateRecords(5000);
         FirstGenerateRecords5000 = GeneratedRecords5000
@@ -200,10 +197,8 @@ public abstract class BenchmarkBase
             )
             .Last()
             .Last();
-        return new[]
-        {
-            GeneratedRecords5000.ToArray(),
-        };
+        var result = new List<object[]> { GeneratedRecords5000.ToArray(), };
+        return result;
     }
 
     public static List<object> GenerateRecords100000()
@@ -230,7 +225,7 @@ public abstract class BenchmarkBase
         => GenerateTestRecords100000()
             .ToArray();
 
-    public static object[][] GenerateTestRecords100000()
+    public static IEnumerable<object[]> GenerateTestRecords100000()
     {
         GeneratedRecords100000 ??= GenerateRecords(100000);
         FirstGenerateRecords100000 = GeneratedRecords100000
@@ -247,10 +242,8 @@ public abstract class BenchmarkBase
             )
             .Last()
             .Last();
-        return new[]
-        {
-            GeneratedRecords100000.ToArray(),
-        };
+        var result = new List<object[]> { GeneratedRecords100000.ToArray(), };
+        return result;
     }
 
     public static IEnumerable<object> GenerateRecords(int count)
@@ -287,11 +280,11 @@ public abstract class BenchmarkBase
     protected abstract TResult GetScalarStructByLinq<TResult>(IEnumerable<TResult> enumerable, params object[] values)
         where TResult : struct;
 
-    protected abstract List<object> GetListByFaslinq(List<object> list, params object[] values);
+    protected abstract List<TestValueTuple> GetListByFaslinq(List<TestValueTuple> list, params object[] values);
     protected abstract List<TestValueTuple> GetStructListByFaslinq(List<TestValueTuple> list, params object[] values);
-    protected abstract object[] GetArrayByArray(object[] array, params object[] values);
+    protected abstract TestValueTuple[] GetArrayByArray(TestValueTuple[] array, params object[] values);
     protected abstract TestValueTuple[] GetStructArrayByFaslinq(TestValueTuple[] array, params object[] values);
-    protected abstract IEnumerable<object> GetEnumerableByLinq(IEnumerable<object> enumerable, params object[] values);
+    protected abstract IEnumerable<TestValueTuple> GetEnumerableByLinq(IEnumerable<TestValueTuple> enumerable, params object[] values);
 
     protected abstract IEnumerable<TestValueTuple> GetEnumerableStructByLinq(
         IEnumerable<TestValueTuple> enumerable,
@@ -385,12 +378,12 @@ public abstract class BenchmarkBase
         //    Debugger.Launch();
         //}
 
-        return item is object[] {Length: 1,} p
+        return item is object[] {Length: 1,} p && p[0] is IEnumerable<TestValueTuple> t
             ? test switch
             {
-                Tests.List => ProcessList(p[0], first),
-                Tests.Array => ProcessArray(p[0], first),
-                Tests.IEnumerable => ProcessEnumerable(p[0], first),
+                Tests.List => ProcessList(t.ToList(), first),
+                Tests.Array => ProcessArray(t.ToArray(), first),
+                Tests.IEnumerable => ProcessEnumerable(t, first),
                 _ => throw new ArgumentException($"Unexpected data.  Received {item.GetType()}"),
             }
             : throw new ArgumentException($"Unexpected data.  Received {item.GetType()}");
@@ -398,12 +391,13 @@ public abstract class BenchmarkBase
 #pragma warning disable CS8603 // Possible null reference return.
         IEnumerable<TestValueTuple> ProcessEnumerable(object? enumerable, TestValueTuple first)
         {
+            Target = first;
             IEnumerable<TestValueTuple> result = Array.Empty<TestValueTuple>();
             while (enumerable is not null)
             {
-                if (enumerable is IEnumerable<TestValueTuple> testEnumerable)
+                if (enumerable is IEnumerable<TestValueTuple> collection)
                 {
-                    result = GetEnumerableStructByLinq(testEnumerable, first);
+                    result = GetEnumerableStructByLinq(collection, first);
                     break;
                 }
 
@@ -411,9 +405,9 @@ public abstract class BenchmarkBase
                 {
                     enumerable = o.FirstOrDefault() as IEnumerable<object>;
                 }
-                else
+                else if(enumerable is IEnumerable<object[]> oo)
                 {
-                    enumerable = null;
+                    ProcessEnumerable(oo.AsEnumerable(), first);
                 }
             }
 
@@ -430,6 +424,7 @@ public abstract class BenchmarkBase
             TestValueTuple[] result = Array.Empty<TestValueTuple>();
             while (array is not null)
             {
+                Target = first;
                 if (array is TestValueTuple[] testArray)
                 {
                     result = GetStructArrayByFaslinq(testArray, first);
@@ -456,6 +451,7 @@ public abstract class BenchmarkBase
 
         List<TestValueTuple> ProcessList(object? list, TestValueTuple first)
         {
+            Target = first;
             List<TestValueTuple> result = new();
             while (list is not null)
             {
@@ -483,6 +479,137 @@ public abstract class BenchmarkBase
             return result;
         }
 #pragma warning restore CS8603 // Possible null reference return.
+
+    }
+
+    public static IEnumerable<object[]> GenerateTestEnumerable1()
+        => GenerateTestEnumerable(1);
+
+    public static IEnumerable<object[]> GenerateTestEnumerable250()
+        => GenerateTestEnumerable(250);
+
+    public static IEnumerable<object[]> GenerateTestEnumerable5000()
+        => GenerateTestEnumerable(5000);
+
+    public static IEnumerable<object[]> GenerateTestEnumerable100000()
+        => GenerateTestEnumerable(100000);
+
+    protected static IEnumerable<object[]> GenerateTestEnumerable(int count)
+    {
+        var data = count switch
+        {
+            1 => GenerateRecords1(),
+            250 => GenerateRecords250(),
+            5000 => GenerateRecords250(),
+            100000 => GenerateRecords250(),
+            _ => new List<object>
+            {
+                Array.Empty<object>(),
+            },
+        };
+
+        switch (data.Count)
+        {
+            case 1 when data.First() is TestValueTuple tuple:
+                yield return new object[]
+                {
+                    tuple,
+                };
+                break;
+
+            case 1 when data.First() is object[] array:
+            {
+                var first = array[0];
+                if (array.Length == 1 && first is IEnumerable<TestValueTuple> innerList)
+                {
+                    yield return Enumerate(innerList);
+                }
+                else
+                {
+                    yield return Enumerate(array.OfType<TestValueTuple>().ToList());
+                }
+
+                break;
+            }
+
+            case > 1 when data.First() is TestValueTuple:
+                yield return Enumerate(
+                    data.OfType<TestValueTuple>()
+                        .ToList()
+                );
+                break;
+        }
+
+        object[] Enumerate(IEnumerable<TestValueTuple> list)
+        {
+            return new object[] { list.Cast<object>().ToArray() };
+        }
+    }
+
+
+    public static IEnumerable<object[]> GenerateTestArray1()
+        => GenerateTestArray(1);
+
+    public static IEnumerable<object[]> GenerateTestArray250()
+        => GenerateTestArray(250);
+
+    public static IEnumerable<object[]> GenerateTestArray5000()
+        => GenerateTestArray(5000);
+
+    public static IEnumerable<object[]> GenerateTestArray100000()
+        => GenerateTestArray(100000);
+
+    protected static IEnumerable<object[]> GenerateTestArray(int count)
+    {
+        var data = count switch
+        {
+            1 => GenerateRecords1(),
+            250 => GenerateRecords250(),
+            5000 => GenerateRecords250(),
+            100000 => GenerateRecords250(),
+            _ => new List<object>
+            {
+                Array.Empty<object>(),
+            },
+        };
+
+        switch (data.Count)
+        {
+            case 1 when data.First() is TestValueTuple tuple:
+                yield return new object[]
+                {
+                    tuple,
+                };
+                break;
+
+            case 1 when data.First() is object[] array:
+            {
+                var first = array[0];
+                if (array.Length == 1 && first is IEnumerable<TestValueTuple> innerList)
+                {
+                    yield return innerList.Cast<object>().ToArray();
+                }
+                else
+                {
+                    yield return array.OfType<TestValueTuple>()
+                        .Cast<object>()
+                        .ToArray();
+                }
+
+                break;
+            }
+
+            case > 1 when data.First() is TestValueTuple:
+                yield return data.OfType<TestValueTuple>()
+                    .Cast<object>()
+                    .ToArray();
+                break;
+        }
+    }
+
+    protected int TakeCount<TData>(IEnumerable<TData> data)
+    {
+        return (int)(data.Count() * 0.2m);
     }
 }
 

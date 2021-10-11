@@ -4,6 +4,7 @@ namespace Faslinq.Benchmarks.Scalar;
 #if !NO_FASLINQ
 #endif
 
+[TestClass]
 public class FirstLinq : FirstBenchmarks
 {
     [Benchmark]

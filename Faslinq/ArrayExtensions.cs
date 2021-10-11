@@ -21,7 +21,7 @@ public static partial class ArrayExtensions
         => source.Length > 0;
 
     /// <summary>
-    ///
+    /// 
     /// </summary>
     /// <param name="source"></param>
     /// <param name="query"></param>
@@ -30,10 +30,10 @@ public static partial class ArrayExtensions
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool Any<TData>(
         this TData[] source,
-        Predicate<TData> query
+        Func<TData, int, bool> query
     )
     {
-        if (source is null or { Length: 0})
+        if (source.Length == 0)
         {
             return false;
         }
@@ -41,7 +41,7 @@ public static partial class ArrayExtensions
         for (var index = 0; index < source.Length; index++)
         {
             var item = source[index];
-            if (query(item))
+            if (query(item, index))
             {
                 return true;
             }
@@ -51,20 +51,19 @@ public static partial class ArrayExtensions
     }
 
     /// <summary>
-    /// Enumerate all items and return `true` if
-    /// they all resolve to `true`.
+    /// 
     /// </summary>
-    /// <param name="source"><see cref="Array"/>Array of TData</param>
-    /// <param name="query"><see cref="Predicate{TData}"/> to filter the array with.</param>
-    /// <typeparam name="TData">Type held in the source array.</typeparam>
-    /// <returns>True if all values match the query.</returns>
+    /// <param name="source"></param>
+    /// <param name="query"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <returns></returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool All<TData>(
         this TData[] source,
-        Predicate<TData> query
+        Func<TData, int, bool> query
     )
     {
-        if (source is null or { Length: 0})
+        if (source.Length == 0)
         {
             return false;
         }
@@ -72,7 +71,7 @@ public static partial class ArrayExtensions
         for (var index = 0; index < source.Length; index++)
         {
             var item = source[index];
-            if (!query(item))
+            if (!query(item, index))
             {
                 return false;
             }
@@ -86,9 +85,6 @@ public static partial class ArrayExtensions
 
 #region First
 
-/// <summary>
-///
-/// </summary>
 public static partial class ArrayExtensions
 {
     /// <summary>
@@ -102,10 +98,10 @@ public static partial class ArrayExtensions
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TData First<TData>(
         this TData[] source,
-        Predicate<TData>? query = null
+        Func<TData, int, bool>? query = null
     )
     {
-        if (source is null or { Length: 0})
+        if (source is null or { Length: 0 })
         {
             throw new IndexOutOfRangeException("List does not contain a matching value.");
         }
@@ -117,7 +113,7 @@ public static partial class ArrayExtensions
 
         for (var i = 0; i < source.Length; i++)
         {
-            if (query(source[i]))
+            if (query(source[i], i))
             {
                 return source[i];
             }
@@ -137,11 +133,11 @@ public static partial class ArrayExtensions
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TData? FirstOrDefault<TData>(
         this TData[] source,
-        Predicate<TData>? query = null,
+        Func<TData, int, bool>? query = null,
         TData? defaultValue = default
     )
     {
-        if (source is null or { Length: 0})
+        if (source is null or { Length: 0 })
         {
             return defaultValue;
         }
@@ -155,7 +151,7 @@ public static partial class ArrayExtensions
 
         for (var i = 0; i < source.Length; i++)
         {
-            if (query(source[i]))
+            if (query(source[i], i))
             {
                 return source[i];
             }
@@ -182,10 +178,10 @@ public static partial class ArrayExtensions
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TData Last<TData>(
         this TData[] source,
-        Predicate<TData>? query = null
+        Func<TData, int, bool>? query = null
     )
     {
-        if (source is null or { Length: 0})
+        if (source is null or { Length: 0 })
         {
             throw new IndexOutOfRangeException("List does not contain a matching value.");
         }
@@ -197,7 +193,7 @@ public static partial class ArrayExtensions
 
         for (var i = source.Length - 1; i >= 0; --i)
         {
-            if (query(source[i]))
+            if (query(source[i], i))
             {
                 return source[i];
             }
@@ -217,11 +213,11 @@ public static partial class ArrayExtensions
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TData? LastOrDefault<TData>(
         this TData[] source,
-        Predicate<TData>? query = null,
+        Func<TData, int, bool>? query = null,
         TData? defaultValue = default
     )
     {
-        if (source is null or { Length: 0})
+        if (source is null or { Length: 0 })
         {
             return defaultValue;
         }
@@ -235,7 +231,7 @@ public static partial class ArrayExtensions
 
         for (var i = source.Length - 1; i >= 0; --i)
         {
-            if (query(source[i]))
+            if (query(source[i], i))
             {
                 return source[i];
             }
@@ -244,7 +240,6 @@ public static partial class ArrayExtensions
         return defaultValue;
     }
 }
-
 #endregion Last
 
 #region Where
@@ -261,7 +256,7 @@ public static partial class ArrayExtensions
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TData[] Where<TData>(
         this TData[] source,
-        Predicate<TData> query
+        Func<TData, int, bool> query
     )
         => source.WhereSelectTake(query, i => i, source.Length);
 
@@ -276,7 +271,7 @@ public static partial class ArrayExtensions
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TData[] WhereTake<TData>(
         this TData[] source,
-        Predicate<TData> query,
+        Func<TData, int, bool> query,
         int takeCount
     )
     {
@@ -295,7 +290,7 @@ public static partial class ArrayExtensions
         var result = new TData[targetLength];
         for (var i = 0; i < source.Length && takeIndex < targetLength; i++)
         {
-            if (query(source[i]))
+            if (query(source[i], i))
             {
                 result[takeIndex++] = source[i];
             }
@@ -315,7 +310,7 @@ public static partial class ArrayExtensions
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TData[] WhereTakeLast<TData>(
         this TData[] source,
-        Predicate<TData> query,
+        Func<TData, int, bool> query,
         int takeCount
     )
     {
@@ -333,7 +328,7 @@ public static partial class ArrayExtensions
         var result = new TData[takeCount];
         for (var i = source.Length - 1; i >= 0 && takeIndex < takeCount; --i)
         {
-            if (query(source[i]))
+            if (query(source[i], i))
             {
                 result[takeIndex++] = source[i];
             }
@@ -455,11 +450,11 @@ public static partial class ArrayExtensions
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TResult[] WhereSelect<TData, TResult>(
         this TData[] source,
-        Predicate<TData> query,
+        Func<TData, int, bool> query,
         Func<TData, TResult> selector
     )
-        => source.WhereSelectTake(query, selector, source.Length);
-
+        => source.WhereSelectTake(query, selector, source.Length);    
+    
     /// <summary>
     ///
     /// </summary>
@@ -473,12 +468,12 @@ public static partial class ArrayExtensions
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TResult[] WhereSelectTake<TData, TResult>(
         this TData[] source,
-        Predicate<TData> query,
+        Func<TData, int, bool> query,
         Func<TData, TResult> selector,
         int takeCount
     )
     {
-        if (source is null or { Length: 0})
+        if (source is null or { Length: 0 })
         {
             return Array.Empty<TResult>();
         }
@@ -493,13 +488,19 @@ public static partial class ArrayExtensions
         var result = new TResult[takeCount];
         for (var i = 0; i < source.Length && takeIndex < takeCount; i++)
         {
-            if (query(source[i]))
+            if (query(source[i], i))
             {
                 result[takeIndex++] = selector(source[i]);
             }
         }
 
-        return result;
+#if NETSTANDARD2_0
+        TResult[] returnArray = new TResult[takeIndex];
+        Array.ConstrainedCopy(result, 0, returnArray, 0, takeIndex);
+        return returnArray;
+#else
+        return result[..takeIndex];
+#endif
     }
 
     /// <summary>
@@ -515,12 +516,12 @@ public static partial class ArrayExtensions
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TResult[] WhereSelectTakeLast<TData, TResult>(
         this TData[] source,
-        Predicate<TData> query,
+        Func<TData, int, bool> query,
         Func<TData, TResult> selector,
         int takeCount
     )
     {
-        if (source is null or { Length: 0})
+        if (source is null or { Length: 0 })
         {
             return Array.Empty<TResult>();
         }
@@ -534,14 +535,122 @@ public static partial class ArrayExtensions
         var result = new TResult[takeCount];
         for (var i = source.Length - 1; i >= 0 && takeIndex < takeCount; --i)
         {
-            if (query(source[i]))
+            if (query(source[i], i))
             {
                 result[takeIndex++] = selector(source[i]);
             }
         }
 
-        return result;
+#if NETSTANDARD2_0
+        TResult[] returnArray = new TResult[takeIndex];
+        Array.ConstrainedCopy(result, 0, returnArray, 0, takeIndex);
+        return returnArray;
+#else
+        return result[..takeIndex];
+#endif
     }
+
+#if !NETSTANDARD2_0
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="query"></param>
+    /// <param name="selector"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <typeparam name="TResult"></typeparam>
+    /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Span<TResult> WhereSelectAsSpan<TData, TResult>(
+        this TData[] source,
+        Func<TData, int, bool> query,
+        Func<TData, TResult> selector
+    )
+        => source.WhereSelectTakeAsSpan(query, selector, source.Length);
+
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="query"></param>
+    /// <param name="selector"></param>
+    /// <param name="takeCount"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <typeparam name="TResult"></typeparam>
+    /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Span<TResult> WhereSelectTakeAsSpan<TData, TResult>(
+        this TData[] source,
+        Func<TData, int, bool> query,
+        Func<TData, TResult> selector,
+        int takeCount
+    )
+    {
+        if (source is null or { Length: 0 })
+        {
+            return Array.Empty<TResult>();
+        }
+
+        if (takeCount < 1)
+        {
+            takeCount = 0;
+        }
+
+        takeCount = Math.Min(takeCount, source.Length);
+        var takeIndex = 0;
+        var result = new TResult[takeCount];
+        for (var i = 0; i < source.Length && takeIndex < takeCount; i++)
+        {
+            if (query(source[i], i))
+            {
+                result[takeIndex++] = selector(source[i]);
+            }
+        }
+
+        return result.AsSpan(..takeIndex);
+    }
+
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="query"></param>
+    /// <param name="selector"></param>
+    /// <param name="takeCount"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <typeparam name="TResult"></typeparam>
+    /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Span<TResult> WhereSelectTakeLastAsSpan<TData, TResult>(
+        this TData[] source,
+        Func<TData, int, bool> query,
+        Func<TData, TResult> selector,
+        int takeCount
+    )
+    {
+        if (source is null or { Length: 0 })
+        {
+            return Array.Empty<TResult>();
+        }
+
+        if (takeCount < 1)
+        {
+            takeCount = 0;
+        }
+
+        var takeIndex = 0;
+        var result = new TResult[takeCount];
+        for (var i = source.Length - 1; i >= 0 && takeIndex < takeCount; --i)
+        {
+            if (query(source[i], i))
+            {
+                result[takeIndex++] = selector(source[i]);
+            }
+        }
+
+        return result.AsSpan(..takeIndex);
+    }
+#endif
 }
 
 #endregion WhereSelect
@@ -1042,7 +1151,7 @@ public static partial class ArrayExtensions
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static PositionCollection PositionsWhere<TData>(
         this TData[] source,
-        Predicate<TData> comparison
+        Func<TData, int, bool> comparison
     )
     {
         var positions = new PositionCollection(0, 0);
@@ -1054,7 +1163,7 @@ public static partial class ArrayExtensions
 
         for (var i = 0; i < source.Length; ++i)
         {
-            if (comparison(source[i]))
+            if (comparison(source[i], i))
             {
                 positions.Add(i);
             }

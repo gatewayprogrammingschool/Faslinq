@@ -30,25 +30,13 @@ public class LastList : LastBenchmarks
         => ProcessScalar(item, LastGenerateRecords100000);
 
     [DataTestMethod]
-    [DynamicData(nameof(GenerateTestRecords1), DynamicDataSourceType.Method)]
-    [DynamicData(nameof(GenerateTestRecords250), DynamicDataSourceType.Method)]
-    [DynamicData(nameof(GenerateTestRecords5000), DynamicDataSourceType.Method)]
-    [DynamicData(nameof(GenerateTestRecords100000), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(GenerateTestRecords1), typeof(BenchmarkBase), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(GenerateTestRecords250), typeof(BenchmarkBase), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(GenerateTestRecords5000), typeof(BenchmarkBase), DynamicDataSourceType.Method)]
+    // [DynamicData(nameof(GenerateTestRecords100000), typeof(BenchmarkBase), DynamicDataSourceType.Method)]
     public void Last_List(object item)
     {
         ProcessScalar(item, LastGenerateRecords1);
     }
-
-    public new static IEnumerable<object[]> GenerateTestRecords1()
-        => BenchmarkBase.GenerateTestRecords1();
-
-    public new static IEnumerable<object[]> GenerateTestRecords250()
-        => BenchmarkBase.GenerateTestRecords250();
-
-    public new static IEnumerable<object[]> GenerateTestRecords5000()
-        => BenchmarkBase.GenerateTestRecords5000();
-
-    public new static IEnumerable<object[]> GenerateTestRecords100000()
-        => BenchmarkBase.GenerateTestRecords100000();
 }
 #endif

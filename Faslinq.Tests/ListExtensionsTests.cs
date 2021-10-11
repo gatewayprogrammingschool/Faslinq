@@ -13,8 +13,8 @@ public class ListExtensionsTests
     {
         var tuples = new List<TestValueTuple>() { toSelect ?? default };
 
-        ListExtensions.Any(tuples, a => true).Should().BeTrue();
-        ListExtensions.Any(tuples, a => false).Should().BeFalse();
+        ListExtensions.Any(tuples, (a, i) => true).Should().BeTrue();
+        ListExtensions.Any(tuples, (a, i) => false).Should().BeFalse();
     }
 
     [DataTestMethod]
@@ -34,8 +34,8 @@ public class ListExtensionsTests
     {
         var tuples = new List<TestValueTuple>() { toSelect ?? default };
 
-        ListExtensions.All(tuples, a => true).Should().BeTrue();
-        ListExtensions.All(tuples, a => false).Should().BeFalse();
+        ListExtensions.All(tuples, (a, i) => true).Should().BeTrue();
+        ListExtensions.All(tuples, (a, i) => false).Should().BeFalse();
     }
     #endregion Any / All Tests
 
@@ -46,9 +46,9 @@ public class ListExtensionsTests
     {
         var anonymous = new List<TestValueTuple>() { toSelect ?? default };
 
-        ListExtensions.First(anonymous, a => true)!.Should().Be(toSelect ?? default);
+        ListExtensions.First(anonymous, (a, i) => true)!.Should().Be(toSelect ?? default);
 
-        Action a = () => ListExtensions.First(anonymous, a => false);
+        Action a = () => ListExtensions.First(anonymous, (a, i) => false);
         a.Should().Throw<IndexOutOfRangeException>();
     }
 
@@ -58,9 +58,9 @@ public class ListExtensionsTests
     {
         var anonymous = new List<TestValueTuple>() { toSelect ?? default };
 
-        ListExtensions.Last(anonymous, a => true)!.Should().Be(toSelect ?? default);
+        ListExtensions.Last(anonymous, (a, i) => true)!.Should().Be(toSelect ?? default);
 
-        Action a = () => ListExtensions.Last(anonymous, a => false);
+        Action a = () => ListExtensions.Last(anonymous, (a, i) => false);
         a.Should().Throw<IndexOutOfRangeException>();
     }
 
@@ -70,8 +70,8 @@ public class ListExtensionsTests
     {
         var anonymous = new List<TestValueTuple>() { toSelect ?? default };
 
-        ListExtensions.FirstOrDefault(anonymous, a => true)!.Should().Be(toSelect ?? default);
-        ListExtensions.FirstOrDefault(anonymous, a => false).Should().Be(default);
+        ListExtensions.FirstOrDefault(anonymous, (a, i) => true)!.Should().Be(toSelect ?? default);
+        ListExtensions.FirstOrDefault(anonymous, (a, i) => false).Should().Be(default);
     }
 
     [DataTestMethod]
@@ -80,8 +80,8 @@ public class ListExtensionsTests
     {
         var anonymous = new List<TestValueTuple>() { toSelect ?? default };
 
-        ListExtensions.LastOrDefault(anonymous, a => true)!.Should().Be(toSelect ?? default);
-        ListExtensions.LastOrDefault(anonymous, a => false).Should().Be(default);
+        ListExtensions.LastOrDefault(anonymous, (a, i) => true)!.Should().Be(toSelect ?? default);
+        ListExtensions.LastOrDefault(anonymous, (a, i) => false).Should().Be(default);
     }
     #endregion First / Last Tests
 
@@ -95,7 +95,7 @@ public class ListExtensionsTests
         var expected = ((dynamic?)toSelect)?.Index;
         object? first = ListExtensions.Where(
                 anonymous,
-                a => a?.Index == expected)?
+                (a, i) => a?.Index == expected)?
             .FirstOrDefault();
 
         first.Should().BeEquivalentTo(toSelect);
@@ -108,7 +108,7 @@ public class ListExtensionsTests
     {
         var anonymous = new List<TestValueTuple>() { toSelect ?? default };
 
-        object? first = ListExtensions.Where(anonymous, a => a.Item1 == toSelect?.Item1).FirstOrDefault();
+        object? first = ListExtensions.Where(anonymous, (a, _) => a.Item1 == toSelect?.Item1).FirstOrDefault();
 
         first.Should().BeEquivalentTo(toSelect ?? default);
     }
@@ -120,7 +120,7 @@ public class ListExtensionsTests
     {
         var list = tuple.Item1.Cast<TestValueTuple>().ToList();
 
-        var result = ListExtensions.Where(list, i => i.Item1 == list[0].Item1);
+        var result = ListExtensions.Where(list, (i, idx) => i.Item1 == list[0].Item1);
 
         result.Should().NotBeNull();
         result!.Count.Should().Be(Math.Min(1, list.Count));
@@ -143,7 +143,7 @@ public class ListExtensionsTests
         list.Should().NotBeNull();
         list.Should().HaveCount(tuple.Item2 * 3);
 
-        var result = ListExtensions.WhereTake(list, i => i.Item1 == list[0].Item1, 2);
+        var result = ListExtensions.WhereTake(list, (i, idx) => i.Item1 == list[0].Item1, 2);
 
         result.Should().NotBeNull();
         result!.Count.Should().Be(Math.Min(2, list.Count));
@@ -170,7 +170,7 @@ public class ListExtensionsTests
         list.Should().NotBeNull();
         list.Should().HaveCount(tuple.Item2 * 3);
 
-        var result = ListExtensions.WhereTakeLast(list, i => i.Item1 == list[first].Item1, 2);
+        var result = ListExtensions.WhereTakeLast(list, (i, idx) => i.Item1 == list[first].Item1, 2);
 
         result.Should().NotBeNull();
         result!.Count.Should().Be(Math.Min(2, list.Count));
@@ -194,7 +194,7 @@ public class ListExtensionsTests
         var expected = ((dynamic?)toSelect)?.Index;
         object? first = ListExtensions.WhereSelect(
                 anonymous,
-                a => a?.Index == expected,
+                (a, i) => a?.Index == expected,
                 i => i)?
             .FirstOrDefault();
 
@@ -240,7 +240,7 @@ public class ListExtensionsTests
 
         IEnumerable<Range> finished = expectedPositions;
 
-        IEnumerable<Range> result = ListExtensions.PositionsWhere(list, i => i.Item1 == 1);
+        IEnumerable<Range> result = ListExtensions.PositionsWhere(list, (i, _) => i.Item1 == 1);
 
         result.Should().BeEquivalentTo(finished);
     }
@@ -699,8 +699,8 @@ public class ListExtensionsTests
 //        List<TestValueTuple> tuples = new();
 //        tuples.Add(toSelect);
 
-//        ListExtensions.Any(tuples, a => true).Should().BeTrue();
-//        ListExtensions.Any(tuples, a => false).Should().BeFalse();
+//        ListExtensions.Any(tuples, (a, i) => true).Should().BeTrue();
+//        ListExtensions.Any(tuples, (a, i) => false).Should().BeFalse();
 //    }
 
 //    [DataTestMethod]
@@ -720,8 +720,8 @@ public class ListExtensionsTests
 //        List<TestValueTuple> tuples = new();
 //        tuples.Add(toSelect);
 
-//        ListExtensions.All(tuples, a => true).Should().BeTrue();
-//        ListExtensions.All(tuples, a => false).Should().BeFalse();
+//        ListExtensions.All(tuples, (a, i) => true).Should().BeTrue();
+//        ListExtensions.All(tuples, (a, i) => false).Should().BeFalse();
 //    }
 //    #endregion Any / All Tests
 
@@ -733,9 +733,9 @@ public class ListExtensionsTests
 //        List<TestValueTuple> anonymous = new();
 //        anonymous.Add(toSelect);
 
-//        ListExtensions.First(anonymous, a => true)!.Should().Be(toSelect ?? default);
+//        ListExtensions.First(anonymous, (a, i) => true)!.Should().Be(toSelect ?? default);
 
-//        Action a = () => ListExtensions.First(anonymous, a => false);
+//        Action a = () => ListExtensions.First(anonymous, (a, i) => false);
 //        a.Should().Throw<IndexOutOfRangeException>();
 //    }
 
@@ -746,9 +746,9 @@ public class ListExtensionsTests
 //        List<TestValueTuple> anonymous = new();
 //        anonymous.Add(toSelect);
 
-//        ListExtensions.Last(anonymous, a => true)!.Should().Be(toSelect ?? default);
+//        ListExtensions.Last(anonymous, (a, i) => true)!.Should().Be(toSelect ?? default);
 
-//        Action a = () => ListExtensions.Last(anonymous, a => false);
+//        Action a = () => ListExtensions.Last(anonymous, (a, i) => false);
 //        a.Should().Throw<IndexOutOfRangeException>();
 //    }
 
@@ -759,8 +759,8 @@ public class ListExtensionsTests
 //        List<TestValueTuple> anonymous = new();
 //        anonymous.Add(toSelect);
 
-//        ListExtensions.FirstOrDefault(anonymous, a => true)!.Should().Be(toSelect ?? default);
-//        ListExtensions.FirstOrDefault(anonymous, a => false).Should().Be(default);
+//        ListExtensions.FirstOrDefault(anonymous, (a, i) => true)!.Should().Be(toSelect ?? default);
+//        ListExtensions.FirstOrDefault(anonymous, (a, i) => false).Should().Be(default);
 //    }
 
 //    [DataTestMethod]
@@ -770,8 +770,8 @@ public class ListExtensionsTests
 //        List<TestValueTuple> anonymous = new();
 //        anonymous.Add(toSelect);
 
-//        ListExtensions.LastOrDefault(anonymous, a => true)!.Should().Be(toSelect ?? default);
-//        ListExtensions.LastOrDefault(anonymous, a => false).Should().Be(default);
+//        ListExtensions.LastOrDefault(anonymous, (a, i) => true)!.Should().Be(toSelect ?? default);
+//        ListExtensions.LastOrDefault(anonymous, (a, i) => false).Should().Be(default);
 //    }
 //    #endregion First / Last Tests
 
@@ -783,7 +783,7 @@ public class ListExtensionsTests
 //        List<dynamic> anonymous = new();
 //        anonymous.Add(toSelect);
 
-//        object first = ListExtensions.Where(anonymous, a => a.Index == ((dynamic)toSelect).Index)[0];
+//        object first = ListExtensions.Where(anonymous, (a, i) => a.Index == ((dynamic)toSelect).Index)[0];
 
 //        first.Should().BeEquivalentTo(toSelect);
 //    }
@@ -807,7 +807,7 @@ public class ListExtensionsTests
 //    {
 //        List<TestValueTuple> list = tuple.Item1.Cast<TestValueTuple>().ToList();
 
-//        var result = ListExtensions.Where(list, i => i.Item1 == list[0].Item1);
+//        var result = ListExtensions.Where(list, (i, idx) => i.Item1 == list[0].Item1);
 
 //        result.Should().NotBeNullOrEmpty();
 //        result!.Count.Should().Be(1);
@@ -828,7 +828,7 @@ public class ListExtensionsTests
 //        list.Should().NotBeNullOrEmpty();
 //        list.Should().HaveCount(tuple.Item2 * 3);
 
-//        var result = ListExtensions.WhereTake(list, 2, i => i.Item1 == list[0].Item1);
+//        var result = ListExtensions.WhereTake(list, 2, (i, idx) => i.Item1 == list[0].Item1);
 
 //        result.Should().NotBeNullOrEmpty();
 //        result!.Count.Should().Be(2);
@@ -853,7 +853,7 @@ public class ListExtensionsTests
 //        list.Should().NotBeNullOrEmpty();
 //        list.Should().HaveCount(tuple.Item2 * 3);
 
-//        var result = ListExtensions.WhereTakeLast(list, 2, i => i.Item1 == list[first].Item1);
+//        var result = ListExtensions.WhereTakeLast(list, 2, (i, idx) => i.Item1 == list[first].Item1);
 
 //        result.Should().NotBeNullOrEmpty();
 //        result!.Count.Should().Be(2);
@@ -875,9 +875,9 @@ public class ListExtensionsTests
 
 //        anonymous.Add(toSelect);
 
-//        Func<dynamic, object> pIndex = a => a.Index;
-//        Func<dynamic, object> pParamA = a => a.ParamA;
-//        Func<dynamic, object> pParamB = a => a.ParamB;
+//        Func<dynamic, object> pIndex = (a, i) => a.Index;
+//        Func<dynamic, object> pParamA = (a, i) => a.ParamA;
+//        Func<dynamic, object> pParamB = (a, i) => a.ParamB;
 
 //        int index = anonymous.Select(pIndex).Cast<int>().First();
 //        string str = anonymous.Select(pParamA).Cast<string>().First();
@@ -982,9 +982,9 @@ public class ListExtensionsTests
 
 //        anonymous.Add(toSelect);
 
-//        Func<dynamic, object> pIndex = a => a.Index;
-//        Func<dynamic, object> pParamA = a => a.ParamA;
-//        Func<dynamic, object> pParamB = a => a.ParamB;
+//        Func<dynamic, object> pIndex = (a, i) => a.Index;
+//        Func<dynamic, object> pParamA = (a, i) => a.ParamA;
+//        Func<dynamic, object> pParamB = (a, i) => a.ParamB;
 
 //        int index = anonymous.Select(pIndex).Cast<int>().First();
 //        string str = anonymous.Select(pParamA).Cast<string>().First();

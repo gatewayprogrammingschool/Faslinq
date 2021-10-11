@@ -1,10 +1,34 @@
-﻿namespace Faslinq.Benchmarks.Collections;
+﻿using System.Xml.Linq;
+
+namespace Faslinq.Benchmarks.Collections;
 
 #if !NO_FASLINQ
 #endif
 
-public class WhereTakeLastBenchmarks : BenchmarkBase
+[TestClass]
+public class WhereTakeLastBenchmarks : CollectionBenchmarkBase
 {
+    [DataTestMethod]
+    [DynamicData(nameof(GenerateTestRecords1), typeof(BenchmarkBase), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(GenerateTestRecords250), typeof(BenchmarkBase), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(GenerateTestRecords5000), typeof(BenchmarkBase), DynamicDataSourceType.Method)]
+    // [DynamicData(nameof(GenerateTestRecords100000), typeof(BenchmarkBase), DynamicDataSourceType.Method)]
+    public void WhereTakeLast_Array(object[] item) => Test(item, Tests.Array);
+
+    [DataTestMethod]
+    [DynamicData(nameof(GenerateTestRecords1), typeof(BenchmarkBase), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(GenerateTestRecords250), typeof(BenchmarkBase), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(GenerateTestRecords5000), typeof(BenchmarkBase), DynamicDataSourceType.Method)]
+    // [DynamicData(nameof(GenerateTestRecords100000), typeof(BenchmarkBase), DynamicDataSourceType.Method)]
+    public void WhereTakeLast_List(object[] item) => Test(item, Tests.List);
+
+    [DataTestMethod]
+    [DynamicData(nameof(GenerateTestRecords1), typeof(BenchmarkBase), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(GenerateTestRecords250), typeof(BenchmarkBase), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(GenerateTestRecords5000), typeof(BenchmarkBase), DynamicDataSourceType.Method)]
+    // [DynamicData(nameof(GenerateTestRecords100000), typeof(BenchmarkBase), DynamicDataSourceType.Method)]
+    public void WhereTakeLast_Linq(object[] item) => Test(item, Tests.IEnumerable);
+
     protected override TResult GetScalarByFaslinq<TResult>(List<TResult> list, params object[] values)
         where TResult : default
         => throw new NotImplementedException();
@@ -31,12 +55,12 @@ public class WhereTakeLastBenchmarks : BenchmarkBase
 
     protected override List<TestValueTuple> GetStructListByFaslinq(List<TestValueTuple> list, params object[] values)
     {
-        return list.WhereTakeLast(i => list[0] == i, (int)(list.Count * 0.2m));
+        return list.WhereTakeLast(Function, TakeCount(list));
     }
 
     protected override TestValueTuple[] GetStructArrayByFaslinq(TestValueTuple[] array, params object[] values)
     {
-        return array.WhereTakeLast(i => array[0] == i, (int)(array.Length * 0.2m));
+        return array.WhereTakeLast(Function, TakeCount(array));
     }
 
     protected override IEnumerable<TestValueTuple> GetEnumerableStructByLinq(
@@ -44,23 +68,44 @@ public class WhereTakeLastBenchmarks : BenchmarkBase
         params object[] values
     )
     {
-        return enumerable.Where(i => enumerable.First() == i)
-            .TakeLast((int)(enumerable.Count() * 0.2m));
+        return enumerable.Where(Function)
+            .TakeLast(TakeCount(enumerable));
     }
 
-    protected override List<object> GetListByFaslinq(List<object> list, params object[] values)
+    protected override List<TestValueTuple> GetListByFaslinq(List<TestValueTuple> list, params object[] values)
     {
-        return list.WhereTakeLast(i => list[0] == i, (int)(list.Count * 0.2m));
+        return list.WhereTakeLast(Function, TakeCount(list));
     }
 
-    protected override object[] GetArrayByArray(object[] array, params object[] values)
+    protected override TestValueTuple[] GetArrayByArray(TestValueTuple[] array, params object[] values)
     {
-        return array.WhereTakeLast(i => array[0] == i, (int)(array.Length * 0.2m));
+        return array.WhereTakeLast(Function, TakeCount(array));
     }
 
-    protected override IEnumerable<object> GetEnumerableByLinq(IEnumerable<object> enumerable, params object[] values)
+    protected override IEnumerable<TestValueTuple> GetEnumerableByLinq(IEnumerable<TestValueTuple> enumerable, params object[] values)
     {
-        return enumerable.Where(i => enumerable.First() == i)
-            .TakeLast((int)(enumerable.Count() * 0.2m));
+        return enumerable.Where(Function)
+            .TakeLast(TakeCount(enumerable));
+}
+
+    protected override IEnumerable<TData> LinqControl<TData>(object item)
+    {
+        (item is object[] { Length: 1, } z && z[0] is object[])
+            .Should()
+            .BeTrue($"{item.GetType().FullName} with Length"
+                    + $" {item.GetType().GetProperty("Length")?.GetValue(item) ?? "<<null>>"}");
+
+        if (item is object[] { Length: 1, } p
+            && p[0] is object[] p0)
+        {
+            var testData = p0.Cast<TestValueTuple>();
+
+            return Enumerable
+                .Where(testData, Function)
+                .TakeLast(TakeCount(p0))
+                .Cast<TData>();
+        }
+
+        return Array.Empty<TData>();
     }
 }

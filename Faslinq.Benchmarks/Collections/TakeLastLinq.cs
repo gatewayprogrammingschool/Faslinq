@@ -1,5 +1,6 @@
 ﻿namespace Faslinq.Benchmarks.Collections;
 
+[TestClass]
 public class TakeLastLinq : TakeLastBenchmarks
 {
     [Benchmark]

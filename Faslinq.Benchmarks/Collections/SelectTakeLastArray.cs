@@ -1,6 +1,6 @@
 ﻿namespace Faslinq.Benchmarks.Collections;
 
-[BenchmarkCategory("SelectTakeLast", "Array")]
+[TestClass]
 public class SelectTakeLastArray : SelectTakeLastBenchmarks
 {
     [Benchmark]

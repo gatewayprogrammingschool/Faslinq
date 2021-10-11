@@ -2,7 +2,7 @@
 
 namespace Faslinq.Benchmarks.Scalar;
 
-public abstract class FirstBenchmarks : BenchmarkBase
+public abstract class FirstBenchmarks : ScalarBenchmarkBase
 {
     protected override TResult GetScalarByFaslinq<TResult>(List<TResult> list, params object[] values)
         where TResult : default
@@ -40,12 +40,24 @@ public abstract class FirstBenchmarks : BenchmarkBase
     )
         => throw new NotImplementedException();
 
-    protected override List<object> GetListByFaslinq(List<object> list, params object[] values)
+    protected override List<TestValueTuple> GetListByFaslinq(List<TestValueTuple> list, params object[] values)
         => throw new NotImplementedException();
 
-    protected override object[] GetArrayByArray(object[] array, params object[] values)
+    protected override TestValueTuple[] GetArrayByArray(TestValueTuple[] array, params object[] values)
         => throw new NotImplementedException();
 
-    protected override IEnumerable<object> GetEnumerableByLinq(IEnumerable<object> enumerable, params object[] values)
+    protected override IEnumerable<TestValueTuple> GetEnumerableByLinq(IEnumerable<TestValueTuple> enumerable, params object[] values)
         => throw new NotImplementedException();
+
+    protected override TData LinqControl<TData>(object item)
+        where TData : struct
+    {
+        if (item is object[] { Length: 1, } p)
+        {
+            return Enumerable
+                .First(p.Cast<TData>());
+        }
+
+        return default;
+    }
 }

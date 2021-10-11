@@ -3,16 +3,6 @@
 [TestClass]
 public class TakeList : TakeBenchmarks
 {
-    [DataTestMethod]
-    [DynamicData(nameof(GenerateTestRecords1), DynamicDataSourceType.Method)]
-    [DynamicData(nameof(GenerateTestRecords250), DynamicDataSourceType.Method)]
-    [DynamicData(nameof(GenerateTestRecords5000), DynamicDataSourceType.Method)]
-    [DynamicData(nameof(GenerateTestRecords100000), DynamicDataSourceType.Method)]
-    public void Take_List(object item)
-    {
-        ProcessCollection(Tests.List, item, FirstGenerateRecords1).Consume(new ());
-    }
-
     [Benchmark]
     [BenchmarkCategory("Take", "1", "List")]
     [ArgumentsSource(nameof(GenerateRecords1))]
@@ -36,16 +26,4 @@ public class TakeList : TakeBenchmarks
     [ArgumentsSource(nameof(GenerateRecords100000))]
     public void Take_100000_List(object item)
         => ProcessCollection(Tests.List, item, FirstGenerateRecords100000).Consume(new ());
-
-    public new static IEnumerable<object[]> GenerateTestRecords1()
-        => BenchmarkBase.GenerateTestRecords1();
-
-    public new static IEnumerable<object[]> GenerateTestRecords250()
-        => BenchmarkBase.GenerateTestRecords250();
-
-    public new static IEnumerable<object[]> GenerateTestRecords5000()
-        => BenchmarkBase.GenerateTestRecords5000();
-
-    public new static IEnumerable<object[]> GenerateTestRecords100000()
-        => BenchmarkBase.GenerateTestRecords100000();
 }

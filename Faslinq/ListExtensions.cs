@@ -31,7 +31,7 @@ public static partial class ListExtensions
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool Any<TData>(
         this List<TData> source,
-        Predicate<TData> query
+        Func<TData, int, bool> query
     )
     {
         if (source.Count == 0)
@@ -42,7 +42,7 @@ public static partial class ListExtensions
         for (var index = 0; index < source.Count; index++)
         {
             var item = source[index];
-            if (query(item))
+            if (query(item, index))
             {
                 return true;
             }
@@ -61,7 +61,7 @@ public static partial class ListExtensions
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool All<TData>(
         this List<TData> source,
-        Predicate<TData> query
+        Func<TData, int, bool> query
     )
     {
         if (source.Count == 0)
@@ -72,7 +72,7 @@ public static partial class ListExtensions
         for (var index = 0; index < source.Count; index++)
         {
             var item = source[index];
-            if (!query(item))
+            if (!query(item, index))
             {
                 return false;
             }
@@ -99,7 +99,7 @@ public static partial class ListExtensions
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TData First<TData>(
         this List<TData> source,
-        Predicate<TData>? query = null
+        Func<TData, int, bool>? query = null
     )
     {
         if (source.Count == 0)
@@ -114,7 +114,7 @@ public static partial class ListExtensions
 
         for (var i = 0; i < source.Count; i++)
         {
-            if (query(source[i]))
+            if (query(source[i], i))
             {
                 return source[i];
             }
@@ -134,7 +134,7 @@ public static partial class ListExtensions
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TData? FirstOrDefault<TData>(
         this List<TData> source,
-        Predicate<TData>? query = null,
+        Func<TData, int, bool>? query = null,
         TData? defaultValue = default
     )
     {
@@ -145,14 +145,14 @@ public static partial class ListExtensions
 
         if (query is null)
         {
-            return source is {Count: > 0,}
+            return source is { Count: > 0, }
                 ? source[0]
                 : defaultValue;
         }
 
         for (var i = 0; i < source.Count; i++)
         {
-            if (query(source[i]))
+            if (query(source[i], i))
             {
                 return source[i];
             }
@@ -161,7 +161,6 @@ public static partial class ListExtensions
         return defaultValue;
     }
 }
-
 #endregion First
 
 #region Last
@@ -179,7 +178,7 @@ public static partial class ListExtensions
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TData Last<TData>(
         this List<TData> source,
-        Predicate<TData>? query = null
+        Func<TData, int, bool>? query = null
     )
     {
         if (source.Count == 0)
@@ -194,7 +193,7 @@ public static partial class ListExtensions
 
         for (var i = source.Count - 1; i >= 0; --i)
         {
-            if (query(source[i]))
+            if (query(source[i], i))
             {
                 return source[i];
             }
@@ -214,7 +213,7 @@ public static partial class ListExtensions
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TData? LastOrDefault<TData>(
         this List<TData> source,
-        Predicate<TData>? query = null,
+        Func<TData, int, bool>? query = null,
         TData? defaultValue = default
     )
     {
@@ -225,14 +224,14 @@ public static partial class ListExtensions
 
         if (query is null)
         {
-            return source is {Count: > 0,}
+            return source is { Count: > 0, }
                 ? source[^1]
                 : defaultValue;
         }
 
         for (var i = source.Count - 1; i >= 0; --i)
         {
-            if (query(source[i]))
+            if (query(source[i], i))
             {
                 return source[i];
             }
@@ -258,7 +257,7 @@ public static partial class ListExtensions
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static List<TData> Where<TData>(
         this List<TData> source,
-        Predicate<TData> query
+        Func<TData, int, bool> query
     )
     {
         if (source.Count == 0)
@@ -280,7 +279,7 @@ public static partial class ListExtensions
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static List<TData> WhereTake<TData>(
         this List<TData> source,
-        Predicate<TData> query,
+        Func<TData, int, bool> query,
         int takeCount
     )
     {
@@ -299,7 +298,7 @@ public static partial class ListExtensions
         var result = new List<TData>(targetLength);
         for (var i = 0; i < source.Count && takeIndex < targetLength; i++)
         {
-            if (!query(source[i]))
+            if (!query(source[i], i))
             {
                 continue;
             }
@@ -322,7 +321,7 @@ public static partial class ListExtensions
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static List<TData> WhereTakeLast<TData>(
         this List<TData> source,
-        Predicate<TData> query,
+        Func<TData, int, bool> query,
         int takeCount
     )
     {
@@ -339,7 +338,7 @@ public static partial class ListExtensions
         List<TData> result = new();
         for (var i = source.Count - 1; i >= 0 && result.Count < takeCount; --i)
         {
-            if (query(source[i]))
+            if (query(source[i], i))
             {
                 result.Add(source[i]);
             }
@@ -348,7 +347,6 @@ public static partial class ListExtensions
         return result;
     }
 }
-
 #endregion Where
 
 #region Select
@@ -472,7 +470,7 @@ public static partial class ListExtensions
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static List<TResult> WhereSelect<TData, TResult>(
         this List<TData> source,
-        Predicate<TData> query,
+        Func<TData, int, bool> query,
         Func<TData, TResult> selector
     )
     {
@@ -492,7 +490,7 @@ public static partial class ListExtensions
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static List<TResult> WhereSelectTake<TData, TResult>(
         this List<TData> source,
-        Predicate<TData> query,
+        Func<TData, int, bool> query,
         Func<TData, TResult> selector,
         int takeCount
     )
@@ -508,17 +506,16 @@ public static partial class ListExtensions
         }
 
         takeCount = Math.Min(takeCount, source.Count);
-        var takeIndex = 0;
-        var result = new TResult[takeCount];
-        for (var i = 0; i < source.Count && takeIndex < takeCount; i++)
+        var result = new List<TResult>();
+        for (var i = 0; i < source.Count && result.Count < takeCount; i++)
         {
-            if (query(source[i]))
+            if (query(source[i], i))
             {
-                result[takeIndex++] = selector(source[i]);
+                result.Add(selector(source[i]));
             }
         }
 
-        return new (result);
+        return result;
     }
 
     /// <summary>
@@ -534,7 +531,7 @@ public static partial class ListExtensions
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static List<TResult> WhereSelectTakeLast<TData, TResult>(
         this List<TData> source,
-        Predicate<TData> query,
+        Func<TData, int, bool> query,
         Func<TData, TResult> selector,
         int takeCount
     )
@@ -553,7 +550,7 @@ public static partial class ListExtensions
 
         for (var i = source.Count - 1; i >= 0 && result.Count < takeCount; --i)
         {
-            if (query(source[i]))
+            if (query(source[i], i))
             {
                 result.Add(selector(source[i]));
             }
@@ -930,7 +927,7 @@ public static partial class ListExtensions
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static PositionCollection PositionsWhere<TData>(
         this List<TData> source,
-        Predicate<TData> comparison
+        Func<TData, int, bool> comparison
     )
     {
         var positions = new PositionCollection(0, 0);
@@ -942,7 +939,7 @@ public static partial class ListExtensions
 
         for (var i = 0; i < source.Count; ++i)
         {
-            if (comparison(source[i]))
+            if (comparison(source[i], i))
             {
                 positions.Add(i);
             }

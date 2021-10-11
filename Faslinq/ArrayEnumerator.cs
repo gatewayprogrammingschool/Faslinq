@@ -19,14 +19,17 @@ public struct ArrayEnumerator<TType> : IEnumerator<TType?>
     object? IEnumerator.Current
         => Current;
 
-    private int _index = -1;
+    private int _index;
 
     /// <summary>
     ///
     /// </summary>
     /// <param name="array"></param>
     public ArrayEnumerator(TType[] array)
-        => _array = array;
+    {
+        _array = array;
+        _index = -1;
+    }
 
     /// <summary>
     ///

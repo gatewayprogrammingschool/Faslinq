@@ -2,7 +2,6 @@
 
 namespace Faslinq.Benchmarks.Collections;
 
-//[BenchmarkCategory("Select")]
 public class SelectArray : SelectBenchmarks
 {
     [Benchmark]

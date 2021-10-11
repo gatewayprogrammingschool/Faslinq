@@ -12,6 +12,10 @@ buttons:
       content: Source
       url: 'https://github.com/gatewayprogrammingschool/Faslinq'
       external_url: true
+    - icon: nuget
+      content: Nuget
+      url: 'https://www.nuget.org/packages/Faslinq/'
+      external_url: true
 
 # Grid navigation
 grid_navigation:

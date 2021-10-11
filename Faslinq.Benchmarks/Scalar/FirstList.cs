@@ -6,10 +6,10 @@ namespace Faslinq.Benchmarks.Scalar;
 public class FirstList : FirstBenchmarks
 {
     [DataTestMethod]
-    [DynamicData(nameof(GenerateTestRecords1), DynamicDataSourceType.Method)]
-    [DynamicData(nameof(GenerateTestRecords250), DynamicDataSourceType.Method)]
-    [DynamicData(nameof(GenerateTestRecords5000), DynamicDataSourceType.Method)]
-    [DynamicData(nameof(GenerateTestRecords100000), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(GenerateTestRecords1), typeof(BenchmarkBase), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(GenerateTestRecords250), typeof(BenchmarkBase), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(GenerateTestRecords5000), typeof(BenchmarkBase), DynamicDataSourceType.Method)]
+    // [DynamicData(nameof(GenerateTestRecords100000), typeof(BenchmarkBase), DynamicDataSourceType.Method)]
     public void First_List(object item)
     {
         ProcessScalar(item, FirstGenerateRecords1);
@@ -39,17 +39,5 @@ public class FirstList : FirstBenchmarks
     [ArgumentsSource(nameof(GenerateRecords100000))]
     public TestValueTuple First_100000_List(object item)
         => ProcessScalar(item, FirstGenerateRecords100000);
-
-    public new static IEnumerable<object[]> GenerateTestRecords1()
-        => BenchmarkBase.GenerateTestRecords1();
-
-    public new static IEnumerable<object[]> GenerateTestRecords250()
-        => BenchmarkBase.GenerateTestRecords250();
-
-    public new static IEnumerable<object[]> GenerateTestRecords5000()
-        => BenchmarkBase.GenerateTestRecords5000();
-
-    public new static IEnumerable<object[]> GenerateTestRecords100000()
-        => BenchmarkBase.GenerateTestRecords100000();
 }
 #endif

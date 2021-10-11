@@ -1,10 +1,34 @@
-﻿namespace Faslinq.Benchmarks.Collections;
+﻿using System.Xml.Linq;
+
+namespace Faslinq.Benchmarks.Collections;
 
 #if !NO_FASLINQ
 #endif
 
-public class WhereSelectBenchmarks : BenchmarkBase
+[TestClass]
+public class WhereSelectBenchmarks : CollectionBenchmarkBase
 {
+    [DataTestMethod]
+    [DynamicData(nameof(GenerateTestRecords1), typeof(BenchmarkBase), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(GenerateTestRecords250), typeof(BenchmarkBase), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(GenerateTestRecords5000), typeof(BenchmarkBase), DynamicDataSourceType.Method)]
+    // [DynamicData(nameof(GenerateTestRecords100000), typeof(BenchmarkBase), DynamicDataSourceType.Method)]
+    public void WhereSelect_Array(object[] item) => Test(item, Tests.Array);
+
+    [DataTestMethod]
+    [DynamicData(nameof(GenerateTestRecords1), typeof(BenchmarkBase), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(GenerateTestRecords250), typeof(BenchmarkBase), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(GenerateTestRecords5000), typeof(BenchmarkBase), DynamicDataSourceType.Method)]
+    // [DynamicData(nameof(GenerateTestRecords100000), typeof(BenchmarkBase), DynamicDataSourceType.Method)]
+    public void WhereSelect_List(object[] item) => Test(item, Tests.List);
+
+    [DataTestMethod]
+    [DynamicData(nameof(GenerateTestRecords1), typeof(BenchmarkBase), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(GenerateTestRecords250), typeof(BenchmarkBase), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(GenerateTestRecords5000), typeof(BenchmarkBase), DynamicDataSourceType.Method)]
+    // [DynamicData(nameof(GenerateTestRecords100000), typeof(BenchmarkBase), DynamicDataSourceType.Method)]
+    public void WhereSelect_Linq(object[] item) => Test(item, Tests.IEnumerable);
+
     protected override TResult GetScalarByFaslinq<TResult>(List<TResult> list, params object[] values)
         where TResult : default
         => throw new NotImplementedException();
@@ -31,12 +55,12 @@ public class WhereSelectBenchmarks : BenchmarkBase
 
     protected override List<TestValueTuple> GetStructListByFaslinq(List<TestValueTuple> list, params object[] values)
     {
-        return list.WhereSelect(Predicate, i => i);
+        return list.WhereSelect(Function, i => i);
     }
 
     protected override TestValueTuple[] GetStructArrayByFaslinq(TestValueTuple[] array, params object[] values)
     {
-        return array.WhereSelect(Predicate, i => i);
+        return array.WhereSelect(Function, i => i);
     }
 
     protected override IEnumerable<TestValueTuple> GetEnumerableStructByLinq(
@@ -44,23 +68,44 @@ public class WhereSelectBenchmarks : BenchmarkBase
         params object[] values
     )
     {
-        return enumerable.Where(i => enumerable.First() == i)
+        return enumerable.Where(Function)
             .Select(i => i);
     }
 
-    protected override List<object> GetListByFaslinq(List<object> list, params object[] values)
+    protected override List<TestValueTuple> GetListByFaslinq(List<TestValueTuple> list, params object[] values)
     {
-        return list.WhereSelect(i => list[0] == i, i => i);
+        return list.WhereSelect(Function, i => i);
     }
 
-    protected override object[] GetArrayByArray(object[] array, params object[] values)
+    protected override TestValueTuple[] GetArrayByArray(TestValueTuple[] array, params object[] values)
     {
-        return array.WhereSelect(i => array[0] == i, i => i);
+        return array.WhereSelect(Function, i => i);
     }
 
-    protected override IEnumerable<object> GetEnumerableByLinq(IEnumerable<object> enumerable, params object[] values)
+    protected override IEnumerable<TestValueTuple> GetEnumerableByLinq(IEnumerable<TestValueTuple> enumerable, params object[] values)
     {
-        return enumerable.Where(i => enumerable.First() == i)
+        return enumerable.Where(Function)
             .Select(i => i);
+}
+
+    protected override IEnumerable<TData> LinqControl<TData>(object item)
+    {
+        (item is object[] { Length: 1, } z && z[0] is object[])
+            .Should()
+            .BeTrue($"{item.GetType().FullName} with Length"
+                    + $" {item.GetType().GetProperty("Length")?.GetValue(item) ?? "<<null>>"}");
+
+        if (item is object[] { Length: 1, } p
+            && p[0] is object[] p0)
+        {
+            var testData = p0.Cast<TestValueTuple>();
+
+            return Enumerable
+                .Where(testData, Function)
+                .Select(i => i)
+                .Cast<TData>();
+        }
+
+        return Array.Empty<TData>();
     }
 }

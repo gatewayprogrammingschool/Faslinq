@@ -137,8 +137,28 @@ function ViewModel(report) {
                 var tr = document.createElement("tr");
                 tr.classList.add("body_row");
 
+                let dir = "Collections";
+                if (/^\bFirst/im.test(bm.Method) || /^\bLast/im.test(bm.Method)) {
+                    dir = "Scalar";
+                }
+
+                const srcPath = `https://github.com/gatewayprogrammingschool/Faslinq/blob/main/Faslinq.Benchmarks/${dir}/${bm.Method}${bm.Api}.cs`
+
+                const a = document.createElement("a");
+                a.setAttribute("href", srcPath);
+                a.setAttribute("target", "_blank");
+                a.innerText = "src";
+
+                const span = document.createElement("span");
+                span.innerText = `${bm.Method} (`;
+                span.appendChild(a);
+                span.append(")");
+
+                const td = self.createCell(["nowrap"]);
+                td.appendChild(span);
+
                 // <td data-bind="text: Method" ></td>
-                tr.appendChild(self.createCell([], bm.Method));
+                tr.appendChild(td);
                 // <td class="stat" data-bind="text: $root.Format($data.Size, 0, '')" ></td>
                 tr.appendChild(self.createCell(["stat"], self.Format(bm.Size, 0, '')));
                 // <td data-bind="text: Api" ></td>
@@ -171,7 +191,9 @@ function ViewModel(report) {
             td.classList.add(classes);
         }
 
-        td.innerText = value;
+        if (value) {
+            td.innerText = value;
+        }
 
         return td;
     }

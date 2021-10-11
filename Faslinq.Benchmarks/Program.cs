@@ -37,7 +37,7 @@ public class Program
         var counter = 1;
         foreach (var filter in filters)
         {
-            if (!aa.Any(a => a.Equals("--filter", StringComparison.CurrentCultureIgnoreCase)))
+            if (!aa.Any((a, i) => a.Equals("--filter", StringComparison.CurrentCultureIgnoreCase)))
             {
                 aa.Insert(0, "--filter");
             }
@@ -52,7 +52,7 @@ public class Program
             }
         }
 
-        var join = aa.FirstOrDefault(a => a.Equals("-Join", StringComparison.CurrentCultureIgnoreCase));
+        var join = aa.FirstOrDefault((a, i) => a.Equals("-Join", StringComparison.CurrentCultureIgnoreCase));
         if (join is not (null or ""))
         {
             aa.Remove(join);
@@ -60,7 +60,7 @@ public class Program
         }
 
 #if DEBUG
-        if (aa.All(a => !a.Equals("--runonceperiteration", StringComparison.CurrentCultureIgnoreCase)))
+        if (aa.All((a, i) => !a.Equals("--runonceperiteration", StringComparison.CurrentCultureIgnoreCase)))
         {
             aa.Add("--runOncePerIteration");
         }
@@ -78,14 +78,14 @@ public class Program
 
     private static List<string> ProcessFilters(List<string> args)
     {
-        var Where = args.Any(a => a.Equals("-where", StringComparison.OrdinalIgnoreCase));
-        var Select = args.Any(a => a.Equals("-select", StringComparison.OrdinalIgnoreCase));
-        var Take = args.Any(a => a.Equals("-take", StringComparison.OrdinalIgnoreCase));
-        var TakeLast = args.Any(a => a.Equals("-takelast", StringComparison.OrdinalIgnoreCase));
-        var First = args.Any(a => a.Equals("-first", StringComparison.OrdinalIgnoreCase));
-        var FirstWhere = args.Any(a => a.Equals("-firstwhere", StringComparison.OrdinalIgnoreCase));
-        var Last = args.Any(a => a.Equals("-last", StringComparison.OrdinalIgnoreCase));
-        var LastWhere = args.Any(a => a.Equals("-lastwhere", StringComparison.OrdinalIgnoreCase));
+        var Where = args.Any((a, i) => a.Equals("-where", StringComparison.OrdinalIgnoreCase));
+        var Select = args.Any((a, i) => a.Equals("-select", StringComparison.OrdinalIgnoreCase));
+        var Take = args.Any((a, i) => a.Equals("-take", StringComparison.OrdinalIgnoreCase));
+        var TakeLast = args.Any((a, i) => a.Equals("-takelast", StringComparison.OrdinalIgnoreCase));
+        var First = args.Any((a, i) => a.Equals("-first", StringComparison.OrdinalIgnoreCase));
+        var FirstWhere = args.Any((a, i) => a.Equals("-firstwhere", StringComparison.OrdinalIgnoreCase));
+        var Last = args.Any((a, i) => a.Equals("-last", StringComparison.OrdinalIgnoreCase));
+        var LastWhere = args.Any((a, i) => a.Equals("-lastwhere", StringComparison.OrdinalIgnoreCase));
 
         List<string> filters = new();
         List<string> f = new();
@@ -99,7 +99,7 @@ public class Program
                     if (Take)
                     {
                         var take = args.IndexOf(
-                            args.FirstOrDefault(a => a.Equals("-take", StringComparison.OrdinalIgnoreCase)) ?? ""
+                            args.FirstOrDefault((a, i) => a.Equals("-take", StringComparison.OrdinalIgnoreCase)) ?? ""
                         );
                         args.RemoveAt(take);
 
@@ -114,7 +114,7 @@ public class Program
                         var takeLast =
                             args.IndexOf(
                                 args.FirstOrDefault(
-                                    a =>
+                                    (a, i) =>
                                         a.Equals("-takelast", StringComparison.OrdinalIgnoreCase)
                                 )
                                 ?? ""
@@ -132,13 +132,13 @@ public class Program
                     f.Add("Select");
 
                     var where = args.IndexOf(
-                        args.FirstOrDefault(a => a.Equals("-where", StringComparison.OrdinalIgnoreCase)) ?? ""
+                        args.FirstOrDefault((a, i) => a.Equals("-where", StringComparison.OrdinalIgnoreCase)) ?? ""
                     );
                     args.RemoveAt(where);
 
                     var select =
                         args.IndexOf(
-                            args.FirstOrDefault(a => a.Equals("-select", StringComparison.OrdinalIgnoreCase)) ?? ""
+                            args.FirstOrDefault((a, i) => a.Equals("-select", StringComparison.OrdinalIgnoreCase)) ?? ""
                         );
                     args.RemoveAt(select);
                     break;
@@ -148,7 +148,7 @@ public class Program
                     if (Take)
                     {
                         var take = args.IndexOf(
-                            args.FirstOrDefault(a => a.Equals("-take", StringComparison.OrdinalIgnoreCase)) ?? ""
+                            args.FirstOrDefault((a, i) => a.Equals("-take", StringComparison.OrdinalIgnoreCase)) ?? ""
                         );
                         args.RemoveAt(take);
 
@@ -161,7 +161,7 @@ public class Program
                         var takeLast =
                             args.IndexOf(
                                 args.FirstOrDefault(
-                                    a =>
+                                    (a, i) =>
                                         a.Equals("-takelast", StringComparison.OrdinalIgnoreCase)
                                 )
                                 ?? ""
@@ -175,7 +175,7 @@ public class Program
                     f.Add("Where");
 
                     var where = args.IndexOf(
-                        args.FirstOrDefault(a => a.Equals("-where", StringComparison.OrdinalIgnoreCase)) ?? ""
+                        args.FirstOrDefault((a, i) => a.Equals("-where", StringComparison.OrdinalIgnoreCase)) ?? ""
                     );
                     args.RemoveAt(where);
                     break;
@@ -185,7 +185,7 @@ public class Program
                     if (Take)
                     {
                         var take = args.IndexOf(
-                            args.FirstOrDefault(a => a.Equals("-take", StringComparison.OrdinalIgnoreCase)) ?? ""
+                            args.FirstOrDefault((a, i) => a.Equals("-take", StringComparison.OrdinalIgnoreCase)) ?? ""
                         );
                         args.RemoveAt(take);
 
@@ -196,7 +196,7 @@ public class Program
                     if (TakeLast)
                     {
                         var takeLastArg = args.FirstOrDefault(
-                            a =>
+                            (a, i) =>
                                 a.Equals("-takelast", StringComparison.InvariantCultureIgnoreCase)
                         );
                         var takeLast = args.IndexOf(takeLastArg ?? "");
@@ -210,7 +210,7 @@ public class Program
 
                     var select =
                         args.IndexOf(
-                            args.FirstOrDefault(a => a.Equals("-select", StringComparison.OrdinalIgnoreCase)) ?? ""
+                            args.FirstOrDefault((a, i) => a.Equals("-select", StringComparison.OrdinalIgnoreCase)) ?? ""
                         );
                     args.RemoveAt(select);
                     break;
@@ -220,7 +220,7 @@ public class Program
                     if (Take)
                     {
                         var take = args.IndexOf(
-                            args.FirstOrDefault(a => a.Equals("-take", StringComparison.OrdinalIgnoreCase)) ?? ""
+                            args.FirstOrDefault((a, i) => a.Equals("-take", StringComparison.OrdinalIgnoreCase)) ?? ""
                         );
                         args.RemoveAt(take);
 
@@ -232,7 +232,7 @@ public class Program
                         var takeLast =
                             args.IndexOf(
                                 args.FirstOrDefault(
-                                    a =>
+                                    (a, i) =>
                                         a.Equals("-takelast", StringComparison.OrdinalIgnoreCase)
                                 )
                                 ?? ""
@@ -248,13 +248,13 @@ public class Program
             case (true, true, false, _):
                 {
                     var where = args.IndexOf(
-                        args.FirstOrDefault(a => a.Equals("-where", StringComparison.OrdinalIgnoreCase)) ?? ""
+                        args.FirstOrDefault((a, i) => a.Equals("-where", StringComparison.OrdinalIgnoreCase)) ?? ""
                     );
                     args.RemoveAt(where);
 
                     var select =
                         args.IndexOf(
-                            args.FirstOrDefault(a => a.Equals("-select", StringComparison.OrdinalIgnoreCase)) ?? ""
+                            args.FirstOrDefault((a, i) => a.Equals("-select", StringComparison.OrdinalIgnoreCase)) ?? ""
                         );
                     args.RemoveAt(select);
 
@@ -268,7 +268,7 @@ public class Program
             case (true, false, false, _):
                 {
                     var where = args.IndexOf(
-                        args.FirstOrDefault(a => a.Equals("-where", StringComparison.OrdinalIgnoreCase)) ?? ""
+                        args.FirstOrDefault((a, i) => a.Equals("-where", StringComparison.OrdinalIgnoreCase)) ?? ""
                     );
                     args.RemoveAt(where);
 
@@ -280,7 +280,7 @@ public class Program
                 {
                     var select =
                         args.IndexOf(
-                            args.FirstOrDefault(a => a.Equals("-select", StringComparison.OrdinalIgnoreCase)) ?? ""
+                            args.FirstOrDefault((a, i) => a.Equals("-select", StringComparison.OrdinalIgnoreCase)) ?? ""
                         );
                     args.RemoveAt(select);
 
@@ -298,7 +298,7 @@ public class Program
                         var firstWhere =
                             args.IndexOf(
                                 args.FirstOrDefault(
-                                    a =>
+                                    (a, i) =>
                                         a.Equals("-firstwhere", StringComparison.OrdinalIgnoreCase)
                                 )
                                 ?? ""
@@ -311,7 +311,7 @@ public class Program
                     if (First)
                     {
                         var first = args.IndexOf(
-                            args.FirstOrDefault(a => a.Equals("-first", StringComparison.OrdinalIgnoreCase)) ?? ""
+                            args.FirstOrDefault((a, i) => a.Equals("-first", StringComparison.OrdinalIgnoreCase)) ?? ""
                         );
                         args.RemoveAt(first);
 
@@ -322,7 +322,7 @@ public class Program
                     {
                         var lastWhere =
                             args.IndexOf(
-                                args.FirstOrDefault(a => a.Equals("-lastwhere", StringComparison.OrdinalIgnoreCase)) ?? ""
+                                args.FirstOrDefault((a, i) => a.Equals("-lastwhere", StringComparison.OrdinalIgnoreCase)) ?? ""
                             );
                         args.RemoveAt(lastWhere);
 
@@ -332,7 +332,7 @@ public class Program
                     if (Last)
                     {
                         var last = args.IndexOf(
-                            args.FirstOrDefault(a => a.Equals("-last", StringComparison.OrdinalIgnoreCase)) ?? ""
+                            args.FirstOrDefault((a, i) => a.Equals("-last", StringComparison.OrdinalIgnoreCase)) ?? ""
                         );
                         args.RemoveAt(last);
 
