@@ -55,12 +55,23 @@ keywords: Linq Dotnet
 <script type="module" src="/benchmarks/benchmarks.js"></script>
 <script type="module" src="/Faslinq/benchmarks/benchmarks.js"></script>
 <script type="module">
-    import { VM } from '/benchmarks/benchmarks.js';
-    VM.buildTable("tbody");
-    VM.populateSelect("methods", VM.methods);
-    VM.populateSelect("platforms", VM.platforms);
-    VM.populateSelect("apis", VM.apis);
-    VM.populateSelect("counts", VM.counts);
+    try{
+        import { VM } from '/benchmarks/benchmarks.js';
+        VM.buildTable("tbody");
+        VM.populateSelect("methods", VM.methods);
+        VM.populateSelect("platforms", VM.platforms);
+        VM.populateSelect("apis", VM.apis);
+        VM.populateSelect("counts", VM.counts);
 
-    document.vm = VM;
+        document.vm = VM;
+    } catch {
+        import { VM } from '/Faslinq/benchmarks/benchmarks.js';
+        VM.buildTable("tbody");
+        VM.populateSelect("methods", VM.methods);
+        VM.populateSelect("platforms", VM.platforms);
+        VM.populateSelect("apis", VM.apis);
+        VM.populateSelect("counts", VM.counts);
+
+        document.vm = VM;
+    }
 </script>
