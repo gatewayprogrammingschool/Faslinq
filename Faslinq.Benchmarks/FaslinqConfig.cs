@@ -69,7 +69,6 @@ internal class FaslinqConfig : IConfig
     {
         yield return new FaslinqExporter();
         yield return MarkdownExporter.GitHub;
-        yield return JsonExporter.Full;
         yield return BenchmarkReportExporter.Default;
     }
 
@@ -124,7 +123,7 @@ internal class FaslinqConfig : IConfig
         )
             => benchmarksCase.OrderBy(benchmark => benchmark.Descriptor.Categories.ElementAtOrDefault(0))
                 .ThenBy(benchmark => int.Parse(benchmark.Descriptor.Categories.ElementAtOrDefault(1) ?? "0"))
-                .ThenBy(benchmark => summary[benchmark].ResultStatistics.Mean);
+                .ThenBy(benchmark => summary[benchmark].ResultStatistics?.Mean ?? 0);
 
         public string? GetHighlightGroupKey(BenchmarkCase benchmarkCase)
             => null;

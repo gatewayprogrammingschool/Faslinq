@@ -5,8 +5,8 @@ keywords: Linq Dotnet
 
 # Hero section
 #title: Faslinq
-logo: /Faslinq/images/Faslinq.png
-description: Faster. Linq.
+logo: /images/Faslinq.png
+description: Fast. Linq.
 buttons:
     - icon: github
       content: Source

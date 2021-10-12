@@ -18,7 +18,9 @@ Linq can also be used on data structures in already in your application's memory
 
 Faslinq is a library of Linq-like extension methods for `List<T>` and arrays that speeds up query and filter operations by providing combined overloads of common patterns.
 
-You're mission is to send five Starfleet Captains on a mission to Alpha Centauri from the ships currently in the Earth sector.
+## An Out of This World Example
+
+You're orders are to send up to five Starfleet Captains on a mission to Alpha Centauri from the ships currently in the Earth sector.
 
 ```csharp
 // Using Linq

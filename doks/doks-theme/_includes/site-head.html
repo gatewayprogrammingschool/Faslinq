@@ -1,3 +1,6 @@
+{% if jekyll.environment == "production" %}
+   <base href='{{ site.doks.baseurl }}{{ site.doks.baseurl }}'/>
+{% endif %}
 <meta charset="UTF-8">
 <meta http-equiv="x-ua-compatible" content="ie=edge">
 <meta name="viewport" content="width=device-width, minimum-scale=1.0">

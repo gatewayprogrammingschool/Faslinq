@@ -99,7 +99,10 @@ try {
     Set-Location "$root\Faslinq.Benchmarks\"
 
     $Runtime = [System.DateTimeOffset]::Now.ToString('G')
-    $md = @("# Benchmark Run at ${Runtime}", '')
+
+    $frontmatter = Get-Content .\doks\benchmarks\results.yaml
+
+    $md = $frontmatter + @("# Benchmark Run at ${Runtime}", '')
 
     $Title = 'Faslinq'
 

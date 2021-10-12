@@ -307,14 +307,6 @@ class Report {
         if (!this.report) {
             let result = await fetch("/benchmarks/faslinq-report.json");
 
-            if (!result.ok) {
-                result = await fetch("/Faslinq/benchmarks/faslinq-report.json");
-
-                if (!result.ok) {
-                    throw new Error(result.statusText);
-                }
-            }
-
             const json = await result.json();
 
             return this.report = json;

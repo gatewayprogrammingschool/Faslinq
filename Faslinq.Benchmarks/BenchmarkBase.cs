@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Collections.Generic;
+using System.Reflection;
 
 // ReSharper disable SuggestVarOrType_Elsewhere
 // ReSharper disable ReturnTypeCanBeEnumerable.Local
@@ -378,15 +379,24 @@ public abstract class BenchmarkBase
         //    Debugger.Launch();
         //}
 
-        return item is object[] {Length: 1,} p && p[0] is IEnumerable<TestValueTuple> t
+        Func<object, (bool, object[]?)> part1 = item => (item is object[] {Length: 1,}, (item is object[] { Length: 1, } pp) ? pp : default);
+        Func<object[]?, IEnumerable<TestValueTuple>?> part2 = p => ((object[])p![0]).Cast<TestValueTuple>();
+
+        var p1result = part1(item);
+        var p2result = part2(p1result.Item2);
+
+        return p2result is IEnumerable<TestValueTuple> p0
             ? test switch
             {
-                Tests.List => ProcessList(t.ToList(), first),
-                Tests.Array => ProcessArray(t.ToArray(), first),
-                Tests.IEnumerable => ProcessEnumerable(t, first),
-                _ => throw new ArgumentException($"Unexpected data.  Received {item.GetType()}"),
+                Tests.List => ProcessList(p0.ToList(), first),
+                Tests.Array => ProcessArray(p0.ToArray(), first),
+                Tests.IEnumerable => ProcessEnumerable(p0, first),
+                _ => throw new ArgumentException($"This should not happen.  Received {p0.GetType()}"),
             }
-            : throw new ArgumentException($"Unexpected data.  Received {item.GetType()}");
+            : throw new ArgumentException(
+                $"Received unexpected data: item is object[] {{Length: 1,}}: {p1result.Item1} && p[0] is IEnumerable<TestValueTuple>: {p2result.Item1}"
+                + $"\b\tp1result.Item2[0].GetType().FullName: {((object[])p1result.Item2!)[0].GetType().FullName}"
+            );
 
 #pragma warning disable CS8603 // Possible null reference return.
         IEnumerable<TestValueTuple> ProcessEnumerable(object? enumerable, TestValueTuple first)

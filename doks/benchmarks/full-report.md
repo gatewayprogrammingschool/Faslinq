@@ -3,6 +3,7 @@
 layout: page
 keywords: Linq Dotnet
 ---
+
 <div class="content_row">
     <div class="flex_container">
         <div class="flex_card">
@@ -53,25 +54,14 @@ keywords: Linq Dotnet
     </div>
 </div>
 <script type="module" src="/benchmarks/benchmarks.js"></script>
-<script type="module" src="/Faslinq/benchmarks/benchmarks.js"></script>
+
 <script type="module">
-    try{
-        import { VM } from '/benchmarks/benchmarks.js';
-        VM.buildTable("tbody");
-        VM.populateSelect("methods", VM.methods);
-        VM.populateSelect("platforms", VM.platforms);
-        VM.populateSelect("apis", VM.apis);
-        VM.populateSelect("counts", VM.counts);
+    import { VM } from '/benchmarks/benchmarks.js';
+    VM.buildTable("tbody");
+    VM.populateSelect("methods", VM.methods);
+    VM.populateSelect("platforms", VM.platforms);
+    VM.populateSelect("apis", VM.apis);
+    VM.populateSelect("counts", VM.counts);
 
-        document.vm = VM;
-    } catch {
-        import { VM } from '/Faslinq/benchmarks/benchmarks.js';
-        VM.buildTable("tbody");
-        VM.populateSelect("methods", VM.methods);
-        VM.populateSelect("platforms", VM.platforms);
-        VM.populateSelect("apis", VM.apis);
-        VM.populateSelect("counts", VM.counts);
-
-        document.vm = VM;
-    }
+    document.vm = VM;
 </script>

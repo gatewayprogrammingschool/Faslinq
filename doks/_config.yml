@@ -11,6 +11,8 @@ doks:
               item_url: '/api/'
             - item_name: Benchmarks
               item_url: '/benchmarks/full-report/'
+            - item_name: Logs
+              item_url: /benchmarks/results/
             - item_name: Examples
               item_url: '/docs/'
     footer:
