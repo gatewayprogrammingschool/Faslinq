@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		
+   <base href='https://gatewayprogrammingschool.github.io/Faslinqhttps://gatewayprogrammingschool.github.io/Faslinq'/>
+
+<meta charset="UTF-8">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<meta name="viewport" content="width=device-width, minimum-scale=1.0">
+<title>Faslinq</title>
+
+	<meta name="description" content="Faster. Linq.">
+
+
+	<meta name="keywords" content="Linq Dotnet">
+
+<link rel="icon" href="https://gatewayprogrammingschool.github.io/Faslinq/favicon.ico" type="image/x-icon">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,400i,500,500i,700,700i|Noto+Sans:400,400i,700,700i|Source+Code+Pro&amp;subset=latin-ext">
+<link rel="stylesheet" href="https://gatewayprogrammingschool.github.io/Faslinq/doks-theme/assets/css/style.css">
+
+	</head>
+	<body class="blue" data-spy="scroll" data-target=".js-scrollspy">
+		
+	<div class="offcanvas visible-xs">
+		<ul class="offcanvas__nav">
+			
+				<li><a href="https://gatewayprogrammingschool.github.io/Faslinq/api/">API</a></li>
+			
+				<li><a href="https://gatewayprogrammingschool.github.io/Faslinq/benchmarks/full-report/">Benchmarks</a></li>
+			
+				<li><a href="https://gatewayprogrammingschool.github.io/Faslinq/benchmarks/results/">Logs</a></li>
+			
+				<li><a href="https://gatewayprogrammingschool.github.io/Faslinq/docs/">Examples</a></li>
+			
+		</ul><!-- /.offcanvas__nav -->
+	</div><!-- /.offcanvas -->
+
+
+
+	<header class="site-header">
+		<div class="container">
+			<div class="row">
+				
+				<div class="col-xs-1 align-left">
+					<ul class="social-list">
+						
+						<li>
+							<a href="https://github.com/gatewayprogrammingschool/Faslinq/" target="_blank"
+								class="social-list__item social-list__item--github">
+								<i class="icon icon--github"></i>
+							</a>
+						</li>
+						
+					</ul><!-- /.social-list -->
+				</div><!-- /.col -->
+				
+				<div class="col-xs-11">
+					
+						<a href="https://gatewayprogrammingschool.github.io/Faslinq/" class="site-header__logo">Faslinq</a>
+					
+					
+						<ul class="site-header__nav hidden-xs">
+							
+								<li><a href="https://gatewayprogrammingschool.github.io/Faslinq/api/">API</a></li>
+							
+								<li><a href="https://gatewayprogrammingschool.github.io/Faslinq/benchmarks/full-report/">Benchmarks</a></li>
+							
+								<li><a href="https://gatewayprogrammingschool.github.io/Faslinq/benchmarks/results/">Logs</a></li>
+							
+								<li><a href="https://gatewayprogrammingschool.github.io/Faslinq/docs/">Examples</a></li>
+							
+						</ul><!-- /.site-header__nav -->
+						<button class="offcanvas-toggle visible-xs">
+							<span></span>
+							<span></span>
+							<span></span>
+						</button><!-- /.offcanvas-toggle -->
+					
+				</div><!-- /.col -->
+			</div><!-- /.row -->
+		</div><!-- /.container -->
+	</header><!-- /.site-header -->
+
+
+		<div class="section">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="content">
+							<h1 id="why-faslinq">Why Faslinq?</h1>
+
+<blockquote>
+  <p>Answer: Because not all use cases for Linq are lazy.</p>
+</blockquote>
+
+<p>Linq is a great part of the Dotnet ecosystem and enables many scenarios to be implemented with common patterns.  When used as the door way to data on remote systems it becomes extremely valuable for being able to delay query execution and build up context to create better queries against the data source, then executing those queries at the last second.  This delayed execution is also known as Lazy Loading.</p>
+
+<p>Linq can also be used on data structures in already in your application’s memory space, such as data stored in an array or <code class="language-plaintext highlighter-rouge">List&lt;T&gt;</code> collection.  When querying these types of structures we typically are using the results right away and so Lazy Loading has little benefit for us.  Microsoft does try to provide some help for improving performance when using Linq with arrays and <code class="language-plaintext highlighter-rouge">List&lt;T&gt;</code> by providing enumerators implemented with structs.  Unfortunately, using Linq’s extension methods marshals the list or array through <code class="language-plaintext highlighter-rouge">IEnumerable&lt;T&gt;</code> which causes the enumerators to be boxed and moved to the heap, thus eliminating the advantage of using a struct.</p>
+
+<p>Faslinq is a library of Linq-like extension methods for <code class="language-plaintext highlighter-rouge">List&lt;T&gt;</code> and arrays that speeds up query and filter operations by providing combined overloads of common patterns.</p>
+
+<h2 id="an-out-of-this-world-example">An Out of This World Example</h2>
+
+<p>You’re orders are to send up to five Starfleet Captains on a mission to Alpha Centauri from the ships currently in the Earth sector.</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Using Linq</span>
+<span class="kt">var</span> <span class="n">fleet</span> <span class="p">=</span> <span class="n">Starfleet</span><span class="p">.</span><span class="nf">GetShipRegistry</span><span class="p">();</span>
+<span class="n">List</span><span class="p">&lt;</span><span class="n">Captain</span><span class="p">&gt;</span> <span class="n">captains</span> <span class="p">=</span> <span class="n">fleet</span><span class="p">.</span><span class="nf">Where</span><span class="p">(</span><span class="n">ship</span> <span class="p">=&gt;</span> <span class="n">ship</span><span class="p">.</span><span class="n">Location</span><span class="p">.</span><span class="n">Sector</span> <span class="p">==</span> <span class="m">0</span><span class="p">)</span>
+                    <span class="p">.</span><span class="nf">Select</span><span class="p">(</span><span class="n">ship</span> <span class="p">=&gt;</span> <span class="n">ship</span><span class="p">.</span><span class="n">Captain</span><span class="p">)</span>
+                    <span class="p">.</span><span class="nf">Take</span><span class="p">(</span><span class="m">5</span><span class="p">)</span>
+                    <span class="p">.</span><span class="nf">ToList</span><span class="p">();</span>
+
+<span class="c1">// Using Faslinq</span>
+<span class="n">List</span><span class="p">&lt;</span><span class="n">Ship</span><span class="p">&gt;</span> <span class="n">fleet</span> <span class="p">=</span> <span class="n">Starfleet</span><span class="p">.</span><span class="nf">GetShipRegistryList</span><span class="p">();</span>
+<span class="n">List</span><span class="p">&lt;</span><span class="n">Captain</span><span class="p">&gt;</span> <span class="n">captains</span> <span class="p">=</span> <span class="n">fleet</span><span class="p">.</span><span class="nf">WhereSelectTake</span><span class="p">(</span>
+                    <span class="n">ship</span> <span class="p">=&gt;</span> <span class="n">ship</span><span class="p">.</span><span class="n">Location</span><span class="p">.</span><span class="n">Sector</span> <span class="p">==</span> <span class="m">0</span><span class="p">,</span>
+                    <span class="n">ship</span> <span class="p">=&gt;</span> <span class="n">ship</span><span class="p">.</span><span class="n">Captain</span><span class="p">,</span>
+                    <span class="m">5</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>Using the composite extension methods in Faslinq we are able to execute a single loop that is at most <code class="language-plaintext highlighter-rouge">O(n)</code> and as little as <code class="language-plaintext highlighter-rouge">O(5)</code>.  With Linq, the <code class="language-plaintext highlighter-rouge">Where</code> executes over the whole set of data before <code class="language-plaintext highlighter-rouge">Select</code> extracts all the captains from the filtered data into a new collection and then returns back up to five captains in another collection, and finally allocating a new <code class="language-plaintext highlighter-rouge">List&lt;Captain&gt;</code> collection for the result.</p>
+
+<h2 id="resources">Resources</h2>
+
+<ul>
+  <li><a href="https://mattwarren.org/2016/09/29/Optimising-LINQ/">Optimising LINQ</a></li>
+  <li><a href="https://stackoverflow.com/questions/4044400/linq-performance-faq">LINQ performance FAQ</a></li>
+  <li><a href="https://nede.dev/blog/preventing-unnecessary-allocation-in-net-collections">Preventing unnecessary allocation in .NET collections</a></li>
+</ul>
+
+						</div><!-- /.content -->
+					</div><!-- /.col -->
+				</div><!-- /.row -->
+			</div><!-- /.container -->
+		</div><!-- /.section -->
+		
+		<div class="js-footer-area">
+			
+			
+			
+	<footer class="site-footer">
+		
+			<p class="site-footer__copyright">Copyright &copy; 2021. - Gateway Programming School, Inc. ◆ All rights reserved.</p>
+		
+	</footer><!-- /.site-footer -->
+
+
+<script src="https://gatewayprogrammingschool.github.io/Faslinq/doks-theme/assets/js/vendor/jquery.min.js"></script>
+<script type="text/javascript" src="https://gatewayprogrammingschool.github.io/Faslinq/doks-theme/assets/js/vendor/bootstrap/affix.min.js"></script>
+<script type="text/javascript" src="https://gatewayprogrammingschool.github.io/Faslinq/doks-theme/assets/js/vendor/bootstrap/scrollspy.min.js"></script>
+<script type="text/javascript" src="https://gatewayprogrammingschool.github.io/Faslinq/doks-theme/assets/js/vendor/matchHeight.min.js"></script>
+<script type="text/javascript" src="https://gatewayprogrammingschool.github.io/Faslinq/doks-theme/assets/js/scripts.min.js"></script>
+
+
+
+
+		</div><!-- /.js-footer-area -->
+	</body>
+</html>

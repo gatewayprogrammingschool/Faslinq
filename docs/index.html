@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		
+   <base href='https://gatewayprogrammingschool.github.io/Faslinqhttps://gatewayprogrammingschool.github.io/Faslinq'/>
+
+<meta charset="UTF-8">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<meta name="viewport" content="width=device-width, minimum-scale=1.0">
+<title></title>
+
+
+	<meta name="keywords" content="Linq Dotnet">
+
+<link rel="icon" href="https://gatewayprogrammingschool.github.io/Faslinq/favicon.ico" type="image/x-icon">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,400i,500,500i,700,700i|Noto+Sans:400,400i,700,700i|Source+Code+Pro&amp;subset=latin-ext">
+<link rel="stylesheet" href="https://gatewayprogrammingschool.github.io/Faslinq/doks-theme/assets/css/style.css">
+
+	</head>
+	<body class="blue" data-spy="scroll" data-target=".js-scrollspy">
+		
+	<div class="offcanvas visible-xs">
+		<ul class="offcanvas__nav">
+			
+				<li><a href="https://gatewayprogrammingschool.github.io/Faslinq/api/">API</a></li>
+			
+				<li><a href="https://gatewayprogrammingschool.github.io/Faslinq/benchmarks/full-report/">Benchmarks</a></li>
+			
+				<li><a href="https://gatewayprogrammingschool.github.io/Faslinq/benchmarks/results/">Logs</a></li>
+			
+				<li><a href="https://gatewayprogrammingschool.github.io/Faslinq/docs/">Examples</a></li>
+			
+		</ul><!-- /.offcanvas__nav -->
+	</div><!-- /.offcanvas -->
+
+
+
+	<header class="site-header">
+		<div class="container">
+			<div class="row">
+				
+				<div class="col-xs-1 align-left">
+					<ul class="social-list">
+						
+						<li>
+							<a href="https://github.com/gatewayprogrammingschool/Faslinq/" target="_blank"
+								class="social-list__item social-list__item--github">
+								<i class="icon icon--github"></i>
+							</a>
+						</li>
+						
+					</ul><!-- /.social-list -->
+				</div><!-- /.col -->
+				
+				<div class="col-xs-11">
+					
+						<a href="https://gatewayprogrammingschool.github.io/Faslinq/" class="site-header__logo">Faslinq</a>
+					
+					
+						<ul class="site-header__nav hidden-xs">
+							
+								<li><a href="https://gatewayprogrammingschool.github.io/Faslinq/api/">API</a></li>
+							
+								<li><a href="https://gatewayprogrammingschool.github.io/Faslinq/benchmarks/full-report/">Benchmarks</a></li>
+							
+								<li><a href="https://gatewayprogrammingschool.github.io/Faslinq/benchmarks/results/">Logs</a></li>
+							
+								<li><a href="https://gatewayprogrammingschool.github.io/Faslinq/docs/">Examples</a></li>
+							
+						</ul><!-- /.site-header__nav -->
+						<button class="offcanvas-toggle visible-xs">
+							<span></span>
+							<span></span>
+							<span></span>
+						</button><!-- /.offcanvas-toggle -->
+					
+				</div><!-- /.col -->
+			</div><!-- /.row -->
+		</div><!-- /.container -->
+	</header><!-- /.site-header -->
+
+
+		<div class="section">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="content">
+							<h1 id="documentation">Documentation</h1>
+
+<h2 id="examples">Examples</h2>
+
+<h3 id="select">Select</h3>
+
+<div class="language-cs highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Old Way</span>
+<span class="kt">var</span> <span class="n">agents</span> <span class="p">=</span> <span class="n">Matrix</span><span class="p">.</span><span class="nf">GetAgents</span><span class="p">();</span>
+<span class="kt">var</span> <span class="n">locations</span> <span class="p">=</span> <span class="n">agents</span>
+                    <span class="p">.</span><span class="nf">Select</span><span class="p">(</span><span class="n">agent</span> <span class="p">=&gt;</span> <span class="n">agent</span><span class="p">.</span><span class="n">Location</span><span class="p">)</span>
+                    <span class="p">.</span><span class="nf">ToList</span><span class="p">();</span>
+
+<span class="c1">// Faslinq Way</span>
+<span class="kt">var</span> <span class="n">agents</span> <span class="p">=</span> <span class="n">Matrix</span><span class="p">.</span><span class="nf">GetAgentsList</span><span class="p">();</span>
+<span class="kt">var</span> <span class="n">locations</span> <span class="p">=</span> <span class="n">agents</span>
+                    <span class="p">.</span><span class="nf">Select</span><span class="p">(</span>
+                        <span class="n">agent</span> <span class="p">=&gt;</span> <span class="n">agent</span><span class="p">.</span><span class="n">Location</span><span class="p">);</span>
+</code></pre></div></div>
+
+<h3 id="where">Where</h3>
+
+<div class="language-cs highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Old Way</span>
+<span class="kt">var</span> <span class="n">agents</span> <span class="p">=</span> <span class="n">Matrix</span><span class="p">.</span><span class="nf">GetAgents</span><span class="p">();</span>
+<span class="kt">var</span> <span class="n">smiths</span> <span class="p">=</span> <span class="n">agents</span>
+                    <span class="p">.</span><span class="nf">Where</span><span class="p">(</span><span class="n">agent</span> <span class="p">=&gt;</span> <span class="n">agent</span><span class="p">.</span><span class="n">Name</span> <span class="p">==</span> <span class="s">"Smith"</span><span class="p">)</span>
+                    <span class="p">.</span><span class="nf">ToList</span><span class="p">();</span>
+
+<span class="c1">// Faslinq Way</span>
+<span class="kt">var</span> <span class="n">agents</span> <span class="p">=</span> <span class="n">Matrix</span><span class="p">.</span><span class="nf">GetAgentsList</span><span class="p">();</span>
+<span class="kt">var</span> <span class="n">smiths</span> <span class="p">=</span> <span class="n">agents</span>
+                    <span class="p">.</span><span class="nf">Where</span><span class="p">(</span>
+                        <span class="n">agent</span> <span class="p">=&gt;</span> <span class="n">agent</span><span class="p">.</span><span class="n">Name</span> <span class="p">==</span> <span class="s">"Smith"</span><span class="p">);</span>
+</code></pre></div></div>
+
+<h3 id="take--takelast">Take / TakeLast</h3>
+
+<div class="language-cs highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Old Way</span>
+<span class="kt">var</span> <span class="n">agents</span> <span class="p">=</span> <span class="n">Matrix</span><span class="p">.</span><span class="nf">GetRankedAgents</span><span class="p">();</span>
+<span class="kt">var</span> <span class="n">bestSquad</span> <span class="p">=</span> <span class="n">agents</span><span class="p">.</span><span class="nf">Take</span><span class="p">(</span><span class="m">3</span><span class="p">).</span><span class="nf">ToList</span><span class="p">();</span>
+<span class="kt">var</span> <span class="n">worstSquad</span> <span class="p">=</span> <span class="n">agents</span><span class="p">.</span><span class="nf">TakeLast</span><span class="p">(</span><span class="m">3</span><span class="p">).</span><span class="nf">ToList</span><span class="p">();</span>
+
+<span class="c1">// Note - Faslinq Polyfills TakeLast for .Net Framework!</span>
+
+<span class="c1">// Faslinq Way</span>
+<span class="kt">var</span> <span class="n">agents</span> <span class="p">=</span> <span class="n">Matrix</span><span class="p">.</span><span class="nf">GetRankedAgentsList</span><span class="p">();</span>
+<span class="kt">var</span> <span class="n">bestSquad</span> <span class="p">=</span> <span class="n">agents</span><span class="p">.</span><span class="nf">Take</span><span class="p">(</span><span class="m">3</span><span class="p">);</span>
+<span class="kt">var</span> <span class="n">worstSquad</span> <span class="p">=</span> <span class="n">agents</span><span class="p">.</span><span class="nf">TakeLast</span><span class="p">(</span><span class="m">3</span><span class="p">);</span>
+</code></pre></div></div>
+
+<h3 id="chaining">Chaining</h3>
+
+<h4 id="whereselect">WhereSelect</h4>
+
+<div class="language-cs highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Old Way</span>
+<span class="kt">var</span> <span class="n">agents</span> <span class="p">=</span> <span class="n">Matrix</span><span class="p">.</span><span class="nf">GetAgents</span><span class="p">();</span>
+<span class="kt">var</span> <span class="n">locations</span> <span class="p">=</span> <span class="n">agents</span>
+                    <span class="p">.</span><span class="nf">Where</span><span class="p">(</span><span class="n">agent</span> <span class="p">=&gt;</span> <span class="n">agent</span><span class="p">.</span><span class="n">Name</span> <span class="p">==</span> <span class="s">"Smith"</span><span class="p">)</span>
+                    <span class="p">.</span><span class="nf">Select</span><span class="p">(</span><span class="n">agent</span> <span class="p">=&gt;</span> <span class="n">agent</span><span class="p">.</span><span class="n">Location</span><span class="p">)</span>
+                    <span class="p">.</span><span class="nf">ToList</span><span class="p">();</span>
+
+<span class="c1">// Faslinq Way</span>
+<span class="kt">var</span> <span class="n">agents</span> <span class="p">=</span> <span class="n">Matrix</span><span class="p">.</span><span class="nf">GetAgentsList</span><span class="p">();</span>
+<span class="kt">var</span> <span class="n">locations</span> <span class="p">=</span> <span class="n">agents</span>
+                    <span class="p">.</span><span class="nf">WhereSelect</span><span class="p">(</span>
+                        <span class="n">agent</span> <span class="p">=&gt;</span> <span class="n">agent</span><span class="p">.</span><span class="n">Name</span> <span class="p">==</span> <span class="s">"Smith"</span><span class="p">,</span>
+                        <span class="n">agent</span> <span class="p">=&gt;</span> <span class="n">agent</span><span class="p">.</span><span class="n">Location</span><span class="p">);</span>
+</code></pre></div></div>
+
+<h4 id="selecttake">SelectTake</h4>
+
+<div class="language-cs highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Old Way</span>
+<span class="kt">var</span> <span class="n">agents</span> <span class="p">=</span> <span class="n">Matrix</span><span class="p">.</span><span class="nf">GetAgents</span><span class="p">();</span>
+<span class="kt">var</span> <span class="n">locations</span> <span class="p">=</span> <span class="n">agents</span>
+                    <span class="p">.</span><span class="nf">Select</span><span class="p">(</span><span class="n">agent</span> <span class="p">=&gt;</span> <span class="n">agent</span><span class="p">.</span><span class="n">Location</span><span class="p">)</span>
+                    <span class="p">.</span><span class="nf">Take</span><span class="p">(</span><span class="m">3</span><span class="p">)</span>
+                    <span class="p">.</span><span class="nf">ToList</span><span class="p">();</span>
+
+<span class="c1">// Faslinq Way</span>
+<span class="kt">var</span> <span class="n">agents</span> <span class="p">=</span> <span class="n">Matrix</span><span class="p">.</span><span class="nf">GetAgentsList</span><span class="p">();</span>
+<span class="kt">var</span> <span class="n">locations</span> <span class="p">=</span> <span class="n">agents</span>
+                    <span class="p">.</span><span class="nf">SelectTake</span><span class="p">(</span>
+                        <span class="n">agent</span> <span class="p">=&gt;</span> <span class="n">agent</span><span class="p">.</span><span class="n">Location</span><span class="p">,</span>
+                        <span class="m">3</span><span class="p">);</span>
+</code></pre></div></div>
+
+<h2 id="scalar-values">Scalar Values</h2>
+
+<h3 id="first--firstordefault--last--lastordefault">First / FirstOrDefault / Last / LastOrDefault</h3>
+
+<div class="language-cs highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Old Way</span>
+<span class="kt">var</span> <span class="n">agents</span> <span class="p">=</span> <span class="n">Matrix</span><span class="p">.</span><span class="nf">GetAgents</span><span class="p">();</span>
+<span class="kt">var</span> <span class="n">_</span> <span class="p">=</span> <span class="n">agents</span><span class="p">.</span><span class="nf">FirstOrDefault</span><span class="p">(</span><span class="n">agent</span> <span class="p">=&gt;</span> <span class="n">agent</span><span class="p">.</span><span class="n">CanBeatNeo</span><span class="p">);</span>
+<span class="c1">// Discard default value...</span>
+
+<span class="c1">// Faslinq Way</span>
+<span class="kt">var</span> <span class="n">agents</span> <span class="p">=</span> <span class="n">Matrix</span><span class="p">.</span><span class="nf">GetAgentsList</span><span class="p">();</span>
+<span class="kt">var</span> <span class="n">sacrificialLamb</span> <span class="p">=</span> <span class="n">agents</span><span class="p">.</span><span class="nf">FirstOrDefault</span><span class="p">(</span>
+                        <span class="n">agent</span> <span class="p">=&gt;</span> <span class="n">agent</span><span class="p">.</span><span class="n">CanBeatNeo</span><span class="p">,</span>
+                        <span class="n">agents</span><span class="p">.</span><span class="nf">Last</span><span class="p">());</span>
+<span class="c1">// Polyfill .Net 6 Default Behavior to all targets.</span>
+</code></pre></div></div>
+
+						</div><!-- /.content -->
+					</div><!-- /.col -->
+				</div><!-- /.row -->
+			</div><!-- /.container -->
+		</div><!-- /.section -->
+		
+		<div class="js-footer-area">
+			
+			
+			
+	<footer class="site-footer">
+		
+			<p class="site-footer__copyright">Copyright &copy; 2021. - Gateway Programming School, Inc. ◆ All rights reserved.</p>
+		
+	</footer><!-- /.site-footer -->
+
+
+<script src="https://gatewayprogrammingschool.github.io/Faslinq/doks-theme/assets/js/vendor/jquery.min.js"></script>
+<script type="text/javascript" src="https://gatewayprogrammingschool.github.io/Faslinq/doks-theme/assets/js/vendor/bootstrap/affix.min.js"></script>
+<script type="text/javascript" src="https://gatewayprogrammingschool.github.io/Faslinq/doks-theme/assets/js/vendor/bootstrap/scrollspy.min.js"></script>
+<script type="text/javascript" src="https://gatewayprogrammingschool.github.io/Faslinq/doks-theme/assets/js/vendor/matchHeight.min.js"></script>
+<script type="text/javascript" src="https://gatewayprogrammingschool.github.io/Faslinq/doks-theme/assets/js/scripts.min.js"></script>
+
+
+
+
+		</div><!-- /.js-footer-area -->
+	</body>
+</html>
