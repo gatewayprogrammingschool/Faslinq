@@ -2,30 +2,8 @@
 
 namespace Faslinq.Benchmarks.Collections;
 
-[TestClass]
 public class SelectBenchmarks : CollectionBenchmarkBase
 {
-    [DataTestMethod]
-    [DynamicData(nameof(GenerateTestRecords1), typeof(BenchmarkBase), DynamicDataSourceType.Method)]
-    [DynamicData(nameof(GenerateTestRecords250), typeof(BenchmarkBase), DynamicDataSourceType.Method)]
-    [DynamicData(nameof(GenerateTestRecords5000), typeof(BenchmarkBase), DynamicDataSourceType.Method)]
-    // [DynamicData(nameof(GenerateTestRecords100000), typeof(BenchmarkBase), DynamicDataSourceType.Method)]
-    public void Select_Array(object[] item) => Test(item, Tests.Array);
-
-    [DataTestMethod]
-    [DynamicData(nameof(GenerateTestRecords1), typeof(BenchmarkBase), DynamicDataSourceType.Method)]
-    [DynamicData(nameof(GenerateTestRecords250), typeof(BenchmarkBase), DynamicDataSourceType.Method)]
-    [DynamicData(nameof(GenerateTestRecords5000), typeof(BenchmarkBase), DynamicDataSourceType.Method)]
-    // [DynamicData(nameof(GenerateTestRecords100000), typeof(BenchmarkBase), DynamicDataSourceType.Method)]
-    public void Select_List(object[] item) => Test(item, Tests.List);
-
-    [DataTestMethod]
-    [DynamicData(nameof(GenerateTestRecords1), typeof(BenchmarkBase), DynamicDataSourceType.Method)]
-    [DynamicData(nameof(GenerateTestRecords250), typeof(BenchmarkBase), DynamicDataSourceType.Method)]
-    [DynamicData(nameof(GenerateTestRecords5000), typeof(BenchmarkBase), DynamicDataSourceType.Method)]
-    // [DynamicData(nameof(GenerateTestRecords100000), typeof(BenchmarkBase), DynamicDataSourceType.Method)]
-    public void Select_Linq(object[] item) => Test(item, Tests.IEnumerable);
-
     protected override TResult GetScalarByFaslinq<TResult>(List<TResult> list, params object[] values)
         where TResult : default
         => throw new NotImplementedException();

@@ -1,7 +1,6 @@
 
 namespace Faslinq.Tests;
 
-[TestClass]
 public class PositionCollectionTests
 {
     private TestContext? testContextInstance;

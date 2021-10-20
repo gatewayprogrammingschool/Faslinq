@@ -7,26 +7,26 @@ public class LastWhereArray : LastWhereBenchmarks
 {
     [Benchmark]
     [BenchmarkCategory("LastWhere", "1", "Array")]
-    [ArgumentsSource(nameof(GenerateArray1))]
+    [ArgumentsSource(nameof(GenerateTestArray1))]
     public TestValueTuple LastWhere_1_Array(object[] item)
-        => ProcessScalar(item, LastGenerateRecords1);
+        => ProcessScalar(item, LastGenerated1);
 
     [Benchmark]
     [BenchmarkCategory("LastWhere", "250", "Array")]
-    [ArgumentsSource(nameof(GenerateArray250))]
+    [ArgumentsSource(nameof(GenerateTestArray250))]
     public TestValueTuple LastWhere_250_Array(object[] item)
-        => ProcessScalar(item, LastGenerateRecords250);
+        => ProcessScalar(item, LastGenerated250);
 
     [Benchmark]
     [BenchmarkCategory("LastWhere", "5000", "Array")]
-    [ArgumentsSource(nameof(GenerateArray5000))]
+    [ArgumentsSource(nameof(GenerateTestArray5000))]
     public TestValueTuple LastWhere_5000_Array(object[] item)
-        => ProcessScalar(item, LastGenerateRecords5000);
+        => ProcessScalar(item, LastGenerated5000);
 
     [Benchmark]
     [BenchmarkCategory("LastWhere", "100000", "Array")]
-    [ArgumentsSource(nameof(GenerateArray100000))]
+    [ArgumentsSource(nameof(GenerateTestArray100000))]
     public TestValueTuple LastWhere_100000_Array(object[] item)
-        => ProcessScalar(item, LastGenerateRecords100000);
+        => ProcessScalar(item, LastGenerated100000);
 }
 #endif

@@ -55,8 +55,8 @@ internal class FaslinqConfig : IConfig
                     .WithBaseline(true)
             );
 #else
-        yield return new Job(Job.Dry.WithRuntime(ClrRuntime.Net48).WithBaseline(false));
-        yield return new Job(Job.Dry.WithRuntime(CoreRuntime.Core60).WithBaseline(true));
+        //yield return new Job(Job.Dry.WithRuntime(ClrRuntime.Net48).WithBaseline(false));
+        yield return new Job(Job.Dry.WithRuntime(CoreRuntime.Core60).WithCustomBuildConfiguration("Debug").WithBaseline(true));
 #endif
     }
 
@@ -171,7 +171,7 @@ internal class FaslinqConfig : IConfig
             }
 
             var baselineStats = summary.Reports
-                .Where(br => br.BenchmarkCase.DisplayInfo == baseline.DisplayInfo)
+                .Where(br => br.ResultStatistics is not null && br.BenchmarkCase.DisplayInfo == baseline.DisplayInfo)
                 .Select(
                     br => new
                     {
@@ -197,42 +197,53 @@ internal class FaslinqConfig : IConfig
                         //BenchmarkResult = br,
                     }
                 )
-                .First();
+                .FirstOrDefault();
 
-            _groupStats.TryAdd(baselineStats.ID, baselineStats);
-
-            foreach (var bc in g.Where(item => item != baseline))
+            if (baselineStats is not null)
             {
-                var stats = summary.Reports
-                    .Where(br => br.BenchmarkCase.DisplayInfo == bc.DisplayInfo)
-                    .Select(
-                        br => new
-                        {
-                            ID = br.BenchmarkCase.DisplayInfo,
-                            Group = g.Key,
-                            Platform = Filter(bc),
-                            Method = g.Key.Split('_').First(),
-                            Size = g.Key.Split('_').Last(),
-                            Api = br.BenchmarkCase.DisplayInfo.Split(':').First().Split('_').Last(),
-                            IsBaseline = false,
-                            Ratio = br.ResultStatistics!.Mean / baselineStats.Mean,
-                            br.ResultStatistics.Mean,
-                            br.ResultStatistics.Median,
-                            br.ResultStatistics.Min,
-                            br.ResultStatistics.Max,
-                            br.ResultStatistics.StandardDeviation,
-                            br.GcStats.TotalOperations,
-                            BytesAllocatedPerOperation
-                                = br.GcStats.GetBytesAllocatedPerOperation(br.BenchmarkCase),
-                            Gen0CollectionsCount = br.GcStats.GetCollectionsCount(0),
-                            Gen1CollectionsCount = br.GcStats.GetCollectionsCount(1),
-                            Gen2CollectionsCount = br.GcStats.GetCollectionsCount(2),
-                            //BenchmarkResult = br,
-                        }
-                    )
-                    .First();
+                _groupStats.TryAdd(baselineStats.ID, baselineStats);
 
-                _groupStats.TryAdd(stats.ID, stats);
+                foreach (var bc in g.Where(item => item != baseline))
+                {
+                    var stats = summary.Reports
+                        .Where(br => br.ResultStatistics != null && br.BenchmarkCase.DisplayInfo == bc.DisplayInfo)
+                        .Select(
+                            br => new
+                            {
+                                ID = br.BenchmarkCase.DisplayInfo,
+                                Group = g.Key,
+                                Platform = Filter(bc),
+                                Method = g.Key.Split('_')
+                                    .First(),
+                                Size = g.Key.Split('_')
+                                    .Last(),
+                                Api = br.BenchmarkCase.DisplayInfo.Split(':')
+                                    .First()
+                                    .Split('_')
+                                    .Last(),
+                                IsBaseline = false,
+                                Ratio = br.ResultStatistics!.Mean / baselineStats.Mean,
+                                br.ResultStatistics.Mean,
+                                br.ResultStatistics.Median,
+                                br.ResultStatistics.Min,
+                                br.ResultStatistics.Max,
+                                br.ResultStatistics.StandardDeviation,
+                                br.GcStats.TotalOperations,
+                                BytesAllocatedPerOperation
+                                    = br.GcStats.GetBytesAllocatedPerOperation(br.BenchmarkCase),
+                                Gen0CollectionsCount = br.GcStats.GetCollectionsCount(0),
+                                Gen1CollectionsCount = br.GcStats.GetCollectionsCount(1),
+                                Gen2CollectionsCount = br.GcStats.GetCollectionsCount(2),
+                                //BenchmarkResult = br,
+                            }
+                        )
+                        .FirstOrDefault();
+
+                    if (stats is not null)
+                    {
+                        _groupStats.TryAdd(stats.ID, stats);
+                    }
+                }
             }
         }
 
@@ -357,9 +368,9 @@ internal class FaslinqConfig : IConfig
             yield return StatisticColumn.Min;
             yield return StatisticColumn.Max;
             yield return heap;
-            var metric = summary.Reports[0]
-                .Metrics.Values.FirstOrDefault();
-            yield return new MetricColumn(metric?.Descriptor);
+            //var metric = summary.Reports[0]
+            //    .Metrics.Values.FirstOrDefault();
+            //yield return new MetricColumn(metric?.Descriptor);
             foreach (var col in JobCharacteristicColumn.AllColumns)
             {
                 if (col.ColumnName is "Platform" or "BuildConfiguration" or "Runtime")

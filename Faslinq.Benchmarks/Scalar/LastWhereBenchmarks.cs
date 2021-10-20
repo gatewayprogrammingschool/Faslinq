@@ -67,7 +67,7 @@ public abstract class LastWhereBenchmarks : ScalarBenchmarkBase
         if (item is object[] { Length: 1, } p)
         {
             return Enumerable
-                .Last(p.Cast<TData>(), i => i.As<TestValueTuple>().Equals(FirstGenerateRecords1));
+                .Last(p.Cast<TData>(), i => i.As<TestValueTuple>().Equals(FirstGenerated1));
         }
 
         return default;

@@ -81,7 +81,7 @@ public abstract class FirstWhereBenchmarks : ScalarBenchmarkBase
         if (item is object[] { Length: 1, } p)
         {
             return Enumerable
-                .First(p.Cast<TData>(), i => i.As<TestValueTuple>().Equals(FirstGenerateRecords1));
+                .First(p.Cast<TData>(), i => i.As<TestValueTuple>().Equals(FirstGenerated1));
         }
 
         return default;

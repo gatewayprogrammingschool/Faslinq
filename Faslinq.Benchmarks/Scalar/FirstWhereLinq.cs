@@ -4,30 +4,29 @@ namespace Faslinq.Benchmarks.Scalar;
 #if !NO_FASLINQ
 #endif
 
-[TestClass]
 public class FirstWhereLinq : FirstWhereBenchmarks
 {
     [Benchmark]
     [BenchmarkCategory("FirstWhere", "1", "Linq")]
-    [ArgumentsSource(nameof(GenerateRecords1))]
+    [ArgumentsSource(nameof(GenerateTestLinq1))]
     public TestValueTuple FirstWhere_1_Linq(object item)
-        => ProcessScalar(item, FirstGenerateRecords1);
+        => ProcessScalar(item, FirstGenerated1);
 
     [Benchmark]
     [BenchmarkCategory("FirstWhere", "250", "Linq")]
-    [ArgumentsSource(nameof(GenerateRecords250))]
+    [ArgumentsSource(nameof(GenerateTestLinq250))]
     public TestValueTuple FirstWhere_250_Linq(object item)
-        => ProcessScalar(item, FirstGenerateRecords250);
+        => ProcessScalar(item, FirstGenerated250);
 
     [Benchmark]
     [BenchmarkCategory("FirstWhere", "5000", "Linq")]
-    [ArgumentsSource(nameof(GenerateRecords5000))]
+    [ArgumentsSource(nameof(GenerateTestLinq5000))]
     public TestValueTuple FirstWhere_5000_Linq(object item)
-        => ProcessScalar(item, FirstGenerateRecords5000);
+        => ProcessScalar(item, FirstGenerated5000);
 
     [Benchmark]
     [BenchmarkCategory("FirstWhere", "10000", "Linq")]
-    [ArgumentsSource(nameof(GenerateRecords100000))]
+    [ArgumentsSource(nameof(GenerateTestLinq100000))]
     public TestValueTuple FirstWhere_100000_Linq(object item)
-        => ProcessScalar(item, FirstGenerateRecords100000);
+        => ProcessScalar(item, FirstGenerated100000);
 }

@@ -4,30 +4,29 @@ namespace Faslinq.Benchmarks.Scalar;
 #if !NO_FASLINQ
 #endif
 
-[TestClass]
 public class LastLinq : LastBenchmarks
 {
     [Benchmark]
     [BenchmarkCategory("Last", "1", "Linq")]
-    [ArgumentsSource(nameof(GenerateRecords1))]
+    [ArgumentsSource(nameof(GenerateTestLinq1))]
     public TestValueTuple Last_1_Linq(object item)
-        => ProcessScalar(item, LastGenerateRecords1);
+        => ProcessScalar(item, LastGenerated1);
 
     [Benchmark]
     [BenchmarkCategory("Last", "250", "Linq")]
-    [ArgumentsSource(nameof(GenerateRecords250))]
+    [ArgumentsSource(nameof(GenerateTestLinq250))]
     public TestValueTuple Last_250_Linq(object item)
-        => ProcessScalar(item, LastGenerateRecords250);
+        => ProcessScalar(item, LastGenerated250);
 
     [Benchmark]
     [BenchmarkCategory("Last", "5000", "Linq")]
-    [ArgumentsSource(nameof(GenerateRecords5000))]
+    [ArgumentsSource(nameof(GenerateTestLinq5000))]
     public TestValueTuple Last_5000_Linq(object item)
-        => ProcessScalar(item, LastGenerateRecords5000);
+        => ProcessScalar(item, LastGenerated5000);
 
     [Benchmark]
     [BenchmarkCategory("Last", "100000", "Linq")]
-    [ArgumentsSource(nameof(GenerateRecords100000))]
+    [ArgumentsSource(nameof(GenerateTestLinq100000))]
     public TestValueTuple Last_100000_Linq(object item)
-        => ProcessScalar(item, LastGenerateRecords100000);
+        => ProcessScalar(item, LastGenerated100000);
 }

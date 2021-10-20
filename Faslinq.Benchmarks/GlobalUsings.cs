@@ -12,7 +12,6 @@ global using System.Threading;
 global using System.Threading.Tasks;
 
 global using Microsoft.Extensions.DependencyInjection;
-global using Microsoft.VisualStudio.TestTools.UnitTesting;
 global using Faslinq;
 global using FluentAssertions;
 global using GPS.RandomDataGenerator;

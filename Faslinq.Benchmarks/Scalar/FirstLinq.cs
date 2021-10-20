@@ -4,30 +4,29 @@ namespace Faslinq.Benchmarks.Scalar;
 #if !NO_FASLINQ
 #endif
 
-[TestClass]
 public class FirstLinq : FirstBenchmarks
 {
     [Benchmark]
     [BenchmarkCategory("First", "1" , "Linq")]
-    [ArgumentsSource(nameof(GenerateRecords1))]
+    [ArgumentsSource(nameof(GenerateTestLinq1))]
     public TestValueTuple First_1_Linq(object item)
-        => ProcessScalar(item, FirstGenerateRecords1);
+        => ProcessScalar(item, FirstGenerated1);
 
     [Benchmark]
     [BenchmarkCategory("First", "250", "Linq")]
-    [ArgumentsSource(nameof(GenerateRecords250))]
+    [ArgumentsSource(nameof(GenerateTestLinq250))]
     public TestValueTuple First_250_Linq(object item)
-        => ProcessScalar(item, FirstGenerateRecords250);
+        => ProcessScalar(item, FirstGenerated250);
 
     [Benchmark]
     [BenchmarkCategory("First", "5000", "Linq")]
-    [ArgumentsSource(nameof(GenerateRecords5000))]
+    [ArgumentsSource(nameof(GenerateTestLinq5000))]
     public TestValueTuple First_5000_Linq(object item)
-        => ProcessScalar(item, FirstGenerateRecords5000);
+        => ProcessScalar(item, FirstGenerated5000);
 
     [Benchmark]
     [BenchmarkCategory("First", "100000", "Linq")]
-    [ArgumentsSource(nameof(GenerateRecords100000))]
+    [ArgumentsSource(nameof(GenerateTestLinq100000))]
     public TestValueTuple First_100000_Linq(object item)
-        => ProcessScalar(item, FirstGenerateRecords100000);
+        => ProcessScalar(item, FirstGenerated100000);
 }

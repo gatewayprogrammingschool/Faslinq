@@ -1,15 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using System.Xml.Linq;
-using BenchmarkDotNet.Extensions;
-using BenchmarkDotNet.Reports;
-using BenchmarkDotNet.Running;
-
-using FastSerialization;
-
-using Microsoft.VisualStudio.TestTools.UnitTesting.Logging;
-
-namespace Faslinq.Benchmarks;
+﻿namespace Faslinq.Benchmarks;
 
 public class Program
 {

@@ -8,26 +8,26 @@ public class FirstArray : FirstBenchmarks
     // Arrays
     [Benchmark]
     [BenchmarkCategory("First", "1", "Array")]
-    [ArgumentsSource(nameof(GenerateArray1))]
+    [ArgumentsSource(nameof(GenerateTestArray1))]
     public TestValueTuple First_1_Array(object[] item)
-        => ProcessScalar(item, FirstGenerateRecords1);
+        => ProcessScalar(item, FirstGenerated1);
 
     [Benchmark]
     [BenchmarkCategory("First", "250", "Array")]
-    [ArgumentsSource(nameof(GenerateArray250))]
+    [ArgumentsSource(nameof(GenerateTestArray250))]
     public TestValueTuple First_250_Array(object[] item)
-        => ProcessScalar(item, FirstGenerateRecords250);
+        => ProcessScalar(item, FirstGenerated250);
 
     [Benchmark]
     [BenchmarkCategory("First", "5000", "Array")]
-    [ArgumentsSource(nameof(GenerateArray5000))]
+    [ArgumentsSource(nameof(GenerateTestArray5000))]
     public TestValueTuple First_5000_Array(object[] item)
-        => ProcessScalar(item, FirstGenerateRecords5000);
+        => ProcessScalar(item, FirstGenerated5000);
 
     [Benchmark]
     [BenchmarkCategory("First", "100000", "Array")]
-    [ArgumentsSource(nameof(GenerateArray100000))]
+    [ArgumentsSource(nameof(GenerateTestArray100000))]
     public TestValueTuple First_100000_Array(object[] item)
-        => ProcessScalar(item, FirstGenerateRecords100000);
+        => ProcessScalar(item, FirstGenerated100000);
 }
 #endif
