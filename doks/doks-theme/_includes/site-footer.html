@@ -1,0 +1,15 @@
+{% if site.doks.footer.content.logo.image or site.doks.footer.content.logo.text or site.doks.footer.content.copyright or site.doks.footer.social_list %}
+	<footer class="site-footer">
+		{% if site.doks.footer.content.copyright %}
+			<p class="site-footer__copyright">{{ site.doks.footer.content.copyright }}</p>
+		{% endif %}
+	</footer><!-- /.site-footer -->
+{% endif %}
+
+<script src="{% if jekyll.environment == 'production' %}{{ site.doks.baseurl }}{% endif %}/doks-theme/assets/js/vendor/jquery.min.js"></script>
+<script type="text/javascript" src="{% if jekyll.environment == 'production' %}{{ site.doks.baseurl }}{% endif %}/doks-theme/assets/js/vendor/bootstrap/affix.min.js"></script>
+<script type="text/javascript" src="{% if jekyll.environment == 'production' %}{{ site.doks.baseurl }}{% endif %}/doks-theme/assets/js/vendor/bootstrap/scrollspy.min.js"></script>
+<script type="text/javascript" src="{% if jekyll.environment == 'production' %}{{ site.doks.baseurl }}{% endif %}/doks-theme/assets/js/vendor/matchHeight.min.js"></script>
+<script type="text/javascript" src="{% if jekyll.environment == 'production' %}{{ site.doks.baseurl }}{% endif %}/doks-theme/assets/js/scripts.min.js"></script>
+
+{% include google-analytics.html %}

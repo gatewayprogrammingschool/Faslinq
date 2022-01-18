@@ -1,466 +1,957 @@
-﻿using System.Diagnostics;
+﻿// ReSharper disable ForCanBeConvertedToForeach
+// ReSharper disable LoopCanBeConvertedToQuery
+
+using System;
+using System.Runtime.CompilerServices;
 
 namespace Faslinq;
 
 #region Any / All
+
 public static partial class ArrayExtensions
 {
-    public static bool Any<TData>(
-        this TData[] source) 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="source"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static bool Any<TData>(this TData[] source)
         => source.Length > 0;
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="query"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool Any<TData>(
         this TData[] source,
-        Predicate<TData> query)
+        Func<TData, int, bool> query
+    )
     {
-        if (source.Length == 0) return false;
-
-        foreach (var item in source)
+        if (source.Length == 0)
         {
-            if (query(item)) return true;
+            return false;
+        }
+
+        for (var index = 0; index < source.Length; index++)
+        {
+            var item = source[index];
+            if (query(item, index))
+            {
+                return true;
+            }
         }
 
         return false;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="query"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool All<TData>(
         this TData[] source,
-        Predicate<TData> query)
+        Func<TData, int, bool> query
+    )
     {
-        if (source.Length == 0) return false;
-
-        foreach (var item in source)
+        if (source.Length == 0)
         {
-            if (!query(item)) return false;
+            return false;
+        }
+
+        for (var index = 0; index < source.Length; index++)
+        {
+            var item = source[index];
+            if (!query(item, index))
+            {
+                return false;
+            }
         }
 
         return true;
     }
 }
+
 #endregion Any / All
 
 #region First
+
 public static partial class ArrayExtensions
 {
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="query"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <returns></returns>
+    /// <exception cref="IndexOutOfRangeException"></exception>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TData First<TData>(
         this TData[] source,
-        Predicate<TData>? query = null)
+        Func<TData, int, bool>? query = null
+    )
     {
-        if (source.Length == 0) throw new ArgumentException("List does not contain a matching value.");
+        if (source is null or { Length: 0 })
+        {
+            throw new IndexOutOfRangeException("List does not contain a matching value.");
+        }
 
         if (query is null)
         {
             return source[0];
         }
 
-        var result = source.WhereTake(query, 1);
+        for (var i = 0; i < source.Length; i++)
+        {
+            if (query(source[i], i))
+            {
+                return source[i];
+            }
+        }
 
-        return result[0];
+        throw new IndexOutOfRangeException("List does not contain a matching value.");
     }
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="query"></param>
+    /// <param name="defaultValue"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TData? FirstOrDefault<TData>(
         this TData[] source,
-        Predicate<TData>? query = null,
-        TData? defaultValue = default)
+        Func<TData, int, bool>? query = null,
+        TData? defaultValue = default
+    )
     {
-        if (source.Length == 0) return defaultValue;
+        if (source is null or { Length: 0 })
+        {
+            return defaultValue;
+        }
 
         if (query is null)
         {
-            return source is { Length: > 0 } 
-                ? source[0] 
+            return source is { Length: > 0, }
+                ? source[0]
                 : defaultValue;
         }
-        
-        var result = source.WhereTake(query, 1);
 
-        return result is { Length: > 0 }
-            ? result[0]
-            : defaultValue;
+        for (var i = 0; i < source.Length; i++)
+        {
+            if (query(source[i], i))
+            {
+                return source[i];
+            }
+        }
+
+        return defaultValue;
     }
 }
+
 #endregion First
 
 #region Last
+
 public static partial class ArrayExtensions
 {
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="query"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <returns></returns>
+    /// <exception cref="IndexOutOfRangeException"></exception>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TData Last<TData>(
         this TData[] source,
-        Predicate<TData>? query = null)
+        Func<TData, int, bool>? query = null
+    )
     {
-        if (source.Length == 0) throw new ArgumentException("List does not contain a matching value.");
+        if (source is null or { Length: 0 })
+        {
+            throw new IndexOutOfRangeException("List does not contain a matching value.");
+        }
 
         if (query is null)
         {
             return source[^1];
         }
 
-        var result = source.WhereTakeLast(query, 1);
+        for (var i = source.Length - 1; i >= 0; --i)
+        {
+            if (query(source[i], i))
+            {
+                return source[i];
+            }
+        }
 
-        return result[^1];
+        throw new IndexOutOfRangeException("List does not contain a matching value.");
     }
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="query"></param>
+    /// <param name="defaultValue"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TData? LastOrDefault<TData>(
         this TData[] source,
-        Predicate<TData>? query = null,
-        TData? defaultValue = default)
+        Func<TData, int, bool>? query = null,
+        TData? defaultValue = default
+    )
     {
-        if (source.Length == 0) return defaultValue;
+        if (source is null or { Length: 0 })
+        {
+            return defaultValue;
+        }
 
         if (query is null)
         {
-            return source is { Length: > 0 } 
-                ? source[^1] 
+            return source is { Length: > 0, }
+                ? source[^1]
                 : defaultValue;
         }
-        
-        var result = source.WhereTakeLast(query, 1);
 
-        return result is { Length: > 0 }
-            ? result[^1]
-            : defaultValue;
+        for (var i = source.Length - 1; i >= 0; --i)
+        {
+            if (query(source[i], i))
+            {
+                return source[i];
+            }
+        }
+
+        return defaultValue;
     }
 }
 #endregion Last
 
 #region Where
+
 public static partial class ArrayExtensions
 {
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="query"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TData[] Where<TData>(
         this TData[] source,
-        Predicate<TData> query) 
+        Func<TData, int, bool> query
+    )
         => source.WhereSelectTake(query, i => i, source.Length);
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="query"></param>
+    /// <param name="takeCount"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TData[] WhereTake<TData>(
         this TData[] source,
-        Predicate<TData> query,
-        int takeCount)
+        Func<TData, int, bool> query,
+        int takeCount
+    )
     {
-        if (source.Length == 0) return Array.Empty<TData>();
-
-        if (takeCount < 1) { takeCount = 0; }
-
-        List<TData> result = new();
-        var targetLength = Math.Min(source.Length, takeCount);
-        for (int i = 0; i < source.Length && result.Count < targetLength; i++)
+        if (source is null or { Length: 0})
         {
-            var found = query(source[i]);
+            return Array.Empty<TData>();
+        }
 
-            if (found)
+        if (takeCount < 1)
+        {
+            takeCount = 0;
+        }
+
+        var takeIndex = 0;
+        var targetLength = Math.Min(source.Length, takeCount);
+        var result = new TData[targetLength];
+        for (var i = 0; i < source.Length && takeIndex < targetLength; i++)
+        {
+            if (query(source[i], i))
             {
-                result.Add(source[i]);
+                result[takeIndex++] = source[i];
             }
         }
 
-        return result.ToArray();
+        return result;
     }
 
-
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="query"></param>
+    /// <param name="takeCount"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TData[] WhereTakeLast<TData>(
         this TData[] source,
-        Predicate<TData> query,
-        int takeCount)
+        Func<TData, int, bool> query,
+        int takeCount
+    )
     {
-        if (source.Length == 0) return Array.Empty<TData>();
-
-        if (takeCount < 1) { takeCount = 0; }
-
-        List<TData> result = new();
-        for (int i = source.Length - 1; i >= 0; --i)
+        if (source is null or { Length: 0})
         {
-            var found = query(source[i]);
+            return Array.Empty<TData>();
+        }
 
-            if (found)
+        if (takeCount < 1)
+        {
+            takeCount = 0;
+        }
+
+        var takeIndex = 0;
+        var result = new TData[takeCount];
+        for (var i = source.Length - 1; i >= 0 && takeIndex < takeCount; --i)
+        {
+            if (query(source[i], i))
             {
-                result.Add(source[i]);
-
-                if (result.Count == takeCount)
-                {
-                    return result.ToArray();
-                }
+                result[takeIndex++] = source[i];
             }
         }
 
-        return result.ToArray();
+        return result;
     }
 }
+
 #endregion Where
 
 #region Select
+
 public static partial class ArrayExtensions
 {
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="selector"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <typeparam name="TResult"></typeparam>
+    /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TResult[] Select<TData, TResult>(
         this TData[] source,
-        Func<TData, TResult> selector) 
+        Func<TData, TResult> selector
+    )
         => source.SelectTake(selector, source.Length);
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="selector"></param>
+    /// <param name="takeCount"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <typeparam name="TResult"></typeparam>
+    /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TResult[] SelectTake<TData, TResult>(
         this TData[] source,
         Func<TData, TResult> selector,
-        int takeCount)
+        int takeCount
+    )
     {
-        if (source.Length == 0) return Array.Empty<TResult>();
-
-        if (takeCount < 1) { takeCount = 0; }
-
-        List<TResult> result = new();
-        for (int i = 0; i < source.Length; i++)
+        if (source is null or { Length: 0})
         {
-            result.Add(selector(source[i]));
-
-            if (result.Count == takeCount)
-            {
-                return result.ToArray();
-            }
+            return Array.Empty<TResult>();
         }
 
-        return result.ToArray();
+        if (takeCount < 1)
+        {
+            takeCount = 0;
+        }
+
+        var takeIndex = 0;
+        var result = new TResult[takeCount];
+        for (var i = 0; i < source.Length && takeIndex < takeCount; i++)
+        {
+            result[takeIndex++] = selector(source[i]);
+        }
+
+        return result;
     }
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="selector"></param>
+    /// <param name="takeCount"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <typeparam name="TResult"></typeparam>
+    /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TResult[] SelectTakeLast<TData, TResult>(
         this TData[] source,
-        Func<TData, TResult>? selector,
-        int takeCount)
+        Func<TData, TResult> selector,
+        int takeCount
+    )
     {
-        if (source.Length == 0) return Array.Empty<TResult>();
-
-        if (takeCount < 1) { takeCount = 0; }
-
-        List<TResult> result = new();
-        for (int i = source.Length - takeCount; i < source.Length; i++)
+        if (source is null or { Length: 0})
         {
-            TResult? converted = default(TResult);
-            if (source[i] is TResult tResult)
-            {
-                converted = tResult;
-            }
-
-            var toAdd = selector switch
-            {
-                null => converted,
-                _ => selector(source[i])
-            };
-
-            result.Add(toAdd!);
+            return Array.Empty<TResult>();
         }
 
-        return result.ToArray();
+        if (takeCount < 1)
+        {
+            takeCount = 0;
+        }
+
+        var takeIndex = 0;
+        var result = new TResult[takeCount];
+        for (var i = source.Length - takeCount; i < source.Length && takeIndex < takeCount; i++)
+        {
+            result[takeIndex++] = selector(source[i]);
+        }
+
+        return result;
     }
 }
+
 #endregion Select
 
 #region WhereSelect
+
 public static partial class ArrayExtensions
 {
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="query"></param>
+    /// <param name="selector"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <typeparam name="TResult"></typeparam>
+    /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TResult[] WhereSelect<TData, TResult>(
-    this TData[] source,
-    Predicate<TData> query,
-    Func<TData, TResult> selector)
-    {
-        return source.WhereSelectTake(query, selector, source.Length);
-    }
-
+        this TData[] source,
+        Func<TData, int, bool> query,
+        Func<TData, TResult> selector
+    )
+        => source.WhereSelectTake(query, selector, source.Length);    
+    
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="query"></param>
+    /// <param name="selector"></param>
+    /// <param name="takeCount"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <typeparam name="TResult"></typeparam>
+    /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TResult[] WhereSelectTake<TData, TResult>(
         this TData[] source,
-        Predicate<TData> query,
+        Func<TData, int, bool> query,
         Func<TData, TResult> selector,
-        int takeCount)
+        int takeCount
+    )
     {
-        if (source.Length == 0) return Array.Empty<TResult>();
-
-        if (takeCount < 1) { takeCount = 0; }
-
-        List<TResult> result = new();
-        for (int i = 0; i < source.Length; i++)
+        if (source is null or { Length: 0 })
         {
-            var found = query(source[i]);
+            return Array.Empty<TResult>();
+        }
 
-            if (found)
+        if (takeCount < 1)
+        {
+            takeCount = 0;
+        }
+
+        takeCount = Math.Min(takeCount, source.Length);
+        var takeIndex = 0;
+        var result = new TResult[takeCount];
+        for (var i = 0; i < source.Length && takeIndex < takeCount; i++)
+        {
+            if (query(source[i], i))
             {
-                result.Add(selector(source[i]));
-
-                if (result.Count == takeCount)
-                {
-                    return result.ToArray();
-                }
+                result[takeIndex++] = selector(source[i]);
             }
         }
 
-        return result.ToArray();
+#if NETSTANDARD2_0
+        TResult[] returnArray = new TResult[takeIndex];
+        Array.ConstrainedCopy(result, 0, returnArray, 0, takeIndex);
+        return returnArray;
+#else
+        return result[..takeIndex];
+#endif
     }
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="query"></param>
+    /// <param name="selector"></param>
+    /// <param name="takeCount"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <typeparam name="TResult"></typeparam>
+    /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TResult[] WhereSelectTakeLast<TData, TResult>(
         this TData[] source,
-        Predicate<TData> query,
+        Func<TData, int, bool> query,
         Func<TData, TResult> selector,
-        int takeCount)
+        int takeCount
+    )
     {
-        if (source.Length == 0) return Array.Empty<TResult>();
-
-        if (takeCount < 1) { takeCount = 0; }
-
-        List<TResult> result = new();
-
-        for (int i = source.Length - 1; i >= 0; --i)
+        if (source is null or { Length: 0 })
         {
-            var found = query(source[i]);
+            return Array.Empty<TResult>();
+        }
 
-            if (found)
+        if (takeCount < 1)
+        {
+            takeCount = 0;
+        }
+
+        var takeIndex = 0;
+        var result = new TResult[takeCount];
+        for (var i = source.Length - 1; i >= 0 && takeIndex < takeCount; --i)
+        {
+            if (query(source[i], i))
             {
-                result.Add(selector(source[i]));
-
-                if (result.Count == takeCount)
-                {
-                    return result.ToArray();
-                }
+                result[takeIndex++] = selector(source[i]);
             }
         }
 
-        return result.ToArray();
+#if NETSTANDARD2_0
+        TResult[] returnArray = new TResult[takeIndex];
+        Array.ConstrainedCopy(result, 0, returnArray, 0, takeIndex);
+        return returnArray;
+#else
+        return result[..takeIndex];
+#endif
     }
+
+#if !NETSTANDARD2_0
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="query"></param>
+    /// <param name="selector"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <typeparam name="TResult"></typeparam>
+    /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Span<TResult> WhereSelectAsSpan<TData, TResult>(
+        this TData[] source,
+        Func<TData, int, bool> query,
+        Func<TData, TResult> selector
+    )
+        => source.WhereSelectTakeAsSpan(query, selector, source.Length);
+
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="query"></param>
+    /// <param name="selector"></param>
+    /// <param name="takeCount"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <typeparam name="TResult"></typeparam>
+    /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Span<TResult> WhereSelectTakeAsSpan<TData, TResult>(
+        this TData[] source,
+        Func<TData, int, bool> query,
+        Func<TData, TResult> selector,
+        int takeCount
+    )
+    {
+        if (source is null or { Length: 0 })
+        {
+            return Array.Empty<TResult>();
+        }
+
+        if (takeCount < 1)
+        {
+            takeCount = 0;
+        }
+
+        takeCount = Math.Min(takeCount, source.Length);
+        var takeIndex = 0;
+        var result = new TResult[takeCount];
+        for (var i = 0; i < source.Length && takeIndex < takeCount; i++)
+        {
+            if (query(source[i], i))
+            {
+                result[takeIndex++] = selector(source[i]);
+            }
+        }
+
+        return result.AsSpan(..takeIndex);
+    }
+
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="query"></param>
+    /// <param name="selector"></param>
+    /// <param name="takeCount"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <typeparam name="TResult"></typeparam>
+    /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Span<TResult> WhereSelectTakeLastAsSpan<TData, TResult>(
+        this TData[] source,
+        Func<TData, int, bool> query,
+        Func<TData, TResult> selector,
+        int takeCount
+    )
+    {
+        if (source is null or { Length: 0 })
+        {
+            return Array.Empty<TResult>();
+        }
+
+        if (takeCount < 1)
+        {
+            takeCount = 0;
+        }
+
+        var takeIndex = 0;
+        var result = new TResult[takeCount];
+        for (var i = source.Length - 1; i >= 0 && takeIndex < takeCount; --i)
+        {
+            if (query(source[i], i))
+            {
+                result[takeIndex++] = selector(source[i]);
+            }
+        }
+
+        return result.AsSpan(..takeIndex);
+    }
+#endif
 }
+
 #endregion WhereSelect
 
 #region Take / TakeLast
+
 public static partial class ArrayExtensions
 {
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="takeCount"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TData[] Take<TData>(
-            this TData[] source,
-            int takeCount)
-            => SelectTake<TData, TData>(source, i => i, takeCount);
+        this TData[] source,
+        int takeCount
+    )
+        => SelectTake(source, i => i, takeCount);
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="takeCount"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TData[] TakeLast<TData>(
         this TData[] source,
-        int takeCount)
-        => SelectTakeLast<TData, TData>(source, null, takeCount);
+        int takeCount
+    )
+        => SelectTakeLast(source, i => i, takeCount);
 }
+
 #endregion Take / TakeLast
 
 #region OrderBy
+
 public static partial class ArrayExtensions
 {
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="comparison"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <typeparam name="TKey"></typeparam>
+    /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TData[] OrderBy<TData, TKey>(
         this TData[] source,
-        Func<TData, TKey> comparison)
+        Func<TData, TKey> comparison
+    )
         => OrderByTake(source, comparison, source.Length);
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="comparison"></param>
+    /// <param name="takeCount"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <typeparam name="TKey"></typeparam>
+    /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TData[] OrderByTake<TData, TKey>(
         this TData[] source,
         Func<TData, TKey> comparison,
-        int takeCount)
+        int takeCount
+    )
     {
-        if(source.Length == 0) return Array.Empty<TData>();
+        if (source is null or { Length: 0})
+        {
+            return Array.Empty<TData>();
+        }
 
-        if (takeCount < 1) { takeCount = 0; }
+        if (takeCount < 1)
+        {
+            takeCount = 0;
+        }
 
-        int[] indices = Enumerable.Range(0, source.Length).ToArray();
+        var indices = Enumerable.Range(0, source.Length)
+            .ToArray();
         IComparer<TKey> comparer = Comparer<TKey>.Default;
-        var keys = source.Select(comparison).ToArray();
-        QuickSort(0, source.Length - 1, comparer, keys, indices);
-
-        List<TData> result = new();
+        var keys = source.Select(comparison)
+            .ToArray();
+        QuickSort(
+            0,
+            source.Length - 1,
+            comparer,
+            keys,
+            indices
+        );
 
         var limit = Math.Min(indices.Length, takeCount);
+        var result = new TData[limit];
+        var takeIndex = 0;
 
-        for (int i = 0; i < limit; ++i)
+        for (var i = 0; i < limit; ++i)
         {
-            result.Add(source[indices[i]]);
+            result[takeIndex++] = source[indices[i]];
         }
 
         return result.ToArray();
     }
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="comparison"></param>
+    /// <param name="takeCount"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <typeparam name="TKey"></typeparam>
+    /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TData[] OrderByTakeLast<TData, TKey>(
         this TData[] source,
         Func<TData, TKey> comparison,
-        int takeCount)
+        int takeCount
+    )
     {
-        if (source.Length == 0) return Array.Empty<TData>();
-
-        if (takeCount < 1) { takeCount = 0; }
-
-        int[] indices = Enumerable.Range(0, source.Length).ToArray();
-        IComparer<TKey> comparer = Comparer<TKey>.Default;
-        var keys = source.Select(comparison).ToArray();
-        QuickSort(0, source.Length - 1, comparer, keys, indices);
-
-        List<TData> result = new();
-
-        for (int i = source.Length - takeCount; i < source.Length; i++)
+        if (source is null or { Length: 0})
         {
-            result.Add(source[indices[i]]);
+            return Array.Empty<TData>();
         }
 
-        return result.ToArray();
+        if (takeCount < 1)
+        {
+            takeCount = 0;
+        }
+
+        var indices = Enumerable.Range(0, source.Length)
+            .ToArray();
+
+        IComparer<TKey> comparer = Comparer<TKey>.Default;
+
+        var keys = source.Select(comparison)
+            .ToArray();
+
+        QuickSort(
+            0,
+            source.Length - 1,
+            comparer,
+            keys,
+            indices
+            );
+
+        var result = new TData[takeCount];
+        var takeIndex = 0;
+
+        for (var i = source.Length - takeCount; i < source.Length && takeIndex < takeCount; i++)
+        {
+            result[takeIndex++] = source[indices[i]];
+        }
+
+        return result;
     }
 }
+
 #endregion OrderBy
 
 #region OrderByDescending
+
 public static partial class ArrayExtensions
 {
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="comparison"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <typeparam name="TKey"></typeparam>
+    /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TData[] OrderByDescending<TData, TKey>(
         this TData[] source,
-        Func<TData, TKey> comparison)
+        Func<TData, TKey> comparison
+    )
         => OrderByDescendingTake(source, comparison, source.Length);
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="comparison"></param>
+    /// <param name="takeCount"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <typeparam name="TKey"></typeparam>
+    /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TData[] OrderByDescendingTakeLast<TData, TKey>(
         this TData[] source,
         Func<TData, TKey> comparison,
-        int takeCount)
+        int takeCount
+    )
     {
-        if (source.Length == 0) return Array.Empty<TData>();
-
-        if (takeCount < 1) { takeCount = 0; }
-
-        int[] indices = Enumerable.Range(0, source.Length).ToArray();
-        IComparer<TKey> comparer = Comparer<TKey>.Default;
-        var keys = source.Select(comparison).ToArray();
-        QuickSort(0, source.Length - 1, comparer, keys, indices);
-
-        List<TData> result = new();
-
-        var start = 0;
-        var end = takeCount;
-
-        for (int i = start; i < end; ++i)
+        if (source is null or { Length: 0})
         {
-            result.Add(source[indices[i]]);
+            return Array.Empty<TData>();
         }
 
-        return result.ToArray();
+        if (takeCount < 1)
+        {
+            takeCount = 0;
+        }
+
+        var indices = Enumerable.Range(0, source.Length)
+            .ToArray();
+
+        IComparer<TKey> comparer = Comparer<TKey>.Default;
+
+        var keys = source.Select(comparison)
+            .ToArray();
+
+        QuickSort(
+            0,
+            source.Length - 1,
+            comparer,
+            keys,
+            indices
+        );
+
+        var result = new TData[takeCount];
+        var takeIndex = 0;
+
+        const int start = 0;
+        var end = takeCount;
+
+        for (var i = start; i < end && takeIndex < takeCount; ++i)
+        {
+            result[takeIndex++] = source[indices[i]];
+        }
+
+        return result;
     }
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="comparison"></param>
+    /// <param name="takeCount"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <typeparam name="TKey"></typeparam>
+    /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TData[] OrderByDescendingTake<TData, TKey>(
         this TData[] source,
         Func<TData, TKey> comparison,
-        int takeCount)
+        int takeCount
+    )
     {
-        if (source.Length == 0) return Array.Empty<TData>();
+        if (source is null or { Length: 0})
+        {
+            return Array.Empty<TData>();
+        }
 
-        if (takeCount < 1) { takeCount = 0; }
+        if (takeCount < 1)
+        {
+            takeCount = 0;
+        }
 
-        int[] indices = Enumerable.Range(0, source.Length).ToArray();
+        var indices = Enumerable.Range(0, source.Length)
+            .ToArray();
+
         IComparer<TKey> comparer = Comparer<TKey>.Default;
-        var keys = source.Select(comparison).ToArray();
-        QuickSort(0, source.Length - 1, comparer, keys, indices);
 
-        List<TData> result = new();
+        var keys = source.Select(comparison)
+            .ToArray();
+
+        QuickSort(
+            0,
+            source.Length - 1,
+            comparer,
+            keys,
+            indices
+        );
+
+        var result = new TData[takeCount];
+        var takeIndex = 0;
 
         var start = indices.Length - 1;
         var end = indices.Length - takeCount;
 
-        for (int i = start; i >= end; --i)
+        for (var i = start; i >= end && takeIndex < takeCount; --i)
         {
-            result.Add(source[indices[i]]);
+            result[takeIndex++] = source[indices[i]];
         }
 
-        return result.ToArray();
+        return result;
     }
 }
+
 #endregion OrderByDescending
 
 #region Private
+
 public static partial class ArrayExtensions
 {
     // Source: https://github.com/dotnet/runtime/blob/44b44501c76c46bd79ee52b7d9a9d8a4957fc85f/src/libraries/System.Linq.Parallel/src/System/Linq/Parallel/Utils/Sorting.cs#L585
@@ -468,29 +959,126 @@ public static partial class ArrayExtensions
     // Sort algorithm used to sort key/value lists. After this has been called, the indices
     // will have been placed in sorted order based on the keys provided.
     //
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal static void QuickSort<TKey>(
-        int left, int right,
+        int left,
+        int right,
         IComparer<TKey> keyComparer,
         TKey[] keys,
         int[] indices,
-        int depth = 0)
+        int depth = 0
+    )
     {
-        if(!(keys != null)) throw new ApplicationException($"need a non-null keyset (depth: {depth})") { Data = { { "left", left }, { "right", right }, { "keys", keys }, { "indices", indices } }};
-        if (!(left <= right)) throw new ApplicationException($"left {left} <= right {right} (depth: {depth})") { Data = { { "left", left }, { "right", right }, { "keys", keys }, { "indices", indices } } };
-        if (!(0 <= left && left < keys!.Length)) throw new ApplicationException($"0 <= left {left} && left {left} < keys!.Length {keys!.Length} (depth: {depth})") { Data = { { "left", left }, { "right", right }, { "keys", keys }, { "indices", indices } } };
-        if (!(0 <= right && right < keys!.Length)) throw new ApplicationException($"0 <= right {right} && right {right} < keys!.Length {keys!.Length} (depth: {depth})") { Data = { { "left", left }, { "right", right }, { "keys", keys }, { "indices", indices } } };
+        if (keys == null)
+        {
+            throw new ApplicationException($"need a non-null keyset (depth: {depth})")
+            {
+                Data =
+                {
+                    {
+                        "left", left
+                    },
+                    {
+                        "right", right
+                    },
+                    {
+                        "keys", keys
+                    },
+                    {
+                        "indices", indices
+                    },
+                },
+            };
+        }
+
+        if (left > right)
+        {
+            throw new ApplicationException($"left {left} <= right {right} (depth: {depth})")
+            {
+                Data =
+                {
+                    {
+                        "left", left
+                    },
+                    {
+                        "right", right
+                    },
+                    {
+                        "keys", keys
+                    },
+                    {
+                        "indices", indices
+                    },
+                },
+            };
+        }
+
+        if (!(0 <= left && left < keys!.Length))
+        {
+            throw new ApplicationException(
+                $"0 <= left {left} && left {left} < keys!.Length {keys!.Length} (depth: {depth})"
+            )
+            {
+                Data =
+                {
+                    {
+                        "left", left
+                    },
+                    {
+                        "right", right
+                    },
+                    {
+                        "keys", keys
+                    },
+                    {
+                        "indices", indices
+                    },
+                },
+            };
+        }
+
+        if (!(0 <= right && right < keys!.Length))
+        {
+            throw new ApplicationException(
+                $"0 <= right {right} && right {right} < keys!.Length {keys!.Length} (depth: {depth})"
+            )
+            {
+                Data =
+                {
+                    {
+                        "left", left
+                    },
+                    {
+                        "right", right
+                    },
+                    {
+                        "keys", keys
+                    },
+                    {
+                        "indices", indices
+                    },
+                },
+            };
+        }
 
         do
         {
-            int i = left;
-            int j = right;
-            int pivot = indices[i + ((j - i) >> 1)];
-            TKey pivotKey = keys[pivot];
+            var i = left;
+            var j = right;
+            var pivot = indices[i + ((j - i) >> 1)];
+            var pivotKey = keys[pivot];
 
             do
             {
-                while (keyComparer.Compare(keys[indices[i]], pivotKey) < 0) i++;
-                while (keyComparer.Compare(keys[indices[j]], pivotKey) > 0) j--;
+                while (keyComparer.Compare(keys[indices[i]], pivotKey) < 0)
+                {
+                    i++;
+                }
+
+                while (keyComparer.Compare(keys[indices[j]], pivotKey) > 0)
+                {
+                    j--;
+                }
 
                 Debug.Assert(i >= left && j <= right, "(i>=left && j<=right) sort failed - bogus IComparer?");
 
@@ -502,9 +1090,7 @@ public static partial class ArrayExtensions
                 if (i < j)
                 {
                     // Swap the indices.
-                    int tmp = indices[i];
-                    indices[i] = indices[j];
-                    indices[j] = tmp;
+                    (indices[i], indices[j]) = (indices[j], indices[i]);
                 }
 
                 i++;
@@ -516,38 +1102,68 @@ public static partial class ArrayExtensions
             {
                 if (left < j)
                 {
-                    QuickSort(left, j, keyComparer, keys, indices, depth + 1);
+                    QuickSort(
+                        left,
+                        j,
+                        keyComparer,
+                        keys,
+                        indices,
+                        depth + 1
+                    );
                 }
+
                 left = i;
             }
             else
             {
                 if (i < right)
                 {
-                    QuickSort(i, right, keyComparer, keys, indices, depth + 1);
+                    QuickSort(
+                        i,
+                        right,
+                        keyComparer,
+                        keys,
+                        indices,
+                        depth + 1
+                    );
                 }
+
                 right = j;
             }
         }
         while (left < right);
     }
 }
+
 #endregion Private
 
 #region PositionsWhere
+
 public static partial class ArrayExtensions
 {
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="comparison"></param>
+    /// <typeparam name="TData"></typeparam>
+    /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static PositionCollection PositionsWhere<TData>(
         this TData[] source,
-        Predicate<TData> comparison)
+        Func<TData, int, bool> comparison
+    )
     {
         var positions = new PositionCollection(0, 0);
 
-        if (source.Length == 0) return positions;
-
-        for (int i = 0; i < source.Length; ++i)
+        if (source is null or { Length: 0})
         {
-            if (comparison(source[i]))
+            return positions;
+        }
+
+        for (var i = 0; i < source.Length; ++i)
+        {
+            if (comparison(source[i], i))
             {
                 positions.Add(i);
             }
@@ -556,4 +1172,5 @@ public static partial class ArrayExtensions
         return positions;
     }
 }
+
 #endregion PositionsWhere

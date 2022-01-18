@@ -1,0 +1,62 @@
+# This is a basic workflow that is manually triggered
+
+name: Build Doks
+
+# Controls when the action will run. Workflow runs when manually triggered using the UI
+# or API.
+on:
+  push: 
+    paths: 
+      - doks/**      
+  workflow_dispatch:
+   
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      
+      - name: Get cached gems
+        uses: actions/cache@v2
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-gems-
+            
+      - uses: helaili/jekyll-action@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          jekyll_src: doks
+
+#   build:
+#     runs-on: ubuntu-latest
+
+#     # Steps represent a sequence of tasks that will be executed as part of the job
+#     steps:
+#     - name: Checkout
+#       uses: actions/checkout@v1
+      
+#     - run: |
+#         git config user.email "ninja@thesharp.ninja"
+#         git config user.name "GitHub Actions"
+#         git checkout -b benchmarks        
+#         cd doks
+        
+#     - name: Build Jekyll
+#       uses: jerryjvl/jekyll-build-action@v1
+      
+#     - name: Commit
+#       env:
+#         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#       run: |        
+#         mv ./_site/* -t ../docs/ -f
+#         cd ../docs
+        
+#         git add .
+        
+#         git commit --message=commit.txt **/results.md
+#         git remote set-url --push origin https://sharpninja:${env:GITHUB_TOKEN}@github.com/gatewayprogrammingschool/Faslinq
+#         git push origin
+        

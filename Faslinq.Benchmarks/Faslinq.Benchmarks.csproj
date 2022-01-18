@@ -1,165 +1,166 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>exe</OutputType>
-    <TargetFrameworks>net6.0;net48</TargetFrameworks>
-    <!---->
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <LangVersion>10.0</LangVersion>
-    <IsPackable>false</IsPackable>
-    <StartupObject>Faslinq.Benchmarks.Program</StartupObject>
-    <DebugType>embedded</DebugType>
-    <Configurations>Debug;Release;Benchmarks;NoFaslinq</Configurations>
-    <Platforms>AnyCPU;x64</Platforms>
-  </PropertyGroup>
+    <PropertyGroup>
+        <OutputType>exe</OutputType>
+<!--        <TargetFrameworks>net6.0;net5.0;net48;net472</TargetFrameworks>-->
+        <TargetFrameworks>net6.0;net5.0</TargetFrameworks>
+        <!---->
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <LangVersion>10.0</LangVersion>
+        <IsPackable>false</IsPackable>
+        <StartupObject>Faslinq.Benchmarks.Program</StartupObject>
+        <DebugType>embedded</DebugType>
+        <Configurations>Debug;Release;Benchmarks;NoFaslinq</Configurations>
+        <Platforms>AnyCPU;x64</Platforms>
+    </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Benchmarks|net6.0|AnyCPU'">
-    <DefineConstants>$(DefineConstants);</DefineConstants>
-    <Optimize>True</Optimize>
-    <PlatformTarget>x64</PlatformTarget>
-  </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Benchmarks|net6.0|AnyCPU'">
+        <DefineConstants>$(DefineConstants);</DefineConstants>
+        <Optimize>True</Optimize>
+        <PlatformTarget>x64</PlatformTarget>
+    </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Benchmarks|net6.0|x64'">
-    <Optimize>True</Optimize>
-    <DefineConstants>$(DefineConstants);</DefineConstants>
-  </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Benchmarks|net6.0|x64'">
+        <Optimize>True</Optimize>
+        <DefineConstants>$(DefineConstants);</DefineConstants>
+    </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Benchmarks|net5.0|AnyCPU'">
-    <Optimize>True</Optimize>
-    <DefineConstants>$(DefineConstants);</DefineConstants>
-    <PlatformTarget>x64</PlatformTarget>
-  </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Benchmarks|net5.0|AnyCPU'">
+        <Optimize>True</Optimize>
+        <DefineConstants>$(DefineConstants);</DefineConstants>
+        <PlatformTarget>x64</PlatformTarget>
+    </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Benchmarks|net5.0|x64'">
-    <Optimize>True</Optimize>
-    <DefineConstants>$(DefineConstants);</DefineConstants>
-  </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Benchmarks|net5.0|x64'">
+        <Optimize>True</Optimize>
+        <DefineConstants>$(DefineConstants);</DefineConstants>
+    </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Benchmarks|netcoreapp3.1|AnyCPU'">
-    <Optimize>True</Optimize>
-    <DefineConstants>$(DefineConstants);</DefineConstants>
-    <PlatformTarget>x86</PlatformTarget>
-  </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Benchmarks|netcoreapp3.1|AnyCPU'">
+        <Optimize>True</Optimize>
+        <DefineConstants>$(DefineConstants);</DefineConstants>
+        <PlatformTarget>x86</PlatformTarget>
+    </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Benchmarks|netcoreapp3.1|x64'">
-    <Optimize>True</Optimize>
-    <DefineConstants>$(DefineConstants);</DefineConstants>
-  </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Benchmarks|netcoreapp3.1|x64'">
+        <Optimize>True</Optimize>
+        <DefineConstants>$(DefineConstants);</DefineConstants>
+    </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Benchmarks|net472|AnyCPU'">
-    <Optimize>True</Optimize>
-    <DefineConstants>$(DefineConstants);</DefineConstants>
-  </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Benchmarks|net472|AnyCPU'">
+        <Optimize>True</Optimize>
+        <DefineConstants>$(DefineConstants);</DefineConstants>
+    </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Benchmarks|net472|x64'">
-    <Optimize>True</Optimize>
-    <DefineConstants>$(DefineConstants);</DefineConstants>
-  </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Benchmarks|net472|x64'">
+        <Optimize>True</Optimize>
+        <DefineConstants>$(DefineConstants);</DefineConstants>
+    </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Benchmarks|net48|AnyCPU'">
-    <Optimize>True</Optimize>
-    <DefineConstants>$(DefineConstants);</DefineConstants>
-  </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Benchmarks|net48|AnyCPU'">
+        <Optimize>True</Optimize>
+        <DefineConstants>$(DefineConstants);</DefineConstants>
+    </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Benchmarks|net48|x64'">
-    <Optimize>True</Optimize>
-    <DefineConstants>$(DefineConstants);</DefineConstants>
-  </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Benchmarks|net48|x64'">
+        <Optimize>True</Optimize>
+        <DefineConstants>$(DefineConstants);</DefineConstants>
+    </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0|AnyCPU'">
-    <DefineConstants>$(DefineConstants);</DefineConstants>
-    <PlatformTarget>x64</PlatformTarget>
-  </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0|AnyCPU'">
+        <DefineConstants>$(DefineConstants);</DefineConstants>
+        <PlatformTarget>x64</PlatformTarget>
+    </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net6.0|AnyCPU'">
-    <DefineConstants>$(DefineConstants);</DefineConstants>
-    <PlatformTarget>x64</PlatformTarget>
-  </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net6.0|AnyCPU'">
+        <DefineConstants>$(DefineConstants);</DefineConstants>
+        <PlatformTarget>x64</PlatformTarget>
+    </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0|x64'">
-    <DefineConstants>$(DefineConstants);</DefineConstants>
-  </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0|x64'">
+        <DefineConstants>$(DefineConstants);</DefineConstants>
+    </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net6.0|x64'">
-    <DefineConstants>$(DefineConstants);</DefineConstants>
-  </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net6.0|x64'">
+        <DefineConstants>$(DefineConstants);</DefineConstants>
+    </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net5.0|AnyCPU'">
-    <DefineConstants>$(DefineConstants);</DefineConstants>
-    <PlatformTarget>x64</PlatformTarget>
-  </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net5.0|AnyCPU'">
+        <DefineConstants>$(DefineConstants);</DefineConstants>
+        <PlatformTarget>x64</PlatformTarget>
+    </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net5.0|AnyCPU'">
-    <DefineConstants>$(DefineConstants);</DefineConstants>
-    <PlatformTarget>x64</PlatformTarget>
-  </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net5.0|AnyCPU'">
+        <DefineConstants>$(DefineConstants);</DefineConstants>
+        <PlatformTarget>x64</PlatformTarget>
+    </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net5.0|x64'">
-    <DefineConstants>$(DefineConstants);</DefineConstants>
-  </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net5.0|x64'">
+        <DefineConstants>$(DefineConstants);</DefineConstants>
+    </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net5.0|x64'">
-    <DefineConstants>$(DefineConstants);</DefineConstants>
-  </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net5.0|x64'">
+        <DefineConstants>$(DefineConstants);</DefineConstants>
+    </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netcoreapp3.1|AnyCPU'">
-    <DefineConstants>$(DefineConstants);</DefineConstants>
-    <PlatformTarget>x64</PlatformTarget>
-  </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netcoreapp3.1|AnyCPU'">
+        <DefineConstants>$(DefineConstants);</DefineConstants>
+        <PlatformTarget>x64</PlatformTarget>
+    </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netcoreapp3.1|AnyCPU'">
-    <DefineConstants>$(DefineConstants);</DefineConstants>
-    <PlatformTarget>x64</PlatformTarget>
-  </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netcoreapp3.1|AnyCPU'">
+        <DefineConstants>$(DefineConstants);</DefineConstants>
+        <PlatformTarget>x64</PlatformTarget>
+    </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netcoreapp3.1|x64'">
-    <DefineConstants>$(DefineConstants);</DefineConstants>
-  </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netcoreapp3.1|x64'">
+        <DefineConstants>$(DefineConstants);</DefineConstants>
+    </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netcoreapp3.1|x64'">
-    <DefineConstants>$(DefineConstants);</DefineConstants>
-  </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netcoreapp3.1|x64'">
+        <DefineConstants>$(DefineConstants);</DefineConstants>
+    </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net472|AnyCPU'">
-    <DefineConstants>$(DefineConstants);</DefineConstants>
-  </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net472|AnyCPU'">
+        <DefineConstants>$(DefineConstants);</DefineConstants>
+    </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net472|AnyCPU'">
-    <DefineConstants>$(DefineConstants);</DefineConstants>
-  </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net472|AnyCPU'">
+        <DefineConstants>$(DefineConstants);</DefineConstants>
+    </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net472|x64'">
-    <DefineConstants>$(DefineConstants);</DefineConstants>
-  </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net472|x64'">
+        <DefineConstants>$(DefineConstants);</DefineConstants>
+    </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net472|x64'">
-    <DefineConstants>$(DefineConstants);</DefineConstants>
-  </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net472|x64'">
+        <DefineConstants>$(DefineConstants);</DefineConstants>
+    </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net48|AnyCPU'">
-    <DefineConstants>$(DefineConstants);</DefineConstants>
-  </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net48|AnyCPU'">
+        <DefineConstants>$(DefineConstants);</DefineConstants>
+    </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net48|AnyCPU'">
-    <DefineConstants>$(DefineConstants);</DefineConstants>
-  </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net48|AnyCPU'">
+        <DefineConstants>$(DefineConstants);</DefineConstants>
+    </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net48|x64'">
-    <DefineConstants>$(DefineConstants);</DefineConstants>
-  </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net48|x64'">
+        <DefineConstants>$(DefineConstants);</DefineConstants>
+    </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net48|x64'">
-    <DefineConstants>$(DefineConstants);</DefineConstants>
-  </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net48|x64'">
+        <DefineConstants>$(DefineConstants);</DefineConstants>
+    </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)'=='NoFaslinq'">
-    <DefineConstants>$(DefineConstants);NO_FASLINQ</DefineConstants>
-    <Optimize>True</Optimize>
-    <PlatformTarget>x64</PlatformTarget>
-  </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)'=='NoFaslinq'">
+        <DefineConstants>$(DefineConstants);NO_FASLINQ</DefineConstants>
+        <Optimize>True</Optimize>
+        <PlatformTarget>x64</PlatformTarget>
+    </PropertyGroup>
 
-  <!--<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0|AnyCPU'">
+    <!--<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0|AnyCPU'">
       <Optimize>True</Optimize>
     </PropertyGroup>
 
@@ -179,6 +180,7 @@
       <Optimize>True</Optimize>
     </PropertyGroup>-->
 
+<<<<<<< HEAD
   <ItemGroup Condition="'$(TargetFramework)'=='netcoreapp'">
     <Assembly Remove="Netstandard20.Range.Bridge" />
   </ItemGroup>
@@ -210,5 +212,32 @@
       <Version>2.0.3</Version>
     </PackageReference>
   </ItemGroup>
+=======
+    <ItemGroup Condition="'$(TargetFramework)'=='netcoreapp'">
+        <Assembly Remove="Netstandard20.Range.Bridge" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="BenchmarkDotNet" Version="0.13.1" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0-rc.1.21451.13" />
+        <PackageReference Include="Netstandard20.Range.Bridge" Version="1.0.0" Condition="'$(TargetFramework)'=='netstandard2.0' or '$(TargetFramework)'=='net472' or '$(TargetFramework)'=='net48' " />
+        <PackageReference Include="FluentAssertions" Version="6.1.0" />
+        <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Faslinq\Faslinq.csproj" Condition="'$(Configuration)' != 'NoFaslinq'" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="GPS.RandomDataGenerator">
+            <Version>2.0.3</Version>
+        </PackageReference>
+        <PackageReference Include="GPS.RandomDataGenerator.BaseData">
+            <Version>2.0.3</Version>
+        </PackageReference>
+    </ItemGroup>
+>>>>>>> baf8f62732723f997dfc6f6a915fae85130b941f
 
 </Project>

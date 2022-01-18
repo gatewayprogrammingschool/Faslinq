@@ -1,7 +1,6 @@
-﻿using BenchmarkDotNet.Diagnosers;
-using BenchmarkDotNet.Order;
-using BenchmarkDotNet.Running;
+﻿namespace Faslinq.Benchmarks;
 
+<<<<<<< HEAD
 namespace Faslinq.Benchmarks;
 
 public class Program
@@ -140,11 +139,15 @@ public class Program
         }
     }
 
+=======
+public class Program
+{
+>>>>>>> baf8f62732723f997dfc6f6a915fae85130b941f
     public static void Main(string[] args)
     {
         args = args.ToList()
-                    .SelectMany(ab => ab.Split(' '))
-                    .ToArray();
+            .SelectMany(ab => ab.Split(' '))
+            .ToArray();
 
         Console.WriteLine($"{args.Length}");
         Console.WriteLine($"{string.Join(", ", args)}");
@@ -155,15 +158,20 @@ public class Program
         var filters = ProcessFilters(aa);
 
         var config =
-            new Config()
-                .KeepBenchmarkFiles()
-                .WithOrderer(new Config.FaslinqOrderer())
-        ;
+                new FaslinqConfig()
+                    .KeepBenchmarkFiles()
+                    .WithOrderer(new FaslinqConfig.FaslinqOrderer())
+                    .WithOptions(ConfigOptions.DisableOptimizationsValidator)
+            ;
 
         var counter = 1;
         foreach (var filter in filters)
         {
+<<<<<<< HEAD
             if (!aa.Any(a => a.Equals("--filter", StringComparison.CurrentCultureIgnoreCase)))
+=======
+            if (!aa.Any((a, i) => a.Equals("--filter", StringComparison.CurrentCultureIgnoreCase)))
+>>>>>>> baf8f62732723f997dfc6f6a915fae85130b941f
             {
                 aa.Insert(0, "--filter");
             }
@@ -178,24 +186,37 @@ public class Program
             }
         }
 
+        var join = aa.FirstOrDefault((a, i) => a.Equals("-Join", StringComparison.CurrentCultureIgnoreCase));
+        if (join is not (null or ""))
+        {
+            aa.Remove(join);
+            aa.Add("--join");
+        }
+
 #if DEBUG
+<<<<<<< HEAD
         if (aa.All(a => !a.Equals("--runonceperiteration", StringComparison.CurrentCultureIgnoreCase)))
+=======
+        if (aa.All((a, i) => !a.Equals("--runonceperiteration", StringComparison.CurrentCultureIgnoreCase)))
+>>>>>>> baf8f62732723f997dfc6f6a915fae85130b941f
         {
             aa.Add("--runOncePerIteration");
         }
 #endif
 
         Console.WriteLine("--------");
-        aa.ToList().ForEach(Console.WriteLine);
+        aa.ToList()
+            .ForEach(Console.WriteLine);
         Console.WriteLine("--------\n");
 
         BenchmarkSwitcher
-            .FromAssembly(typeof(Faslinq.Benchmarks.Program).Assembly)
+            .FromAssembly(typeof(Program).Assembly)
             .Run(aa.ToArray(), config);
     }
 
     private static List<string> ProcessFilters(List<string> args)
     {
+<<<<<<< HEAD
         var Where = args.Any(a => a.Equals("-where", StringComparison.OrdinalIgnoreCase));
         var Select = args.Any(a => a.Equals("-select", StringComparison.OrdinalIgnoreCase));
         var Take = args.Any(a => a.Equals("-take", StringComparison.OrdinalIgnoreCase));
@@ -204,6 +225,16 @@ public class Program
         var FirstWhere = args.Any(a => a.Equals("-firstwhere", StringComparison.OrdinalIgnoreCase));
         var Last = args.Any(a => a.Equals("-last", StringComparison.OrdinalIgnoreCase));
         var LastWhere = args.Any(a => a.Equals("-lastwhere", StringComparison.OrdinalIgnoreCase));
+=======
+        var Where = args.Any((a, i) => a.Equals("-where", StringComparison.OrdinalIgnoreCase));
+        var Select = args.Any((a, i) => a.Equals("-select", StringComparison.OrdinalIgnoreCase));
+        var Take = args.Any((a, i) => a.Equals("-take", StringComparison.OrdinalIgnoreCase));
+        var TakeLast = args.Any((a, i) => a.Equals("-takelast", StringComparison.OrdinalIgnoreCase));
+        var First = args.Any((a, i) => a.Equals("-first", StringComparison.OrdinalIgnoreCase));
+        var FirstWhere = args.Any((a, i) => a.Equals("-firstwhere", StringComparison.OrdinalIgnoreCase));
+        var Last = args.Any((a, i) => a.Equals("-last", StringComparison.OrdinalIgnoreCase));
+        var LastWhere = args.Any((a, i) => a.Equals("-lastwhere", StringComparison.OrdinalIgnoreCase));
+>>>>>>> baf8f62732723f997dfc6f6a915fae85130b941f
 
         List<string> filters = new();
         List<string> f = new();
@@ -217,7 +248,12 @@ public class Program
                     if (Take)
                     {
                         var take = args.IndexOf(
+<<<<<<< HEAD
                             args.FirstOrDefault(a => a.Equals("-take", StringComparison.OrdinalIgnoreCase)) ?? "");
+=======
+                            args.FirstOrDefault((a, i) => a.Equals("-take", StringComparison.OrdinalIgnoreCase)) ?? ""
+                        );
+>>>>>>> baf8f62732723f997dfc6f6a915fae85130b941f
                         args.RemoveAt(take);
 
                         f.Add("WhereSelectTake");
@@ -229,8 +265,18 @@ public class Program
                     if (TakeLast)
                     {
                         var takeLast =
+<<<<<<< HEAD
                             args.IndexOf(args.FirstOrDefault(a =>
                                 a.Equals("-takelast", StringComparison.OrdinalIgnoreCase)) ?? "");
+=======
+                            args.IndexOf(
+                                args.FirstOrDefault(
+                                    (a, i) =>
+                                        a.Equals("-takelast", StringComparison.OrdinalIgnoreCase)
+                                )
+                                ?? ""
+                            );
+>>>>>>> baf8f62732723f997dfc6f6a915fae85130b941f
                         args.RemoveAt(takeLast);
 
                         f.Add("WhereSelectTakeLast");
@@ -242,6 +288,7 @@ public class Program
                     f.Add("WhereSelect");
                     f.Add("Where");
                     f.Add("Select");
+<<<<<<< HEAD
 
                     var where = args.IndexOf(
                         args.FirstOrDefault(a => a.Equals("-where", StringComparison.OrdinalIgnoreCase)) ?? "");
@@ -422,6 +469,226 @@ public class Program
 
         if (f.Count <= 0) return filters;
 
+=======
+
+                    var where = args.IndexOf(
+                        args.FirstOrDefault((a, i) => a.Equals("-where", StringComparison.OrdinalIgnoreCase)) ?? ""
+                    );
+                    args.RemoveAt(where);
+
+                    var select =
+                        args.IndexOf(
+                            args.FirstOrDefault((a, i) => a.Equals("-select", StringComparison.OrdinalIgnoreCase)) ?? ""
+                        );
+                    args.RemoveAt(select);
+                    break;
+                }
+            case (true, false, true, _):
+                {
+                    if (Take)
+                    {
+                        var take = args.IndexOf(
+                            args.FirstOrDefault((a, i) => a.Equals("-take", StringComparison.OrdinalIgnoreCase)) ?? ""
+                        );
+                        args.RemoveAt(take);
+
+                        f.Add("WhereTake");
+                        f.Add("Take");
+                    }
+
+                    if (TakeLast)
+                    {
+                        var takeLast =
+                            args.IndexOf(
+                                args.FirstOrDefault(
+                                    (a, i) =>
+                                        a.Equals("-takelast", StringComparison.OrdinalIgnoreCase)
+                                )
+                                ?? ""
+                            );
+                        args.RemoveAt(takeLast);
+
+                        f.Add("WhereTakeLast");
+                        f.Add("TakeLast");
+                    }
+
+                    f.Add("Where");
+
+                    var where = args.IndexOf(
+                        args.FirstOrDefault((a, i) => a.Equals("-where", StringComparison.OrdinalIgnoreCase)) ?? ""
+                    );
+                    args.RemoveAt(where);
+                    break;
+                }
+            case (false, true, true, _):
+                {
+                    if (Take)
+                    {
+                        var take = args.IndexOf(
+                            args.FirstOrDefault((a, i) => a.Equals("-take", StringComparison.OrdinalIgnoreCase)) ?? ""
+                        );
+                        args.RemoveAt(take);
+
+                        f.Add("SelectTake");
+                        f.Add("Take");
+                    }
+
+                    if (TakeLast)
+                    {
+                        var takeLastArg = args.FirstOrDefault(
+                            (a, i) =>
+                                a.Equals("-takelast", StringComparison.InvariantCultureIgnoreCase)
+                        );
+                        var takeLast = args.IndexOf(takeLastArg ?? "");
+                        args.RemoveAt(takeLast);
+
+                        f.Add("SelectTakeLast");
+                        f.Add("TakeLast");
+                    }
+
+                    f.Add("Select");
+
+                    var select =
+                        args.IndexOf(
+                            args.FirstOrDefault((a, i) => a.Equals("-select", StringComparison.OrdinalIgnoreCase)) ?? ""
+                        );
+                    args.RemoveAt(select);
+                    break;
+                }
+            case (false, false, true, _):
+                {
+                    if (Take)
+                    {
+                        var take = args.IndexOf(
+                            args.FirstOrDefault((a, i) => a.Equals("-take", StringComparison.OrdinalIgnoreCase)) ?? ""
+                        );
+                        args.RemoveAt(take);
+
+                        f.Add("Take");
+                    }
+
+                    if (TakeLast)
+                    {
+                        var takeLast =
+                            args.IndexOf(
+                                args.FirstOrDefault(
+                                    (a, i) =>
+                                        a.Equals("-takelast", StringComparison.OrdinalIgnoreCase)
+                                )
+                                ?? ""
+                            );
+                        args.RemoveAt(takeLast);
+
+                        f.Add("TakeLast");
+                    }
+
+                    break;
+                }
+
+            case (true, true, false, _):
+                {
+                    var where = args.IndexOf(
+                        args.FirstOrDefault((a, i) => a.Equals("-where", StringComparison.OrdinalIgnoreCase)) ?? ""
+                    );
+                    args.RemoveAt(where);
+
+                    var select =
+                        args.IndexOf(
+                            args.FirstOrDefault((a, i) => a.Equals("-select", StringComparison.OrdinalIgnoreCase)) ?? ""
+                        );
+                    args.RemoveAt(select);
+
+                    f.Add("WhereSelect");
+                    f.Add("Where");
+                    f.Add("Select");
+
+                    break;
+                }
+
+            case (true, false, false, _):
+                {
+                    var where = args.IndexOf(
+                        args.FirstOrDefault((a, i) => a.Equals("-where", StringComparison.OrdinalIgnoreCase)) ?? ""
+                    );
+                    args.RemoveAt(where);
+
+                    f.Add("Where");
+                    break;
+                }
+
+            case (false, true, false, _):
+                {
+                    var select =
+                        args.IndexOf(
+                            args.FirstOrDefault((a, i) => a.Equals("-select", StringComparison.OrdinalIgnoreCase)) ?? ""
+                        );
+                    args.RemoveAt(select);
+
+                    f.Add("Select");
+                    break;
+                }
+        }
+
+        switch (match)
+        {
+            case (_, _, _, true):
+                {
+                    if (FirstWhere)
+                    {
+                        var firstWhere =
+                            args.IndexOf(
+                                args.FirstOrDefault(
+                                    (a, i) =>
+                                        a.Equals("-firstwhere", StringComparison.OrdinalIgnoreCase)
+                                )
+                                ?? ""
+                            );
+                        args.RemoveAt(firstWhere);
+
+                        f.Add("FirstWhere");
+                    }
+
+                    if (First)
+                    {
+                        var first = args.IndexOf(
+                            args.FirstOrDefault((a, i) => a.Equals("-first", StringComparison.OrdinalIgnoreCase)) ?? ""
+                        );
+                        args.RemoveAt(first);
+
+                        f.Add("First");
+                    }
+
+                    if (LastWhere)
+                    {
+                        var lastWhere =
+                            args.IndexOf(
+                                args.FirstOrDefault((a, i) => a.Equals("-lastwhere", StringComparison.OrdinalIgnoreCase)) ?? ""
+                            );
+                        args.RemoveAt(lastWhere);
+
+                        f.Add("LastWhere");
+                    }
+
+                    if (Last)
+                    {
+                        var last = args.IndexOf(
+                            args.FirstOrDefault((a, i) => a.Equals("-last", StringComparison.OrdinalIgnoreCase)) ?? ""
+                        );
+                        args.RemoveAt(last);
+
+                        f.Add("Last");
+                    }
+
+                    break;
+                }
+        }
+
+        if (f.Count == 0)
+        {
+            return filters;
+        }
+
+>>>>>>> baf8f62732723f997dfc6f6a915fae85130b941f
         foreach (var fil in f)
         {
             filters.Add($".{fil}_");
@@ -429,4 +696,5 @@ public class Program
 
         return filters;
     }
+
 }

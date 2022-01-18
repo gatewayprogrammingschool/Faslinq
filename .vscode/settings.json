@@ -1,7 +1,15 @@
 {
     "cSpell.words": [
         "Analysers",
+        "Diagnoser",
+        "doks",
         "ints",
-        "Perfolizer"
-    ]
+        "Perfolizer",
+        "typs",
+        "uncast"
+    ],
+    "markdownlint.config": {
+        "MD033": false,
+        "RCS1138": false
+    }
 }

@@ -2,16 +2,20 @@
 
     <PropertyGroup>
         <OutputType>Library</OutputType>
-        <TargetFrameworks>net6.0;net5.0;netcoreapp3.1;net472;net48</TargetFrameworks>
+        <TargetFrameworks>net6.0;net5.0</TargetFrameworks>
         <!---->
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <LangVersion>10.0</LangVersion>
         <IsPackable>false</IsPackable>
-        <StartupObject></StartupObject>
         <DebugType>embedded</DebugType>
         <Configurations>Debug;Release;Benchmarks</Configurations>
         <Platforms>AnyCPU;x64</Platforms>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageTags>LINQ Array List</PackageTags>
+        <RepositoryType>git</RepositoryType>
+        <RepositoryUrl>https://github.com/gatewayprogrammingschool/Faslinq</RepositoryUrl>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Benchmarks|net6.0|AnyCPU'">
@@ -153,6 +157,13 @@
       <DefineConstants>$(DefineConstants)TRACE</DefineConstants>
     </PropertyGroup>
 
+    <ItemGroup>
+      <None Include="..\README.md">
+        <Pack>True</Pack>
+        <PackagePath></PackagePath>
+      </None>
+    </ItemGroup>
+
     <!--<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0|AnyCPU'">
       <Optimize>True</Optimize>
     </PropertyGroup>
@@ -195,6 +206,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\Faslinq.Benchmarks\Faslinq.Benchmarks.csproj" />
         <ProjectReference Include="..\Faslinq\Faslinq.csproj" />
     </ItemGroup>
 

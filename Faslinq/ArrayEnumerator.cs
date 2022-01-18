@@ -1,27 +1,54 @@
-﻿using System.Collections;
+﻿namespace Faslinq;
 
-namespace Faslinq;
-
+/// <summary>
+///
+/// </summary>
+/// <typeparam name="TType"></typeparam>
 public struct ArrayEnumerator<TType> : IEnumerator<TType?>
 {
-    private TType[] _array;
+    private readonly TType[] _array;
 
-    public TType? Current => _index > -1 ? _array[_index] : default(TType); 
-    
-    object? IEnumerator.Current => Current;
+    /// <summary>
+    ///
+    /// </summary>
+    public TType? Current
+        => _index > -1
+            ? _array[_index]
+            : default;
 
-    int _index = -1;
-    public ArrayEnumerator(TType[] array) => _array = array;
+    object? IEnumerator.Current
+        => Current;
 
+    private int _index;
+
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="array"></param>
+    public ArrayEnumerator(TType[] array)
+    {
+        _array = array;
+        _index = -1;
+    }
+
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="array"></param>
+    /// <param name="index"></param>
     public ArrayEnumerator(TType[] array, int index) : this(array)
-    {
-        _index = index;
-    }
+        => _index = index;
 
+    /// <summary>
+    ///
+    /// </summary>
     public void Dispose()
-    {
-    }
+    { }
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <returns></returns>
     public bool MoveNext()
     {
         _index++;
@@ -34,5 +61,9 @@ public struct ArrayEnumerator<TType> : IEnumerator<TType?>
         return true;
     }
 
-    public void Reset() => _index = -1;
+    /// <summary>
+    ///
+    /// </summary>
+    public void Reset()
+        => _index = -1;
 }

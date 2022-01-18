@@ -1,0 +1,41 @@
+# Theme settings
+doks:
+    baseurl: https://gatewayprogrammingschool.github.io/Faslinq
+    color_theme: blue # Available themes: blue (default), green, purple, red and yellow
+    header:
+        logo:
+            text: Faslinq
+            image:
+        nav:
+            - item_name: API
+              item_url: '/api/'
+            - item_name: Benchmarks
+              item_url: '/benchmarks/full-report/'
+            - item_name: Logs
+              item_url: /benchmarks/results/
+            - item_name: Examples
+              item_url: '/docs/'
+    footer:
+        content:
+            logo:
+                text: Faslinq
+                image:
+            copyright: Copyright &copy; 2021. - Gateway Programming School, Inc. ◆ All rights reserved.
+        social_list:
+            - network_name: github
+              profile_url: 'https://github.com/gatewayprogrammingschool/Faslinq/'
+    google_analytics:
+        tracking_code: # Add your Google Analytics tracking code to activate Google Analytics
+    comments:
+        disqus_forum_shortname: faslinq # Add your disqus forum shortname to activate comments
+
+# SASS settings
+sass:
+    sass_dir: ./doks-theme/_sass
+    style: :compressed
+
+# Jekyll settings
+layouts_dir: ./doks-theme/_layouts
+includes_dir: ./doks-theme/_includes
+exclude: [ 'README.md', 'CHANGELOG.md' ]
+permalink: /:title/

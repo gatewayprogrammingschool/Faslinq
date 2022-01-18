@@ -1,18 +1,32 @@
 ﻿namespace Faslinq;
 
+/// <summary>
+///
+/// </summary>
 public class IndexComparer : IEqualityComparer<Index>
 {
-    private static IndexComparer _instance = new();
+    private static readonly IndexComparer Instance = new();
 
-    public static IEqualityComparer<Index> Default => _instance;
+    /// <summary>
+    ///
+    /// </summary>
+    public static IEqualityComparer<Index> Default
+        => Instance;
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <returns></returns>
     public bool Equals(Index x, Index y)
-    {
-        return x.Equals(y);
-    }
+        => x.Equals(y);
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="obj"></param>
+    /// <returns></returns>
     public int GetHashCode(Index obj)
-    {
-        return obj.GetHashCode();
-    }
+        => obj.GetHashCode();
 }

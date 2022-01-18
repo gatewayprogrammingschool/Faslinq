@@ -15,24 +15,39 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v1
       with:
+        dotnet-version: 5.0.x
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
         dotnet-version: 6.0.x
         include-prerelease: true
     - name: Benchmark
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        .\bench.ps1 -Select -Where -Take -TakeLast -First -FirstWhere -Last -LastWhere -Once -Join -Configuration Debug
-        
-        copy ./results.md ./docs -Verbose
-        
-        git add -v **/results.md
-
-        echo "Updated benchmark results." > commit.txt
-        
+        git remote set-url --push origin https://sharpninja:${env:GITHUB_TOKEN}@github.com/gatewayprogrammingschool/Faslinq
+        git fetch --unshallow
         git config user.email "ninja@thesharp.ninja"
         git config user.name "GitHub Actions"
-        
-        git commit --message=commit.txt **/results.md
-        git remote set-url --push origin https://sharpninja:${env:GITHUB_TOKEN}@github.com/gatewayprogrammingschool/Faslinq
+
+        git checkout main
+
+        # . .\bench.ps1 -Select -Once -Configuration Debug
+        . .\bench.ps1 -Select -Where -Take -TakeLast -First -FirstWhere -Last -LastWhere -Join -Configuration Release
+
+        $semver = & gitversion /showvariable SemVer
+        $commit = & git rev-parse HEAD
+
+        $mds = get-content .\results.md
+
+        $mds += ""
+        $mds += "> Benchmarked Version: $semver ($commit)"
+
+        $mds | out-file .\results.md
+
+        gc .\doks\benchmarks\results.yaml,.\results.md | out-file .\doks\benchmarks\results.md
+
+        git add -v ./doks/benchmarks/results.md
+        git commit -m "Updated benchmark results."
+        git tag -a "b.$semver" -m "Benchmark $semver"
         git push origin
-        
