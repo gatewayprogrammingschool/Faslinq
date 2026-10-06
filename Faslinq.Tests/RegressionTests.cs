@@ -44,6 +44,17 @@ public class RegressionTests
         ListExtensions.SelectTakeLast(SourceList, i => i * 10, 10).Should().Equal(10, 20, 30);
     }
 
+    // Logic behind the netstandard2.0-only IEnumerable TakeLast polyfill.
+    [TestMethod]
+    public void TakeLastCore_ReturnsLastItems()
+    {
+        IEnumerable<int> source = new[] { 1, 2, 3, 4, 5 };
+
+        ListExtensions.TakeLastCore(source, 2).Should().Equal(Enumerable.TakeLast(source, 2));
+        ListExtensions.TakeLastCore(source, 10).Should().Equal(Enumerable.TakeLast(source, 10));
+        ListExtensions.TakeLastCore(source, 0).Should().BeEmpty();
+    }
+
     #endregion
 
     #region WhereTake padding
