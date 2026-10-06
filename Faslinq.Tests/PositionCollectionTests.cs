@@ -1,6 +1,7 @@
 
 namespace Faslinq.Tests;
 
+[TestClass()]
 public class PositionCollectionTests
 {
     private TestContext? testContextInstance;
@@ -22,7 +23,7 @@ public class PositionCollectionTests
         positions = new PositionCollection(indices[0], indices[^1]);
 
         positions?.Should().NotBeNull();
-        positions!.Count.Should().NotBe(0);
+        positions!.Count.Should().Be(value[0] < value[^1] ? 1 : 0);
     }
 
     [DataTestMethod]
@@ -35,13 +36,17 @@ public class PositionCollectionTests
         positions = new PositionCollection(values[0], values[^1]);
 
         positions?.Should().NotBeNull();
-        positions!.Count.Should().NotBe(0);
+        positions!.Count.Should().Be(values[0] < values[^1] ? 1 : 0);
     }
 
     [DataTestMethod]
-    [DataRow(new int[] { 1, 2, 3 })]
-    [DataRow(new int[] { 1, 2, 4 })]
-    [DataRow(new int[] { 1, 3, 4 })]
+    // { start, end (exclusive), index to add, expected range count }
+    [DataRow(new int[] { 1, 2, 2, 1 })]
+    [DataRow(new int[] { 1, 2, 3, 2 })]
+    [DataRow(new int[] { 1, 3, 4, 2 })]
+    [DataRow(new int[] { 2, 4, 1, 1 })]
+    [DataRow(new int[] { 2, 4, 3, 1 })]
+    [DataRow(new int[] { 1, 3, 0, 1 })]
     public void AddIntTests(int[] values)
     {
         PositionCollection? positions = default;
@@ -53,16 +58,17 @@ public class PositionCollectionTests
         positions?.Should().NotBeNull();
         positions!.Count.Should().NotBe(0);
 
-        var first = new Index(values[1] + 1);
-        var expected = first.Equals(values[2]) ? 1 : 2;
-
-        positions!.Count.Should().Be(expected);
+        positions!.Count.Should().Be(values[3]);
     }
 
     [DataTestMethod]
-    [DataRow(new int[] { 1, 2, 3 })]
-    [DataRow(new int[] { 1, 2, 4 })]
-    [DataRow(new int[] { 1, 3, 4 })]
+    // { start, end (exclusive), index to add, expected range count }
+    [DataRow(new int[] { 1, 2, 2, 1 })]
+    [DataRow(new int[] { 1, 2, 3, 2 })]
+    [DataRow(new int[] { 1, 3, 4, 2 })]
+    [DataRow(new int[] { 2, 4, 1, 1 })]
+    [DataRow(new int[] { 2, 4, 3, 1 })]
+    [DataRow(new int[] { 1, 3, 0, 1 })]
     public void AddIndexTests(int[] values)
     {
         PositionCollection? positions = default;
@@ -76,16 +82,16 @@ public class PositionCollectionTests
         positions?.Should().NotBeNull();
         positions!.Count.Should().NotBe(0);
 
-        var first = new Index(indices[1].Value + 1);
-        var expected = first.Equals(indices[2]) ? 1 : 2;
-
-        positions!.Count.Should().Be(expected);
+        positions!.Count.Should().Be(values[3]);
     }
 
     [DataTestMethod]
-    [DataRow(new int[] { 1, 2, 1 })]
-    [DataRow(new int[] { 1, 2, 2 })]
-    [DataRow(new int[] { 1, 3, 2 })]
+    // { start, end (exclusive), index to remove, expected range count }
+    [DataRow(new int[] { 1, 3, 1, 1 })]
+    [DataRow(new int[] { 1, 3, 2, 1 })]
+    [DataRow(new int[] { 1, 4, 2, 2 })]
+    [DataRow(new int[] { 1, 2, 1, 0 })]
+    [DataRow(new int[] { 1, 3, 3, 1 })]
     public void RemoveIntTests(int[] values)
     {
         PositionCollection? positions = default;
@@ -95,21 +101,16 @@ public class PositionCollectionTests
         positions.Remove(values[2]);
 
         positions?.Should().NotBeNull();
-        positions!.Count.Should().NotBe(0);
-
-        var first = values[0];
-        var second = values[1];
-        var third = values[2];
-
-        var expected = first < third && third < second ? 2 : 1;
-
-        positions!.Count.Should().Be(expected);
+        positions!.Count.Should().Be(values[3]);
     }
 
     [DataTestMethod]
-    [DataRow(new int[] { 1, 2, 1 })]
-    [DataRow(new int[] { 1, 2, 2 })]
-    [DataRow(new int[] { 1, 3, 2 })]
+    // { start, end (exclusive), index to remove, expected range count }
+    [DataRow(new int[] { 1, 3, 1, 1 })]
+    [DataRow(new int[] { 1, 3, 2, 1 })]
+    [DataRow(new int[] { 1, 4, 2, 2 })]
+    [DataRow(new int[] { 1, 2, 1, 0 })]
+    [DataRow(new int[] { 1, 3, 3, 1 })]
     public void RemoveIndexTests(int[] values)
     {
         PositionCollection? positions = default;
@@ -121,15 +122,7 @@ public class PositionCollectionTests
         positions.Remove(indices[2]);
 
         positions?.Should().NotBeNull();
-        positions!.Count.Should().NotBe(0);
-
-        var first = indices[0];
-        var second = indices[1];
-        var third = indices[2];
-
-        var expected = first.Value < third.Value && third.Value < second.Value ? 2 : 1;
-
-        positions!.Count.Should().Be(expected);
+        positions!.Count.Should().Be(values[3]);
     }
 
     [DataTestMethod]
@@ -143,7 +136,7 @@ public class PositionCollectionTests
 
         var indices = values.Select(i => new Index(i)).ToArray();
 
-        positions = new PositionCollection(indices[2], indices[2]);
+        positions = new PositionCollection(indices[2], indices[2].Value + 1);
 
         Index result = default;
 
@@ -179,7 +172,7 @@ public class PositionCollectionTests
     {
         PositionCollection? positions = default;
 
-        positions = new PositionCollection(values[2], values[2]);
+        positions = new PositionCollection(values[2], values[2] + 1);
 
         int result = default;
 
