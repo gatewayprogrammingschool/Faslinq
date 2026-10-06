@@ -12,7 +12,7 @@ public struct ArrayEnumerator<TType> : IEnumerator<TType?>
     ///
     /// </summary>
     public TType? Current
-        => _index > -1
+        => _index > -1 && _index < _array.Length
             ? _array[_index]
             : default;
 
@@ -51,14 +51,12 @@ public struct ArrayEnumerator<TType> : IEnumerator<TType?>
     /// <returns></returns>
     public bool MoveNext()
     {
-        _index++;
-        if (_index >= _array.Length)
+        if (_index < _array.Length)
         {
-            _index = _array.Length - 1;
-            return false;
+            _index++;
         }
 
-        return true;
+        return _index < _array.Length;
     }
 
     /// <summary>

@@ -10,14 +10,25 @@ public record PositionCollection : IList<Range>, IList<Index>
     private readonly SortedList<int, Range> _ranges = new();
 
     /// <summary>
-    /// 
+    /// Creates an empty collection.
     /// </summary>
-    /// <param name="start"></param>
-    /// <param name="end"></param>
+    public PositionCollection()
+    {
+    }
+
+    /// <summary>
+    /// Creates a collection holding the positions in <paramref name="start"/>..<paramref name="end"/>.
+    /// </summary>
+    /// <param name="start">First position (inclusive).</param>
+    /// <param name="end">End position (exclusive), as with <see cref="Range"/>.</param>
     public PositionCollection(Index start, Index end)
     {
         _currentRange = new Range(start, end);
-        AddInternal(_currentRange);
+
+        if (end.Value > start.Value)
+        {
+            AddInternal(_currentRange);
+        }
     }
 
     /// <summary>
@@ -85,35 +96,37 @@ public record PositionCollection : IList<Range>, IList<Index>
     /// <returns></returns>
     public bool Remove(Index item)
     {
-        var result = false;
-        var range = _ranges.Find(item.Value);
+        var value = item.Value;
+        Range? found = null;
 
-        if (!range.Equals(default))
+        foreach (var range in _ranges.Values)
         {
-            result = true;
-            Remove(range);
-            var isStart = range.Start.Equals(item);
-            var isEnd = range.End.Equals(item);
-            if (!isStart && !isEnd)
+            if (range.Contains(value))
             {
-                AddRangeInternal(range.Start, item.Value - 1);
-                AddRangeInternal(item.Value + 1, range.End);
-            }
-            else if (isStart && isEnd)
-            {
-                // Remove the range altogether.
-            }
-            else if (isStart)
-            {
-                AddRangeInternal(item.Value + 1, range.End);
-            }
-            else
-            {
-                AddRangeInternal(range.Start, item.Value - 1);
+                found = range;
+                break;
             }
         }
 
-        return result;
+        if (found is not { } containing)
+        {
+            return false;
+        }
+
+        // Ranges are end-exclusive: split around the removed position.
+        _ranges.Remove(containing.Start.Value);
+
+        if (containing.Start.Value < value)
+        {
+            AddRangeInternal(containing.Start, value);
+        }
+
+        if (value + 1 < containing.End.Value)
+        {
+            AddRangeInternal(value + 1, containing.End);
+        }
+
+        return true;
     }
 
     IEnumerator<Index> IEnumerable<Index>.GetEnumerator()
@@ -274,47 +287,66 @@ public record PositionCollection : IList<Range>, IList<Index>
     /// </summary>
     /// <param name="index"></param>
     /// <returns></returns>
-    /// <exception cref="IndexOutOfRangeException"></exception>
+    /// <exception cref="ArgumentOutOfRangeException"></exception>
     public Range Add(int index)
     {
-        if (index is <= 0)
+        if (index < 0)
         {
-            throw new IndexOutOfRangeException("Must be greater than or equal to zero.");
+            throw new ArgumentOutOfRangeException(nameof(index), index, "Must be greater than or equal to zero.");
         }
 
-        if (_ranges.Any(index) || _currentRange.Contains(index))
+        // Ascending adds, as PositionsWhere makes, only touch the last range.
+        if (_ranges.Count > 0)
         {
-            return _currentRange = _ranges.Find(index);
+            var last = _ranges.Values[_ranges.Count - 1];
+
+            if (index > last.End.Value)
+            {
+                return AddRangeInternal(index, index + 1);
+            }
+
+            if (index == last.End.Value)
+            {
+                _ranges.RemoveAt(_ranges.Count - 1);
+                return AddRangeInternal(last.Start, index + 1);
+            }
         }
 
-        if (index == End.Value + 1)
+        Range? before = null;
+        Range? after = null;
+
+        foreach (var range in _ranges.Values)
         {
-            return _currentRange = AddIndexInternal(Start, new Index(index));
+            if (range.Contains(index))
+            {
+                return _currentRange = range;
+            }
+
+            if (range.End.Value == index)
+            {
+                before = range;
+            }
+            else if (range.Start.Value == index + 1)
+            {
+                after = range;
+            }
         }
 
-        if (index == Start.Value - 1)
+        var start = index;
+        var end = index + 1;
+
+        if (before is { } left)
         {
-            return _currentRange = AddIndexInternal(new Index(index), End);
+            _ranges.Remove(left.Start.Value);
+            start = left.Start.Value;
         }
 
-        return _currentRange = AddRangeInternal(index, index);
-    }
-
-    private Range AddIndexInternal(Index index)
-    {
-        var range = _ranges.Find(index.Value);
-
-        if (range.Equals(default))
+        if (after is { } right)
         {
-            return AddIndexInternal(index, index);
+            _ranges.Remove(right.Start.Value);
+            end = right.End.Value;
         }
 
-        return range;
-    }
-
-    private Range AddIndexInternal(Index start, Index end)
-    {
-        _ranges.Remove(start.Value);
         return AddRangeInternal(start, end);
     }
 

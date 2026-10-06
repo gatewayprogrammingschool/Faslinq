@@ -49,7 +49,7 @@ public class ListExtensionsTests
         ListExtensions.First(anonymous, (a, i) => true)!.Should().Be(toSelect ?? default);
 
         Action a = () => ListExtensions.First(anonymous, (a, i) => false);
-        a.Should().Throw<IndexOutOfRangeException>();
+        a.Should().Throw<InvalidOperationException>();
     }
 
     [DataTestMethod]
@@ -61,7 +61,7 @@ public class ListExtensionsTests
         ListExtensions.Last(anonymous, (a, i) => true)!.Should().Be(toSelect ?? default);
 
         Action a = () => ListExtensions.Last(anonymous, (a, i) => false);
-        a.Should().Throw<IndexOutOfRangeException>();
+        a.Should().Throw<InvalidOperationException>();
     }
 
     [DataTestMethod]
@@ -736,7 +736,7 @@ public class ListExtensionsTests
 //        ListExtensions.First(anonymous, (a, i) => true)!.Should().Be(toSelect ?? default);
 
 //        Action a = () => ListExtensions.First(anonymous, (a, i) => false);
-//        a.Should().Throw<IndexOutOfRangeException>();
+//        a.Should().Throw<InvalidOperationException>();
 //    }
 
 //    [DataTestMethod]
@@ -749,7 +749,7 @@ public class ListExtensionsTests
 //        ListExtensions.Last(anonymous, (a, i) => true)!.Should().Be(toSelect ?? default);
 
 //        Action a = () => ListExtensions.Last(anonymous, (a, i) => false);
-//        a.Should().Throw<IndexOutOfRangeException>();
+//        a.Should().Throw<InvalidOperationException>();
 //    }
 
 //    [DataTestMethod]

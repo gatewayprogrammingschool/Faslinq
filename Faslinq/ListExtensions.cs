@@ -64,11 +64,6 @@ public static partial class ListExtensions
         Func<TData, int, bool> query
     )
     {
-        if (source.Count == 0)
-        {
-            return false;
-        }
-
         for (var index = 0; index < source.Count; index++)
         {
             var item = source[index];
@@ -95,7 +90,7 @@ public static partial class ListExtensions
     /// <param name="query"></param>
     /// <typeparam name="TData"></typeparam>
     /// <returns></returns>
-    /// <exception cref="IndexOutOfRangeException"></exception>
+    /// <exception cref="InvalidOperationException"></exception>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TData First<TData>(
         this List<TData> source,
@@ -104,7 +99,7 @@ public static partial class ListExtensions
     {
         if (source.Count == 0)
         {
-            throw new IndexOutOfRangeException("List does not contain a matching value.");
+            throw new InvalidOperationException("Sequence contains no elements.");
         }
 
         if (query is null)
@@ -120,7 +115,7 @@ public static partial class ListExtensions
             }
         }
 
-        throw new IndexOutOfRangeException("List does not contain a matching value.");
+        throw new InvalidOperationException("Sequence contains no matching element.");
     }
 
     /// <summary>
@@ -174,7 +169,7 @@ public static partial class ListExtensions
     /// <param name="query"></param>
     /// <typeparam name="TData"></typeparam>
     /// <returns></returns>
-    /// <exception cref="IndexOutOfRangeException"></exception>
+    /// <exception cref="InvalidOperationException"></exception>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TData Last<TData>(
         this List<TData> source,
@@ -183,7 +178,7 @@ public static partial class ListExtensions
     {
         if (source.Count == 0)
         {
-            throw new IndexOutOfRangeException("List does not contain a matching value.");
+            throw new InvalidOperationException("Sequence contains no elements.");
         }
 
         if (query is null)
@@ -199,7 +194,7 @@ public static partial class ListExtensions
             }
         }
 
-        throw new IndexOutOfRangeException("List does not contain a matching value.");
+        throw new InvalidOperationException("Sequence contains no matching element.");
     }
 
     /// <summary>
@@ -262,7 +257,7 @@ public static partial class ListExtensions
     {
         if (source.Count == 0)
         {
-            return source;
+            return new List<TData>();
         }
 
         return source.WhereTake(query, source.Count);
@@ -285,7 +280,7 @@ public static partial class ListExtensions
     {
         if (source.Count == 0)
         {
-            return source;
+            return new List<TData>();
         }
 
         if (takeCount < 1)
@@ -327,7 +322,7 @@ public static partial class ListExtensions
     {
         if (source.Count == 0)
         {
-            return source;
+            return new List<TData>();
         }
 
         if (takeCount < 1)
@@ -344,6 +339,8 @@ public static partial class ListExtensions
             }
         }
 
+        // Collected back to front; restore source order.
+        result.Reverse();
         return result;
     }
 }
@@ -442,7 +439,8 @@ public static partial class ListExtensions
             takeCount = 0;
         }
 
-        List<TResult> result = new();
+        takeCount = Math.Min(takeCount, source.Count);
+        List<TResult> result = new(takeCount);
         for (var i = source.Count - takeCount; i < source.Count; i++)
         {
             result.Add(selector(source[i]));
@@ -556,6 +554,8 @@ public static partial class ListExtensions
             }
         }
 
+        // Collected back to front; restore source order.
+        result.Reverse();
         return result;
     }
 }
@@ -581,7 +581,7 @@ public static partial class ListExtensions
     {
         if (source.Count == 0)
         {
-            return source;
+            return new List<TData>();
         }
 
         if (takeCount < 1)
@@ -613,7 +613,7 @@ public static partial class ListExtensions
     {
         if (source.Count == 0)
         {
-            return source;
+            return new List<TData>();
         }
 
         if (takeCount < 1)
@@ -621,7 +621,8 @@ public static partial class ListExtensions
             takeCount = 0;
         }
 
-        List<TData> result = new();
+        takeCount = Math.Min(takeCount, source.Count);
+        List<TData> result = new(takeCount);
         for (var i = source.Count - takeCount; i < source.Count; i++)
         {
             result.Add(source[i]);
@@ -642,25 +643,30 @@ public static partial class ListExtensions
     public static IEnumerable<TData> TakeLast<TData>(
         this IEnumerable<TData> source,
         int takeCount)
+        => TakeLastCore(source, takeCount);
+#endif
+
+    // Backs the netstandard2.0 TakeLast; compiled everywhere so it can be tested.
+    internal static List<TData> TakeLastCore<TData>(IEnumerable<TData> source, int takeCount)
     {
-        var count = source.Count();
-        if (count == 0) return source;
-
-        if (takeCount < 1) { takeCount = 0; }
-
-        List<TData> result = new();
-        foreach (var item in source)
+        if (takeCount < 1)
         {
-            result.Add(item);
-            if(result.Count >= takeCount)
-            {
-                break;
-            }
+            return new List<TData>();
         }
 
-        return result;
+        var window = new Queue<TData>(takeCount);
+        foreach (var item in source)
+        {
+            if (window.Count == takeCount)
+            {
+                window.Dequeue();
+            }
+
+            window.Enqueue(item);
+        }
+
+        return new List<TData>(window);
     }
-#endif
 }
 
 #endregion Take / TakeLast
@@ -702,37 +708,12 @@ public static partial class ListExtensions
     {
         if (source.Count == 0)
         {
-            return source;
+            return new List<TData>();
         }
 
-        if (takeCount < 1)
-        {
-            takeCount = 0;
-        }
+        var indices = SortIndices(source, comparison, false);
 
-        var indices = Enumerable.Range(0, source.Count)
-            .ToArray();
-        IComparer<TKey> comparer = Comparer<TKey>.Default;
-        var keys = source.Select(comparison)
-            .ToArray();
-        ArrayExtensions.QuickSort(
-            0,
-            source.Count - 1,
-            comparer,
-            keys,
-            indices
-        );
-
-        var result = new List<TData>();
-
-        var limit = Math.Min(indices.Length, takeCount);
-
-        for (var i = 0; i < limit; ++i)
-        {
-            result.Add(source[indices[i]]);
-        }
-
-        return result;
+        return Pick(source, indices, 0, Math.Min(Math.Max(takeCount, 0), indices.Length));
     }
 
     /// <summary>
@@ -753,32 +734,32 @@ public static partial class ListExtensions
     {
         if (source.Count == 0)
         {
-            return source;
+            return new List<TData>();
         }
 
-        if (takeCount < 1)
+        var indices = SortIndices(source, comparison, false);
+        var count = Math.Min(Math.Max(takeCount, 0), indices.Length);
+
+        return Pick(source, indices, indices.Length - count, count);
+    }
+
+    private static int[] SortIndices<TData, TKey>(List<TData> source, Func<TData, TKey> comparison, bool descending)
+    {
+        var keys = new TKey[source.Count];
+        for (var i = 0; i < keys.Length; i++)
         {
-            takeCount = 0;
+            keys[i] = comparison(source[i]);
         }
 
-        var indices = Enumerable.Range(0, source.Count)
-            .ToArray();
-        IComparer<TKey> comparer = Comparer<TKey>.Default;
-        var keys = source.Select(comparison)
-            .ToArray();
-        ArrayExtensions.QuickSort(
-            0,
-            source.Count - 1,
-            comparer,
-            keys,
-            indices
-        );
+        return ArrayExtensions.SortIndices(keys, descending);
+    }
 
-        var result = new List<TData>();
-
-        for (var i = source.Count - takeCount; i < source.Count; i++)
+    private static List<TData> Pick<TData>(List<TData> source, int[] indices, int start, int count)
+    {
+        var result = new List<TData>(count);
+        for (var i = 0; i < count; i++)
         {
-            result.Add(source[indices[i]]);
+            result.Add(source[indices[start + i]]);
         }
 
         return result;
@@ -824,38 +805,13 @@ public static partial class ListExtensions
     {
         if (source.Count == 0)
         {
-            return source;
+            return new List<TData>();
         }
 
-        if (takeCount < 1)
-        {
-            takeCount = 0;
-        }
+        var indices = SortIndices(source, comparison, true);
+        var count = Math.Min(Math.Max(takeCount, 0), indices.Length);
 
-        var indices = Enumerable.Range(0, source.Count)
-            .ToArray();
-        IComparer<TKey> comparer = Comparer<TKey>.Default;
-        var keys = source.Select(comparison)
-            .ToArray();
-        ArrayExtensions.QuickSort(
-            0,
-            source.Count - 1,
-            comparer,
-            keys,
-            indices
-        );
-
-        var result = new List<TData>();
-
-        var start = 0;
-        var end = takeCount;
-
-        for (var i = start; i < end; ++i)
-        {
-            result.Add(source[indices[i]]);
-        }
-
-        return result;
+        return Pick(source, indices, indices.Length - count, count);
     }
 
     /// <summary>
@@ -876,38 +832,12 @@ public static partial class ListExtensions
     {
         if (source.Count == 0)
         {
-            return source;
+            return new List<TData>();
         }
 
-        if (takeCount < 1)
-        {
-            takeCount = 0;
-        }
+        var indices = SortIndices(source, comparison, true);
 
-        var indices = Enumerable.Range(0, source.Count)
-            .ToArray();
-        IComparer<TKey> comparer = Comparer<TKey>.Default;
-        var keys = source.Select(comparison)
-            .ToArray();
-        ArrayExtensions.QuickSort(
-            0,
-            source.Count - 1,
-            comparer,
-            keys,
-            indices
-        );
-
-        var result = new List<TData>();
-
-        var start = indices.Length - 1;
-        var end = indices.Length - takeCount;
-
-        for (var i = start; i >= end; --i)
-        {
-            result.Add(source[indices[i]]);
-        }
-
-        return result;
+        return Pick(source, indices, 0, Math.Min(Math.Max(takeCount, 0), indices.Length));
     }
 }
 
@@ -930,7 +860,7 @@ public static partial class ListExtensions
         Func<TData, int, bool> comparison
     )
     {
-        var positions = new PositionCollection(0, 0);
+        var positions = new PositionCollection();
 
         if (source.Count == 0)
         {

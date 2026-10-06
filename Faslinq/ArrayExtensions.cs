@@ -63,11 +63,6 @@ public static partial class ArrayExtensions
         Func<TData, int, bool> query
     )
     {
-        if (source.Length == 0)
-        {
-            return false;
-        }
-
         for (var index = 0; index < source.Length; index++)
         {
             var item = source[index];
@@ -94,7 +89,7 @@ public static partial class ArrayExtensions
     /// <param name="query"></param>
     /// <typeparam name="TData"></typeparam>
     /// <returns></returns>
-    /// <exception cref="IndexOutOfRangeException"></exception>
+    /// <exception cref="InvalidOperationException"></exception>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TData First<TData>(
         this TData[] source,
@@ -103,7 +98,7 @@ public static partial class ArrayExtensions
     {
         if (source is null or { Length: 0 })
         {
-            throw new IndexOutOfRangeException("List does not contain a matching value.");
+            throw new InvalidOperationException("Sequence contains no elements.");
         }
 
         if (query is null)
@@ -119,7 +114,7 @@ public static partial class ArrayExtensions
             }
         }
 
-        throw new IndexOutOfRangeException("List does not contain a matching value.");
+        throw new InvalidOperationException("Sequence contains no matching element.");
     }
 
     /// <summary>
@@ -174,7 +169,7 @@ public static partial class ArrayExtensions
     /// <param name="query"></param>
     /// <typeparam name="TData"></typeparam>
     /// <returns></returns>
-    /// <exception cref="IndexOutOfRangeException"></exception>
+    /// <exception cref="InvalidOperationException"></exception>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TData Last<TData>(
         this TData[] source,
@@ -183,7 +178,7 @@ public static partial class ArrayExtensions
     {
         if (source is null or { Length: 0 })
         {
-            throw new IndexOutOfRangeException("List does not contain a matching value.");
+            throw new InvalidOperationException("Sequence contains no elements.");
         }
 
         if (query is null)
@@ -199,7 +194,7 @@ public static partial class ArrayExtensions
             }
         }
 
-        throw new IndexOutOfRangeException("List does not contain a matching value.");
+        throw new InvalidOperationException("Sequence contains no matching element.");
     }
 
     /// <summary>
@@ -296,7 +291,7 @@ public static partial class ArrayExtensions
             }
         }
 
-        return result;
+        return Slice(result, 0, takeIndex);
     }
 
     /// <summary>
@@ -324,17 +319,19 @@ public static partial class ArrayExtensions
             takeCount = 0;
         }
 
-        var takeIndex = 0;
+        // Fill from the end so the result keeps source order.
+        takeCount = Math.Min(takeCount, source.Length);
+        var takeIndex = takeCount;
         var result = new TData[takeCount];
-        for (var i = source.Length - 1; i >= 0 && takeIndex < takeCount; --i)
+        for (var i = source.Length - 1; i >= 0 && takeIndex > 0; --i)
         {
             if (query(source[i], i))
             {
-                result[takeIndex++] = source[i];
+                result[--takeIndex] = source[i];
             }
         }
 
-        return result;
+        return Slice(result, takeIndex, takeCount - takeIndex);
     }
 }
 
@@ -385,11 +382,11 @@ public static partial class ArrayExtensions
             takeCount = 0;
         }
 
-        var takeIndex = 0;
+        takeCount = Math.Min(takeCount, source.Length);
         var result = new TResult[takeCount];
-        for (var i = 0; i < source.Length && takeIndex < takeCount; i++)
+        for (var i = 0; i < takeCount; i++)
         {
-            result[takeIndex++] = selector(source[i]);
+            result[i] = selector(source[i]);
         }
 
         return result;
@@ -421,9 +418,10 @@ public static partial class ArrayExtensions
             takeCount = 0;
         }
 
+        takeCount = Math.Min(takeCount, source.Length);
         var takeIndex = 0;
         var result = new TResult[takeCount];
-        for (var i = source.Length - takeCount; i < source.Length && takeIndex < takeCount; i++)
+        for (var i = source.Length - takeCount; i < source.Length; i++)
         {
             result[takeIndex++] = selector(source[i]);
         }
@@ -531,23 +529,19 @@ public static partial class ArrayExtensions
             takeCount = 0;
         }
 
-        var takeIndex = 0;
+        // Fill from the end so the result keeps source order.
+        takeCount = Math.Min(takeCount, source.Length);
+        var takeIndex = takeCount;
         var result = new TResult[takeCount];
-        for (var i = source.Length - 1; i >= 0 && takeIndex < takeCount; --i)
+        for (var i = source.Length - 1; i >= 0 && takeIndex > 0; --i)
         {
             if (query(source[i], i))
             {
-                result[takeIndex++] = selector(source[i]);
+                result[--takeIndex] = selector(source[i]);
             }
         }
 
-#if NETSTANDARD2_0
-        TResult[] returnArray = new TResult[takeIndex];
-        Array.ConstrainedCopy(result, 0, returnArray, 0, takeIndex);
-        return returnArray;
-#else
-        return result[..takeIndex];
-#endif
+        return Slice(result, takeIndex, takeCount - takeIndex);
     }
 
 #if !NETSTANDARD2_0
@@ -638,17 +632,19 @@ public static partial class ArrayExtensions
             takeCount = 0;
         }
 
-        var takeIndex = 0;
+        // Fill from the end so the result keeps source order.
+        takeCount = Math.Min(takeCount, source.Length);
+        var takeIndex = takeCount;
         var result = new TResult[takeCount];
-        for (var i = source.Length - 1; i >= 0 && takeIndex < takeCount; --i)
+        for (var i = source.Length - 1; i >= 0 && takeIndex > 0; --i)
         {
             if (query(source[i], i))
             {
-                result[takeIndex++] = selector(source[i]);
+                result[--takeIndex] = selector(source[i]);
             }
         }
 
-        return result.AsSpan(..takeIndex);
+        return result.AsSpan(takeIndex);
     }
 #endif
 }
@@ -730,34 +726,9 @@ public static partial class ArrayExtensions
             return Array.Empty<TData>();
         }
 
-        if (takeCount < 1)
-        {
-            takeCount = 0;
-        }
+        var indices = SortIndices(source.Select(comparison), false);
 
-        var indices = Enumerable.Range(0, source.Length)
-            .ToArray();
-        IComparer<TKey> comparer = Comparer<TKey>.Default;
-        var keys = source.Select(comparison)
-            .ToArray();
-        QuickSort(
-            0,
-            source.Length - 1,
-            comparer,
-            keys,
-            indices
-        );
-
-        var limit = Math.Min(indices.Length, takeCount);
-        var result = new TData[limit];
-        var takeIndex = 0;
-
-        for (var i = 0; i < limit; ++i)
-        {
-            result[takeIndex++] = source[indices[i]];
-        }
-
-        return result.ToArray();
+        return Pick(source, indices, 0, Math.Min(Math.Max(takeCount, 0), indices.Length));
     }
 
     /// <summary>
@@ -781,36 +752,10 @@ public static partial class ArrayExtensions
             return Array.Empty<TData>();
         }
 
-        if (takeCount < 1)
-        {
-            takeCount = 0;
-        }
+        var indices = SortIndices(source.Select(comparison), false);
+        var count = Math.Min(Math.Max(takeCount, 0), indices.Length);
 
-        var indices = Enumerable.Range(0, source.Length)
-            .ToArray();
-
-        IComparer<TKey> comparer = Comparer<TKey>.Default;
-
-        var keys = source.Select(comparison)
-            .ToArray();
-
-        QuickSort(
-            0,
-            source.Length - 1,
-            comparer,
-            keys,
-            indices
-            );
-
-        var result = new TData[takeCount];
-        var takeIndex = 0;
-
-        for (var i = source.Length - takeCount; i < source.Length && takeIndex < takeCount; i++)
-        {
-            result[takeIndex++] = source[indices[i]];
-        }
-
-        return result;
+        return Pick(source, indices, indices.Length - count, count);
     }
 }
 
@@ -856,39 +801,10 @@ public static partial class ArrayExtensions
             return Array.Empty<TData>();
         }
 
-        if (takeCount < 1)
-        {
-            takeCount = 0;
-        }
+        var indices = SortIndices(source.Select(comparison), true);
+        var count = Math.Min(Math.Max(takeCount, 0), indices.Length);
 
-        var indices = Enumerable.Range(0, source.Length)
-            .ToArray();
-
-        IComparer<TKey> comparer = Comparer<TKey>.Default;
-
-        var keys = source.Select(comparison)
-            .ToArray();
-
-        QuickSort(
-            0,
-            source.Length - 1,
-            comparer,
-            keys,
-            indices
-        );
-
-        var result = new TData[takeCount];
-        var takeIndex = 0;
-
-        const int start = 0;
-        var end = takeCount;
-
-        for (var i = start; i < end && takeIndex < takeCount; ++i)
-        {
-            result[takeIndex++] = source[indices[i]];
-        }
-
-        return result;
+        return Pick(source, indices, indices.Length - count, count);
     }
 
     /// <summary>
@@ -912,39 +828,9 @@ public static partial class ArrayExtensions
             return Array.Empty<TData>();
         }
 
-        if (takeCount < 1)
-        {
-            takeCount = 0;
-        }
+        var indices = SortIndices(source.Select(comparison), true);
 
-        var indices = Enumerable.Range(0, source.Length)
-            .ToArray();
-
-        IComparer<TKey> comparer = Comparer<TKey>.Default;
-
-        var keys = source.Select(comparison)
-            .ToArray();
-
-        QuickSort(
-            0,
-            source.Length - 1,
-            comparer,
-            keys,
-            indices
-        );
-
-        var result = new TData[takeCount];
-        var takeIndex = 0;
-
-        var start = indices.Length - 1;
-        var end = indices.Length - takeCount;
-
-        for (var i = start; i >= end && takeIndex < takeCount; --i)
-        {
-            result[takeIndex++] = source[indices[i]];
-        }
-
-        return result;
+        return Pick(source, indices, 0, Math.Min(Math.Max(takeCount, 0), indices.Length));
     }
 }
 
@@ -954,6 +840,59 @@ public static partial class ArrayExtensions
 
 public static partial class ArrayExtensions
 {
+    /// <summary>
+    /// Returns the positions of <paramref name="keys"/> in sorted order. Equal keys keep
+    /// their original relative order, as System.Linq's OrderBy and OrderByDescending do.
+    /// </summary>
+    internal static int[] SortIndices<TKey>(TKey[] keys, bool descending)
+    {
+        var indices = new int[keys.Length];
+        for (var i = 0; i < indices.Length; i++)
+        {
+            indices[i] = i;
+        }
+
+        if (indices.Length > 1)
+        {
+            QuickSort(0, indices.Length - 1, Comparer<TKey>.Default, keys, indices, descending: descending);
+        }
+
+        return indices;
+    }
+
+    private static TData[] Pick<TData>(TData[] source, int[] indices, int start, int count)
+    {
+        var result = new TData[count];
+        for (var i = 0; i < count; i++)
+        {
+            result[i] = source[indices[start + i]];
+        }
+
+        return result;
+    }
+
+    private static T[] Slice<T>(T[] array, int start, int count)
+    {
+        if (start == 0 && count == array.Length)
+        {
+            return array;
+        }
+
+        var result = new T[count];
+        Array.Copy(array, start, result, 0, count);
+        return result;
+    }
+
+    // Ties are broken by position, which makes the sort stable.
+    private static int CompareAt<TKey>(IComparer<TKey> keyComparer, TKey[] keys, int x, int y, bool descending)
+    {
+        var result = descending
+            ? keyComparer.Compare(keys[y], keys[x])
+            : keyComparer.Compare(keys[x], keys[y]);
+
+        return result != 0 ? result : x.CompareTo(y);
+    }
+
     // Source: https://github.com/dotnet/runtime/blob/44b44501c76c46bd79ee52b7d9a9d8a4957fc85f/src/libraries/System.Linq.Parallel/src/System/Linq/Parallel/Utils/Sorting.cs#L585
     //---------------------------------------------------------------------------------------
     // Sort algorithm used to sort key/value lists. After this has been called, the indices
@@ -966,7 +905,8 @@ public static partial class ArrayExtensions
         IComparer<TKey> keyComparer,
         TKey[] keys,
         int[] indices,
-        int depth = 0
+        int depth = 0,
+        bool descending = false
     )
     {
         if (keys == null)
@@ -1066,16 +1006,15 @@ public static partial class ArrayExtensions
             var i = left;
             var j = right;
             var pivot = indices[i + ((j - i) >> 1)];
-            var pivotKey = keys[pivot];
 
             do
             {
-                while (keyComparer.Compare(keys[indices[i]], pivotKey) < 0)
+                while (CompareAt(keyComparer, keys, indices[i], pivot, descending) < 0)
                 {
                     i++;
                 }
 
-                while (keyComparer.Compare(keys[indices[j]], pivotKey) > 0)
+                while (CompareAt(keyComparer, keys, indices[j], pivot, descending) > 0)
                 {
                     j--;
                 }
@@ -1108,7 +1047,8 @@ public static partial class ArrayExtensions
                         keyComparer,
                         keys,
                         indices,
-                        depth + 1
+                        depth + 1,
+                        descending
                     );
                 }
 
@@ -1124,7 +1064,8 @@ public static partial class ArrayExtensions
                         keyComparer,
                         keys,
                         indices,
-                        depth + 1
+                        depth + 1,
+                        descending
                     );
                 }
 
@@ -1154,7 +1095,7 @@ public static partial class ArrayExtensions
         Func<TData, int, bool> comparison
     )
     {
-        var positions = new PositionCollection(0, 0);
+        var positions = new PositionCollection();
 
         if (source is null or { Length: 0})
         {

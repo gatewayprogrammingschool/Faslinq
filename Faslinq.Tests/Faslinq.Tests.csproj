@@ -205,6 +205,12 @@
         </PackageReference>
     </ItemGroup>
 
+    <!-- BenchmarkTests use GenerateTestRecords* helpers that BenchmarkBase no longer provides. -->
+    <ItemGroup>
+        <Compile Remove="BenchmarkTests\**" />
+        <None Include="BenchmarkTests\**" />
+    </ItemGroup>
+
     <ItemGroup>
         <ProjectReference Include="..\Faslinq.Benchmarks\Faslinq.Benchmarks.csproj" />
         <ProjectReference Include="..\Faslinq\Faslinq.csproj" />
