@@ -85,7 +85,7 @@ public abstract class BenchmarkBase
             1 => Generated1 = data,
             250 => Generated250 = data,
             5000 => Generated5000 = data,
-            10000 => Generated100000 = data,
+            100000 => Generated100000 = data,
             _ => null,
         };
 
@@ -94,7 +94,7 @@ public abstract class BenchmarkBase
             1 => FirstGenerated1 = Generated1!.First(),
             250 => FirstGenerated250 = Generated250!.First(),
             5000 => FirstGenerated5000 = Generated5000!.First(),
-            10000 => FirstGenerated100000 = Generated100000!.First(),
+            100000 => FirstGenerated100000 = Generated100000!.First(),
             _ => default,
         };
 
@@ -103,7 +103,7 @@ public abstract class BenchmarkBase
             1 => LastGenerated1 = Generated1!.Last(),
             250 => LastGenerated250 = Generated250!.Last(),
             5000 => LastGenerated5000 = Generated5000!.Last(),
-            10000 => LastGenerated100000 = Generated100000!.Last(),
+            100000 => LastGenerated100000 = Generated100000!.Last(),
             _ => default,
         };
 
@@ -442,6 +442,24 @@ public abstract class BenchmarkBase
 
     public static IEnumerable<object[]> GenerateTestList100000()
         => GenerateTestArray(Tests.List, 100000);
+
+    public static IEnumerable<object[]> GenerateTestRecords1()
+        => GenerateTestRecords(1);
+
+    public static IEnumerable<object[]> GenerateTestRecords250()
+        => GenerateTestRecords(250);
+
+    public static IEnumerable<object[]> GenerateTestRecords5000()
+        => GenerateTestRecords(5000);
+
+    public static IEnumerable<object[]> GenerateTestRecords100000()
+        => GenerateTestRecords(100000);
+
+    // MSTest DynamicData rows: a single object[] argument whose only element is the records.
+    private static IEnumerable<object[]> GenerateTestRecords(int count)
+    {
+        yield return new object[] { new object[] { GenerateRecords(Tests.Array, count) } };
+    }
 
     protected static IEnumerable<object[]> GenerateTestArray(Tests test, int count)
     {
