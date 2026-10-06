@@ -1,91 +1,32 @@
-﻿// ReSharper disable InvokeAsExtensionMethod
-
-using Faslinq.Benchmarks.Scalar;
+﻿using Faslinq.Benchmarks;
 
 namespace Faslinq.Tests.BenchmarkTests;
 
-public abstract class FirstWhereBenchmarks : ScalarBenchmarkBase
+/// <summary>
+/// Checks that each input shape of <see cref="Benchmarks.Scalar.FirstWhereBenchmarks"/> returns
+/// the same record as its System.Linq control.
+/// </summary>
+[TestClass]
+public class FirstWhereBenchmarks : Benchmarks.Scalar.FirstWhereBenchmarks
 {
-    protected override TResult GetScalarByFaslinq<TResult>(List<TResult> list, params object[] values)
-        where TResult : default
-    {
-        var s = list.FirstOrDefault();
+    [DataTestMethod]
+    [DynamicData(nameof(GenerateTestRecords1), typeof(BenchmarkBase), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(GenerateTestRecords250), typeof(BenchmarkBase), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(GenerateTestRecords5000), typeof(BenchmarkBase), DynamicDataSourceType.Method)]
+    // [DynamicData(nameof(GenerateTestRecords100000), typeof(BenchmarkBase), DynamicDataSourceType.Method)]
+    public void FirstWhere_Array(object[] item) => Test(item, Benchmarks.Tests.Array);
 
-        return list.First(i => i?.Equals(s) ?? false);
-    }
+    [DataTestMethod]
+    [DynamicData(nameof(GenerateTestRecords1), typeof(BenchmarkBase), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(GenerateTestRecords250), typeof(BenchmarkBase), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(GenerateTestRecords5000), typeof(BenchmarkBase), DynamicDataSourceType.Method)]
+    // [DynamicData(nameof(GenerateTestRecords100000), typeof(BenchmarkBase), DynamicDataSourceType.Method)]
+    public void FirstWhere_List(object[] item) => Test(item, Benchmarks.Tests.List);
 
-    protected override TResult GetScalarStructByFaslinq<TResult>(List<TResult> list, params object[] values)
-        where TResult : struct
-    {
-        var s = list.FirstOrDefault();
-
-        return list.First(i => i.Equals(s));
-    }
-
-    protected override TResult GetScalarByFaslinq<TResult>(TResult[] array, params object[] values)
-        where TResult : default
-    {
-        var s = array.FirstOrDefault();
-
-        return array.First(i => i?.Equals(s) ?? false);
-    }
-
-    protected override TResult GetScalarStructByFaslinq<TResult>(TResult[] array, params object[] values)
-        where TResult : struct
-    {
-        var s = array.FirstOrDefault();
-
-        return array.First(i => i.Equals(s));
-    }
-
-    protected override TResult GetScalarByLinq<TResult>(IEnumerable<TResult> enumerable, params object[] values)
-        where TResult : default
-    {
-        var s = enumerable.FirstOrDefault();
-
-        // ReSharper disable once InvokeAsExtensionMethod
-        return enumerable!.First(i => i?.Equals(s) ?? false);
-    }
-
-    protected override TResult GetScalarStructByLinq<TResult>(IEnumerable<TResult> enumerable, params object[] values)
-        where TResult : struct
-    {
-        var s = enumerable.FirstOrDefault();
-
-        // ReSharper disable once InvokeAsExtensionMethod
-        return enumerable!.First(i => i.Equals(s));
-    }
-
-    protected override List<TestValueTuple> GetStructListByFaslinq(List<TestValueTuple> list, params object[] values)
-        => throw new NotImplementedException();
-
-    protected override TestValueTuple[] GetStructArrayByFaslinq(TestValueTuple[] array, params object[] values)
-        => throw new NotImplementedException();
-
-    protected override IEnumerable<TestValueTuple> GetEnumerableStructByLinq(
-        IEnumerable<TestValueTuple> enumerable,
-        params object[] values
-    )
-        => throw new NotImplementedException();
-
-    protected override List<TestValueTuple> GetListByFaslinq(List<TestValueTuple> list, params object[] values)
-        => throw new NotImplementedException();
-
-    protected override TestValueTuple[] GetArrayByArray(TestValueTuple[] array, params object[] values)
-        => throw new NotImplementedException();
-
-    protected override IEnumerable<TestValueTuple> GetEnumerableByLinq(IEnumerable<TestValueTuple> enumerable, params object[] values)
-        => throw new NotImplementedException();
-
-    protected override TData LinqControl<TData>(object item)
-        where TData : struct
-    {
-        if (item is object[] { Length: 1, } p)
-        {
-            return Enumerable
-                .First(p.Cast<TData>(), i => i.As<TestValueTuple>().Equals(FirstGenerated1));
-        }
-
-        return default;
-    }
+    [DataTestMethod]
+    [DynamicData(nameof(GenerateTestRecords1), typeof(BenchmarkBase), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(GenerateTestRecords250), typeof(BenchmarkBase), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(GenerateTestRecords5000), typeof(BenchmarkBase), DynamicDataSourceType.Method)]
+    // [DynamicData(nameof(GenerateTestRecords100000), typeof(BenchmarkBase), DynamicDataSourceType.Method)]
+    public void FirstWhere_Linq(object[] item) => Test(item, Benchmarks.Tests.IEnumerable);
 }

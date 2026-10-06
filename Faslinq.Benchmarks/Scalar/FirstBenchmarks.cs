@@ -49,15 +49,9 @@ public abstract class FirstBenchmarks : ScalarBenchmarkBase
     protected override IEnumerable<TestValueTuple> GetEnumerableByLinq(IEnumerable<TestValueTuple> enumerable, params object[] values)
         => throw new NotImplementedException();
 
-    protected override TData LinqControl<TData>(object item)
-        where TData : struct
-    {
-        if (item is object[] { Length: 1, } p)
-        {
-            return Enumerable
-                .First(p.Cast<TData>());
-        }
+    protected override TestValueTuple SelectTarget(IReadOnlyList<TestValueTuple> records)
+        => records[0];
 
-        return default;
-    }
+    protected override TestValueTuple LinqControl(IEnumerable<TestValueTuple> records, TestValueTuple target)
+        => Enumerable.First(records);
 }
