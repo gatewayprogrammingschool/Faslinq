@@ -486,9 +486,10 @@ public abstract class BenchmarkBase
         };
     }
 
+    // At least one, so small inputs (1 record) still take something to compare.
     protected int TakeCount<TData>(IEnumerable<TData> data)
     {
-        return (int)(data.Count() * 0.2m);
+        return Math.Max((int)(data.Count() * 0.2m), 1);
     }
 }
 

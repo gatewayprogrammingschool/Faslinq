@@ -37,6 +37,9 @@ public abstract class CollectionBenchmarkBase : BenchmarkBase
 
             var expected = LinqControl<TestValueTuple>(linqSource).ToList();
 
+            // Every operation keeps the first record, so an empty control means the run compares nothing.
+            expected.Should()
+                .NotBeEmpty();
             results.Should()
                 .NotBeNull();
             results.Should()
