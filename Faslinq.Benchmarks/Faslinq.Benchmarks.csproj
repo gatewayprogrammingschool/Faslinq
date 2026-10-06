@@ -180,39 +180,6 @@
       <Optimize>True</Optimize>
     </PropertyGroup>-->
 
-<<<<<<< HEAD
-  <ItemGroup Condition="'$(TargetFramework)'=='netcoreapp'">
-    <Assembly Remove="Netstandard20.Range.Bridge" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="BenchmarkDotNet" Version="0.13.1" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0-rc.1.21451.13" />
-    <PackageReference Include="Netstandard20.Range.Bridge" Version="1.0.0" Condition="'$(TargetFramework)'=='netstandard2.0' or '$(TargetFramework)'=='net472' or '$(TargetFramework)'=='net48' " />
-    <PackageReference Include="FluentAssertions" Version="6.1.0" />
-    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
-    <PackageReference Include="MSTest.TestAdapter" Version="2.2.7" />
-    <PackageReference Include="MSTest.TestFramework" Version="2.2.7" />
-    <PackageReference Include="coverlet.collector" Version="3.1.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Faslinq\Faslinq.csproj" Condition="'$(Configuration)' != 'NoFaslinq'" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="GPS.RandomDataGenerator">
-      <Version>2.0.3</Version>
-    </PackageReference>
-    <PackageReference Include="GPS.RandomDataGenerator.BaseData">
-      <Version>2.0.3</Version>
-    </PackageReference>
-  </ItemGroup>
-=======
     <ItemGroup Condition="'$(TargetFramework)'=='netcoreapp'">
         <Assembly Remove="Netstandard20.Range.Bridge" />
     </ItemGroup>
@@ -238,6 +205,5 @@
             <Version>2.0.3</Version>
         </PackageReference>
     </ItemGroup>
->>>>>>> baf8f62732723f997dfc6f6a915fae85130b941f
 
 </Project>
