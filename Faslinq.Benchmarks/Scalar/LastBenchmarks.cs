@@ -23,12 +23,12 @@ public abstract class LastBenchmarks : ScalarBenchmarkBase
     protected override TResult GetScalarByLinq<TResult>(IEnumerable<TResult> enumerable, params object[] values)
         where TResult : default
     // ReSharper disable once InvokeAsExtensionMethod
-        => enumerable.First();
+        => enumerable.Last();
 
     protected override TResult GetScalarStructByLinq<TResult>(IEnumerable<TResult> enumerable, params object[] values)
         where TResult : struct
     // ReSharper disable once InvokeAsExtensionMethod
-        => enumerable.First();
+        => enumerable.Last();
 
     protected override List<TestValueTuple> GetStructListByFaslinq(List<TestValueTuple> list, params object[] values)
         => throw new NotImplementedException();
@@ -51,15 +51,9 @@ public abstract class LastBenchmarks : ScalarBenchmarkBase
     protected override IEnumerable<TestValueTuple> GetEnumerableByLinq(IEnumerable<TestValueTuple> enumerable, params object[] values)
         => throw new NotImplementedException();
 
-    protected override TData LinqControl<TData>(object item)
-        where TData : struct
-    {
-        if (item is object[] { Length: 1, } p)
-        {
-            return Enumerable
-                .Last(p.Cast<TData>());
-        }
+    protected override TestValueTuple SelectTarget(IReadOnlyList<TestValueTuple> records)
+        => records[^1];
 
-        return default;
-    }
+    protected override TestValueTuple LinqControl(IEnumerable<TestValueTuple> records, TestValueTuple target)
+        => Enumerable.Last(records);
 }

@@ -22,17 +22,28 @@ public abstract class CollectionBenchmarkBase : BenchmarkBase
 
         if (first is TestValueTuple tuple)
         {
+            // Hand ProcessCollection the shape the test names; it skips any other shape.
+            IEnumerable<TestValueTuple> source = test switch
+            {
+                Tests.List => collection.ToList(),
+                Tests.Array => collection.ToArray(),
+                _ => collection,
+            };
+
             var results = ProcessCollection(
                 test,
-                new object[] { collection, },
+                new object[] { source, },
                 tuple).ToList();
 
             var expected = LinqControl<TestValueTuple>(linqSource).ToList();
 
+            // Every operation keeps the first record, so an empty control means the run compares nothing.
+            expected.Should()
+                .NotBeEmpty();
             results.Should()
                 .NotBeNull();
             results.Should()
-                .BeEquivalentTo(expected);
+                .BeEquivalentTo(expected, options => options.WithStrictOrdering());
         }
         else
         {

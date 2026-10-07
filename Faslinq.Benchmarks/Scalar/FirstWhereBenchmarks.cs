@@ -9,7 +9,7 @@ public abstract class FirstWhereBenchmarks : ScalarBenchmarkBase
     {
         var s = list.FirstOrDefault();
 
-        return list.First(i => i?.Equals(s) ?? false);
+        return list.First((i, _) => i?.Equals(s) ?? false);
     }
 
     protected override TResult GetScalarStructByFaslinq<TResult>(List<TResult> list, params object[] values)
@@ -17,7 +17,7 @@ public abstract class FirstWhereBenchmarks : ScalarBenchmarkBase
     {
         var s = list.FirstOrDefault();
 
-        return list.First(i => i.Equals(s));
+        return list.First((i, _) => i.Equals(s));
     }
 
     protected override TResult GetScalarByFaslinq<TResult>(TResult[] array, params object[] values)
@@ -25,7 +25,7 @@ public abstract class FirstWhereBenchmarks : ScalarBenchmarkBase
     {
         var s = array.FirstOrDefault();
 
-        return array.First(i => i?.Equals(s) ?? false);
+        return array.First((i, _) => i?.Equals(s) ?? false);
     }
 
     protected override TResult GetScalarStructByFaslinq<TResult>(TResult[] array, params object[] values)
@@ -33,7 +33,7 @@ public abstract class FirstWhereBenchmarks : ScalarBenchmarkBase
     {
         var s = array.FirstOrDefault();
 
-        return array.First(i => i.Equals(s));
+        return array.First((i, _) => i.Equals(s));
     }
 
     protected override TResult GetScalarByLinq<TResult>(IEnumerable<TResult> enumerable, params object[] values)
@@ -75,15 +75,9 @@ public abstract class FirstWhereBenchmarks : ScalarBenchmarkBase
     protected override IEnumerable<TestValueTuple> GetEnumerableByLinq(IEnumerable<TestValueTuple> enumerable, params object[] values)
         => throw new NotImplementedException();
 
-    protected override TData LinqControl<TData>(object item)
-        where TData : struct
-    {
-        if (item is object[] { Length: 1, } p)
-        {
-            return Enumerable
-                .First(p.Cast<TData>(), i => i.As<TestValueTuple>().Equals(FirstGenerated1));
-        }
+    protected override TestValueTuple SelectTarget(IReadOnlyList<TestValueTuple> records)
+        => records[0];
 
-        return default;
-    }
+    protected override TestValueTuple LinqControl(IEnumerable<TestValueTuple> records, TestValueTuple target)
+        => Enumerable.First(records, record => record.Equals(target));
 }
