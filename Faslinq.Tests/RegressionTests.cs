@@ -265,6 +265,20 @@ public class RegressionTests
 
     #endregion
 
+    #region Build settings
+
+    // The NuGet package must load in x86, x64 and ARM64 processes.
+    [TestMethod]
+    public void Library_IsPlatformNeutral()
+    {
+        typeof(ArrayExtensions).Assembly.ManifestModule.GetPEKind(out var kind, out var machine);
+
+        kind.Should().Be(PortableExecutableKinds.ILOnly);
+        machine.Should().Be(ImageFileMachine.I386);
+    }
+
+    #endregion
+
     #region RangeExtensions
 
     [TestMethod]
