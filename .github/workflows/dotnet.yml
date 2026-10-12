@@ -16,6 +16,10 @@ jobs:
 
     runs-on: windows-latest
 
+    permissions:
+      # Push the tag for each published version.
+      contents: write
+
     steps:
     - name: Checkout
       uses: actions/checkout@v4
@@ -51,5 +55,21 @@ jobs:
     # Publish on a merge to main (or a manual run on main) and on a published GitHub release.
     # --skip-duplicate makes a run whose version is already on NuGet a no-op.
     - name: Publish to NuGet
+      id: publish
       if: ${{ ((github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main') || github.event_name == 'release' }}
       run: dotnet nuget push "packages/*.nupkg" --api-key "${{ secrets.NUGET_KEY }}" --source https://api.nuget.org/v3/index.json --skip-duplicate
+
+    # GitVersion gives every untagged commit on main the same version, so tag each published
+    # version; the next merge then gets the next patch version instead of a duplicate.
+    - name: Tag published version
+      if: ${{ steps.publish.outcome == 'success' && github.event_name != 'release' }}
+      shell: pwsh
+      run: |
+        $package = Get-ChildItem packages/Faslinq.*.nupkg | Select-Object -First 1
+        $version = $package.BaseName.Substring('Faslinq.'.Length)
+        if (git tag --list $version) {
+          Write-Host "Tag $version already exists."
+          exit 0
+        }
+        git tag $version
+        git push origin $version

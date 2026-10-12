@@ -12,6 +12,8 @@ Add `using Faslinq;`. Faslinq's extension methods work on arrays and `List<T>`, 
 
 Faslinq predicates receive each item **and its index**, so write `(agent, _) => …`, or use the index: `(agent, index) => index % 2 == 0`. A one-parameter lambda such as `agent => …` still compiles, but it binds to System.Linq instead of Faslinq.
 
+The System.Linq versions below show code in a file *without* `using Faslinq;`. With it, calls such as `agents.Select(…)` or `agents.Take(3)` on a list bind to Faslinq, because Faslinq's overloads take the list type itself.
+
 Every call runs immediately and returns a new array or `List<T>`, so there's no `.ToList()` at the end.
 
 The examples use this type:
@@ -25,7 +27,7 @@ record Agent(string Name, string Location, int Rank, bool CanBeatNeo);
 ### Select
 
 ```cs
-// System.Linq
+// System.Linq, without using Faslinq;
 List<string> locations = agents
                     .Select(agent => agent.Location)
                     .ToList();
@@ -40,7 +42,7 @@ Selectors take only the item, so `Select` looks the same in both.
 ### Where
 
 ```cs
-// System.Linq
+// System.Linq, without using Faslinq;
 List<Agent> smiths = agents
                     .Where(agent => agent.Name == "Smith")
                     .ToList();
@@ -53,7 +55,7 @@ List<Agent> smiths = agents
 ### Take / TakeLast
 
 ```cs
-// System.Linq
+// System.Linq, without using Faslinq;
 List<Agent> bestSquad = rankedAgents.Take(3).ToList();
 List<Agent> worstSquad = rankedAgents.TakeLast(3).ToList();
 
@@ -69,7 +71,7 @@ Asking for more items than the source has returns the whole source. `TakeLast` k
 #### WhereSelect
 
 ```cs
-// System.Linq
+// System.Linq, without using Faslinq;
 List<string> locations = agents
                     .Where(agent => agent.Name == "Smith")
                     .Select(agent => agent.Location)
@@ -85,7 +87,7 @@ List<string> locations = agents
 #### SelectTake
 
 ```cs
-// System.Linq
+// System.Linq, without using Faslinq;
 List<string> locations = agents
                     .Select(agent => agent.Location)
                     .Take(3)
@@ -101,7 +103,7 @@ List<string> locations = agents
 #### WhereSelectTake
 
 ```cs
-// System.Linq
+// System.Linq, without using Faslinq;
 List<string> locations = agents
                     .Where(agent => agent.Name == "Smith")
                     .Select(agent => agent.Location)
@@ -121,7 +123,7 @@ The `TakeLast` combinations (`WhereTakeLast`, `SelectTakeLast`, `WhereSelectTake
 ### Sorting
 
 ```cs
-// System.Linq
+// System.Linq, without using Faslinq;
 List<Agent> byRank = agents.OrderBy(agent => agent.Rank).ToList();
 List<Agent> topTwo = agents.OrderByDescending(agent => agent.Rank).Take(2).ToList();
 
@@ -137,7 +139,7 @@ Like System.Linq, Faslinq's sorts are stable: agents with equal keys keep their 
 ### First / FirstOrDefault / Last / LastOrDefault
 
 ```cs
-// System.Linq
+// System.Linq, without using Faslinq;
 Agent? challenger = agents.FirstOrDefault(agent => agent.CanBeatNeo);
 
 // Faslinq

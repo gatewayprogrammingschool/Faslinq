@@ -44,7 +44,7 @@ Ranges follow the `System.Range` convention: the start is included and the end i
 | `Contains(Range range)` | Whether exactly that range is stored |
 | `Count` | The number of **ranges**, not positions |
 | `Start`, `End` | The start and end of the range most recently added or changed |
-| `this[int start]` | The stored range that begins at `start`. Throws `KeyNotFoundException` if no range begins there. |
+| `this[int start]` | Gets the stored range that begins at `start`, and throws `KeyNotFoundException` if no range begins there. Setting it replaces the range that begins at `start`; the new range is then stored under its own start. |
 | `Filter(T[] source)`, `Filter(List<T> source)` | The items at each position, in ascending order. Positions past the end of `source` are skipped. |
 | `ForEach(List<T> source, Action<T> action)` | Runs `action` on the item at each position, range by range. That's ascending order unless ranges overlap. |
 | `CopyTo(Range[] array, int arrayIndex)` | Copies the ranges. Throws `OverflowException` if they don't fit. |

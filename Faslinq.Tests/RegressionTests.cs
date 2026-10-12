@@ -289,6 +289,13 @@ public class RegressionTests
         positions.Contains(3..4).Should().BeTrue();
         positions.Remove(3..4).Should().BeTrue();
         positions.Contains(3..4).Should().BeFalse();
+
+        positions.Add(0..2);
+        positions[0] = 3..5;
+        positions.Remove(new Index(3)).Should().BeTrue();
+        positions.Contains(new Index(3)).Should().BeFalse();
+        positions.Contains(new Index(4)).Should().BeTrue();
+        positions[4].Should().Be(4..5);
     }
 
     #endregion

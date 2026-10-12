@@ -172,7 +172,11 @@ public record PositionCollection : IList<Range>, IList<Index>
         get
             => _ranges[index];
         set
-            => _ranges[index] = value;
+        {
+            // Replace the range starting at index, keeping every range keyed by its own start.
+            _ranges.Remove(index);
+            _ranges[value.Start.Value] = value;
+        }
     }
 
     /// <summary>
