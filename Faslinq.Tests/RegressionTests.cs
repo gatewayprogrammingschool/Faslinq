@@ -278,6 +278,19 @@ public class RegressionTests
         new SortedList<int, Range> { { 0, 0..0 } }.Any(default(Range)).Should().BeTrue();
     }
 
+    // The indexer setter stores a range under the given key even when the range starts elsewhere.
+    [TestMethod]
+    public void PositionCollection_RangeSetThroughIndexer_CanBeFoundAndRemoved()
+    {
+        var positions = new PositionCollection();
+        positions.Add(0..2);
+        positions[0] = 3..4;
+
+        positions.Contains(3..4).Should().BeTrue();
+        positions.Remove(3..4).Should().BeTrue();
+        positions.Contains(3..4).Should().BeFalse();
+    }
+
     #endregion
 
     #region Build settings

@@ -39,7 +39,7 @@ List<string> viaFaslinq = agents.WhereSelectTake(
   - Take counts larger than the source return the whole source.
   - `TakeLast` variants keep source order.
 
-The released packages (1.0.0 and 1.0.5) predate several of these fixes, which ship in the next release.
+Versions before 1.1.0 (1.0.0 and 1.0.5) lack several of these fixes.
 
 ## Supported frameworks
 

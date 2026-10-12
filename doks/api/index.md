@@ -11,7 +11,7 @@ keywords: Linq Dotnet
 
 Install with `dotnet add package Faslinq` and add `using Faslinq;`. Faslinq targets `net6.0`, `net5.0`, `netstandard2.1` and `netstandard2.0`, and the package is platform-neutral (AnyCPU).
 
-The published packages (1.0.0 and 1.0.5) predate several fixes described on these pages, including the `TakeLast`, `OrderBy` and `PositionCollection` behaviour. Those fixes ship in the next release.
+Versions before 1.1.0 (1.0.0 and 1.0.5) lack several fixes described on these pages, including the `TakeLast`, `OrderBy` and `PositionCollection` behaviour.
 
 ## Conventions
 

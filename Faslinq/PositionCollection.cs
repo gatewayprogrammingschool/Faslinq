@@ -199,8 +199,7 @@ public record PositionCollection : IList<Range>, IList<Index>
     /// <param name="item"></param>
     /// <returns></returns>
     public bool Contains(Range item)
-        => _ranges.TryGetValue(item.Start.Value, out var stored)
-           && stored.Equals(item);
+        => _ranges.IndexOfValue(item) >= 0;
 
     /// <summary>
     /// 
@@ -231,9 +230,18 @@ public record PositionCollection : IList<Range>, IList<Index>
     /// <returns></returns>
     /// <exception cref="IndexOutOfRangeException"></exception>
     public bool Remove(Range item)
-        => Contains(item)
-            ? _ranges.Remove(item.Start.Value)
-            : throw new IndexOutOfRangeException("The specified Range is not in the collection.");
+    {
+        // Search the stored values: the indexer setter can store a range under another key.
+        var position = _ranges.IndexOfValue(item);
+
+        if (position < 0)
+        {
+            throw new IndexOutOfRangeException("The specified Range is not in the collection.");
+        }
+
+        _ranges.RemoveAt(position);
+        return true;
+    }
 
     /// <summary>
     /// 

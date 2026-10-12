@@ -6,6 +6,8 @@
         <Nullable>enable</Nullable>
         <LangVersion>10.0</LangVersion>
         <DebugType>embedded</DebugType>
+        <!-- Put the sources in the embedded PDB, so the package supports source-level debugging. -->
+        <EmbedAllSources>true</EmbedAllSources>
         <Configurations>Debug;Release;Benchmarks</Configurations>
         <Platforms>AnyCPU;x64</Platforms>
         <GenerateDocumentationFile>True</GenerateDocumentationFile>
