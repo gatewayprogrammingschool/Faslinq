@@ -48,8 +48,8 @@ jobs:
         name: packages
         path: packages/*.nupkg
 
-    # Publish on a merge to main and on a published GitHub release. --skip-duplicate makes a run
-    # whose version is already on NuGet a no-op.
+    # Publish on a merge to main (or a manual run on main) and on a published GitHub release.
+    # --skip-duplicate makes a run whose version is already on NuGet a no-op.
     - name: Publish to NuGet
-      if: ${{ (github.event_name == 'push' && github.ref == 'refs/heads/main') || github.event_name == 'release' }}
+      if: ${{ ((github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main') || github.event_name == 'release' }}
       run: dotnet nuget push "packages/*.nupkg" --api-key "${{ secrets.NUGET_KEY }}" --source https://api.nuget.org/v3/index.json --skip-duplicate
