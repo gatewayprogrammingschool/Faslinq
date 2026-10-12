@@ -57,7 +57,24 @@ jobs:
     - name: Publish to NuGet
       id: publish
       if: ${{ ((github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main') || github.event_name == 'release' }}
-      run: dotnet nuget push "packages/*.nupkg" --api-key "${{ secrets.NUGET_KEY }}" --source https://api.nuget.org/v3/index.json --skip-duplicate
+      shell: pwsh
+      env:
+        NUGET_KEY: ${{ secrets.NUGET_KEY }}
+      run: |
+        if (-not $env:NUGET_KEY) {
+          Write-Error "The NUGET_KEY secret is not set for this repository."
+          exit 1
+        }
+        # Push each package by its full path: dotnet nuget push doesn't expand packages/*.nupkg on Windows.
+        $packages = @(Get-ChildItem packages -Filter *.nupkg)
+        if ($packages.Count -eq 0) {
+          Write-Error "No packages to push."
+          exit 1
+        }
+        foreach ($package in $packages) {
+          dotnet nuget push $package.FullName --api-key $env:NUGET_KEY --source https://api.nuget.org/v3/index.json --skip-duplicate
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+        }
 
     # GitVersion gives every untagged commit on main the same version, so tag each published
     # version; the next merge then gets the next patch version instead of a duplicate.
