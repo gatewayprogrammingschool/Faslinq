@@ -2,13 +2,14 @@ name: .NET
 
 on:
   push:
-    branches: [ release/* ]
-    tags: 
+    branches: [ main, release/* ]
+    tags:
       - v*
   pull_request:
     branches: [ main, master ]
   workflow_dispatch:
   release:
+    types: [ published ]
 
 jobs:
   build:
@@ -17,52 +18,38 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v1
-      
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v1
+      uses: actions/checkout@v4
       with:
-        dotnet-version: 5.0.x
+        # GitVersion.MsBuild computes the package version from the full history.
+        fetch-depth: 0
+
     - name: Setup .NET
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: 6.0.x
-        include-prerelease: true
-        
-    - name: Setup Scoop
-      run: |
-        git fetch --unshallow
-        iwr -useb get.scoop.sh | iex
-        scoop install gitversion
-        GitVersion
-        
+        dotnet-version: |
+          6.0.x
+          8.0.x
+
     - name: Restore dependencies
       run: dotnet restore
-    - name: Build Debug
-      if: ${{ github.event_name != 'release' }}
-      run: dotnet build -c Debug --no-restore 
-    - name: Build Release
-      if: ${{ github.event_name == 'release' }}
-      run: dotnet build -c Release --no-restore 
-    - name: Debug Tests 
-      if: ${{ github.event_name != 'release' }}
-      run: dotnet test --no-build -f net6.0 -c Debug
-    - name: Release Tests 
-      if: ${{ github.event_name == 'release' }}
-      run: dotnet test --no-build -f net6.0 -c Release
-    - name: Publish
-      if: ${{ github.event_name == 'release' }}
-      run: | 
-        $outPath = (Join-Path . -Child packages)
-        dotnet pack -c Release --no-restore --include-source --no-build -o $outPath 
-        
-        gci $outPath\*.nupkg -ErrorAction Stop
-        gci $outPath\*.snupkg -ErrorAction Stop
-        
-        gci $outPath\*.nupkg | forEach-Object -process {
-          dotnet nuget push $_ -k "${{ secrets.NUGET_KEY }}" -s https://api.nuget.org/v3/index.json --skip-duplicate
-        }
-        gci $outPath\*.snupkg | forEach-Object -process {
-          dotnet nuget push $_ -k "${{ secrets.NUGET_KEY }}" -s https://api.nuget.org/v3/index.json --skip-duplicate
-        }
-        
+
+    - name: Build
+      run: dotnet build -c Release --no-restore
+
+    - name: Test
+      run: dotnet test Faslinq.Tests/Faslinq.Tests.csproj -c Release --no-build -f net6.0
+
+    - name: Pack
+      run: dotnet pack Faslinq/Faslinq.csproj -c Release --no-build -o packages
+
+    - name: Upload packages
+      uses: actions/upload-artifact@v4
+      with:
+        name: packages
+        path: packages/*.nupkg
+
+    # Publish on a merge to main and on a published GitHub release. --skip-duplicate makes a run
+    # whose version is already on NuGet a no-op.
+    - name: Publish to NuGet
+      if: ${{ (github.event_name == 'push' && github.ref == 'refs/heads/main') || github.event_name == 'release' }}
+      run: dotnet nuget push "packages/*.nupkg" --api-key "${{ secrets.NUGET_KEY }}" --source https://api.nuget.org/v3/index.json --skip-duplicate
