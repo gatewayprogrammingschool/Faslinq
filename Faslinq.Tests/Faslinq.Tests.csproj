@@ -246,4 +246,9 @@
         </PackageReference>
     </ItemGroup>
 
+    <!-- Lets Library_TargetsTheBuildPlatform expect x64 when the build targets it. -->
+    <PropertyGroup Condition="'$(Platform)' == 'x64'">
+        <DefineConstants>$(DefineConstants);PLATFORM_X64</DefineConstants>
+    </PropertyGroup>
+
 </Project>

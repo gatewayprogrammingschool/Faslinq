@@ -263,18 +263,39 @@ public class RegressionTests
         enumerator.Current.Should().Be(default(int));
     }
 
+    // default(Range) (0..0) is also Find's "not found" value; it must not count as stored.
+    [TestMethod]
+    public void PositionCollection_DefaultRange_IsOnlyContainedWhenStored()
+    {
+        var positions = new PositionCollection();
+
+        positions.Contains(default(Range)).Should().BeFalse();
+        Action remove = () => positions.Remove(default(Range));
+        remove.Should().Throw<IndexOutOfRangeException>();
+
+        positions.Add(0..0);
+        positions.Contains(default(Range)).Should().BeTrue();
+        new SortedList<int, Range> { { 0, 0..0 } }.Any(default(Range)).Should().BeTrue();
+    }
+
     #endregion
 
     #region Build settings
 
-    // The NuGet package must load in x86, x64 and ARM64 processes.
+    // AnyCPU builds (the NuGet package) must load in x86, x64 and ARM64 processes;
+    // an explicit -p:Platform=x64 build targets x64.
     [TestMethod]
-    public void Library_IsPlatformNeutral()
+    public void Library_TargetsTheBuildPlatform()
     {
         typeof(ArrayExtensions).Assembly.ManifestModule.GetPEKind(out var kind, out var machine);
 
+#if PLATFORM_X64
+        kind.Should().Be(PortableExecutableKinds.ILOnly | PortableExecutableKinds.PE32Plus);
+        machine.Should().Be(ImageFileMachine.AMD64);
+#else
         kind.Should().Be(PortableExecutableKinds.ILOnly);
         machine.Should().Be(ImageFileMachine.I386);
+#endif
     }
 
     #endregion

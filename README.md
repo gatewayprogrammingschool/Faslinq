@@ -49,7 +49,9 @@ The released packages (1.0.0 and 1.0.5) predate several of these fixes, which sh
 
 ```bash
 dotnet build Faslinq.sln
-dotnet test Faslinq.Tests/Faslinq.Tests.csproj
+dotnet test Faslinq.Tests/Faslinq.Tests.csproj -f net6.0
 ```
+
+The tests also target `net5.0`; drop `-f net6.0` to run those too if the .NET 5 runtime is installed.
 
 The build runs GitVersion, which needs the full git history; in a shallow clone, run `git fetch --unshallow` first. `Faslinq.Tests` includes `BenchmarkTests`, which check that each benchmark's Faslinq path returns the same results as its System.Linq control. Benchmarks run from `Faslinq.Benchmarks` using `bench.ps1`.

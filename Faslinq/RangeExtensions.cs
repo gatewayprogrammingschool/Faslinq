@@ -55,8 +55,7 @@ public static class RangeExtensions
     /// <param name="range"></param>
     /// <returns></returns>
     public static bool Any(this SortedList<int, Range> ranges, Range range)
-        => !ranges.FirstOrDefault(r => r.Value.Equals(range))
-            .Value.Equals(default);
+        => ranges.Values.Contains(range);
 
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP
     /// <summary>
