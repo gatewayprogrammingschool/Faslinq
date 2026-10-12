@@ -6,108 +6,158 @@ keywords: Linq Dotnet
 
 # Documentation
 
+## Before you start
+
+Add `using Faslinq;`. Faslinq's extension methods work on arrays and `List<T>`, and keep System.Linq's method names.
+
+Faslinq predicates receive each item **and its index**, so write `(agent, _) => …`, or use the index: `(agent, index) => index % 2 == 0`. A one-parameter lambda such as `agent => …` still compiles, but it binds to System.Linq instead of Faslinq.
+
+The System.Linq versions below show code in a file *without* `using Faslinq;`. With it, calls such as `agents.Select(…)` or `agents.Take(3)` on a list bind to Faslinq, because Faslinq's overloads take the list type itself.
+
+Every call runs immediately and returns a new array or `List<T>`, so there's no `.ToList()` at the end.
+
+The examples use this type:
+
+```cs
+record Agent(string Name, string Location, int Rank, bool CanBeatNeo);
+```
+
 ## Examples
 
 ### Select
 
 ```cs
-// Old Way
-var agents = Matrix.GetAgents();
-var locations = agents
+// System.Linq, without using Faslinq;
+List<string> locations = agents
                     .Select(agent => agent.Location)
                     .ToList();
 
-// Faslinq Way
-var agents = Matrix.GetAgentsList();
-var locations = agents
-                    .Select(
-                        agent => agent.Location);
+// Faslinq
+List<string> locations = agents
+                    .Select(agent => agent.Location);
 ```
+
+Selectors take only the item, so `Select` looks the same in both.
 
 ### Where
 
 ```cs
-// Old Way
-var agents = Matrix.GetAgents();
-var smiths = agents
+// System.Linq, without using Faslinq;
+List<Agent> smiths = agents
                     .Where(agent => agent.Name == "Smith")
                     .ToList();
 
-// Faslinq Way
-var agents = Matrix.GetAgentsList();
-var smiths = agents
-                    .Where(
-                        agent => agent.Name == "Smith");
+// Faslinq
+List<Agent> smiths = agents
+                    .Where((agent, _) => agent.Name == "Smith");
 ```
 
 ### Take / TakeLast
 
 ```cs
-// Old Way
-var agents = Matrix.GetRankedAgents();
-var bestSquad = agents.Take(3).ToList();
-var worstSquad = agents.TakeLast(3).ToList();
+// System.Linq, without using Faslinq;
+List<Agent> bestSquad = rankedAgents.Take(3).ToList();
+List<Agent> worstSquad = rankedAgents.TakeLast(3).ToList();
 
-// Note - Faslinq Polyfills TakeLast for .Net Framework!
-
-// Faslinq Way
-var agents = Matrix.GetRankedAgentsList();
-var bestSquad = agents.Take(3);
-var worstSquad = agents.TakeLast(3);
+// Faslinq
+List<Agent> bestSquad = rankedAgents.Take(3);
+List<Agent> worstSquad = rankedAgents.TakeLast(3);
 ```
+
+Asking for more items than the source has returns the whole source. `TakeLast` keeps the source order. On `netstandard2.0`, which has no `TakeLast`, Faslinq also adds `TakeLast` for any `IEnumerable<T>`.
 
 ### Chaining
 
 #### WhereSelect
 
 ```cs
-// Old Way
-var agents = Matrix.GetAgents();
-var locations = agents
+// System.Linq, without using Faslinq;
+List<string> locations = agents
                     .Where(agent => agent.Name == "Smith")
                     .Select(agent => agent.Location)
                     .ToList();
 
-// Faslinq Way
-var agents = Matrix.GetAgentsList();
-var locations = agents
+// Faslinq
+List<string> locations = agents
                     .WhereSelect(
-                        agent => agent.Name == "Smith",
+                        (agent, _) => agent.Name == "Smith",
                         agent => agent.Location);
 ```
 
 #### SelectTake
 
 ```cs
-// Old Way
-var agents = Matrix.GetAgents();
-var locations = agents
+// System.Linq, without using Faslinq;
+List<string> locations = agents
                     .Select(agent => agent.Location)
                     .Take(3)
                     .ToList();
 
-// Faslinq Way
-var agents = Matrix.GetAgentsList();
-var locations = agents
+// Faslinq
+List<string> locations = agents
                     .SelectTake(
                         agent => agent.Location,
                         3);
 ```
+
+#### WhereSelectTake
+
+```cs
+// System.Linq, without using Faslinq;
+List<string> locations = agents
+                    .Where(agent => agent.Name == "Smith")
+                    .Select(agent => agent.Location)
+                    .Take(2)
+                    .ToList();
+
+// Faslinq
+List<string> locations = agents
+                    .WhereSelectTake(
+                        (agent, _) => agent.Name == "Smith",
+                        agent => agent.Location,
+                        2);
+```
+
+The `TakeLast` combinations (`WhereTakeLast`, `SelectTakeLast`, `WhereSelectTakeLast`) work the same way, from the end of the source, and return items in source order.
+
+### Sorting
+
+```cs
+// System.Linq, without using Faslinq;
+List<Agent> byRank = agents.OrderBy(agent => agent.Rank).ToList();
+List<Agent> topTwo = agents.OrderByDescending(agent => agent.Rank).Take(2).ToList();
+
+// Faslinq
+List<Agent> byRank = agents.OrderBy(agent => agent.Rank);
+List<Agent> topTwo = agents.OrderByDescendingTake(agent => agent.Rank, 2);
+```
+
+Like System.Linq, Faslinq's sorts are stable: agents with equal keys keep their original order. Keys are compared with `Comparer<TKey>.Default`.
 
 ## Scalar Values
 
 ### First / FirstOrDefault / Last / LastOrDefault
 
 ```cs
-// Old Way
-var agents = Matrix.GetAgents();
-var _ = agents.FirstOrDefault(agent => agent.CanBeatNeo);
-// Discard default value...
+// System.Linq, without using Faslinq;
+Agent? challenger = agents.FirstOrDefault(agent => agent.CanBeatNeo);
 
-// Faslinq Way
-var agents = Matrix.GetAgentsList();
-var sacrificialLamb = agents.FirstOrDefault(
-                        agent => agent.CanBeatNeo,
+// Faslinq
+Agent? challenger = agents.FirstOrDefault((agent, _) => agent.CanBeatNeo);
+
+// Faslinq, with a value to use when nothing matches (on every target framework)
+Agent? sacrificialLamb = agents.FirstOrDefault(
+                        (agent, _) => agent.CanBeatNeo,
                         agents.Last());
-// Polyfill .Net 6 Default Behavior to all targets.
+```
+
+`First` and `Last` throw `InvalidOperationException` when the source is empty or nothing matches, as System.Linq does.
+
+## Finding positions
+
+`PositionsWhere` returns the positions of matching items as a [`PositionCollection`](../api/position-collection/). Its `Filter` method gives back the items at those positions:
+
+```cs
+PositionCollection positions = agents.PositionsWhere((agent, _) => agent.Name == "Smith");
+List<Agent> smiths = positions.Filter(agents).ToList();
 ```

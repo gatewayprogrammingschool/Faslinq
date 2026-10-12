@@ -24,7 +24,7 @@ grid_navigation:
       cta: Read more
       url: '/why/'
     - title: Is Faslinq Fast?
-      excerpt: Benchmark Results
+      excerpt: Benchmark results (recorded in 2021, before the library and benchmark fixes)
       cta: Read more
       url: '/benchmarks/full-report/'
     - title: Faslinq API

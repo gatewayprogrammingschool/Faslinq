@@ -263,6 +263,61 @@ public class RegressionTests
         enumerator.Current.Should().Be(default(int));
     }
 
+    // default(Range) (0..0) is also Find's "not found" value; it must not count as stored.
+    [TestMethod]
+    public void PositionCollection_DefaultRange_IsOnlyContainedWhenStored()
+    {
+        var positions = new PositionCollection();
+
+        positions.Contains(default(Range)).Should().BeFalse();
+        Action remove = () => positions.Remove(default(Range));
+        remove.Should().Throw<IndexOutOfRangeException>();
+
+        positions.Add(0..0);
+        positions.Contains(default(Range)).Should().BeTrue();
+        new SortedList<int, Range> { { 0, 0..0 } }.Any(default(Range)).Should().BeTrue();
+    }
+
+    // The indexer setter stores a range under the given key even when the range starts elsewhere.
+    [TestMethod]
+    public void PositionCollection_RangeSetThroughIndexer_CanBeFoundAndRemoved()
+    {
+        var positions = new PositionCollection();
+        positions.Add(0..2);
+        positions[0] = 3..4;
+
+        positions.Contains(3..4).Should().BeTrue();
+        positions.Remove(3..4).Should().BeTrue();
+        positions.Contains(3..4).Should().BeFalse();
+
+        positions.Add(0..2);
+        positions[0] = 3..5;
+        positions.Remove(new Index(3)).Should().BeTrue();
+        positions.Contains(new Index(3)).Should().BeFalse();
+        positions.Contains(new Index(4)).Should().BeTrue();
+        positions[4].Should().Be(4..5);
+    }
+
+    #endregion
+
+    #region Build settings
+
+    // AnyCPU builds (the NuGet package) must load in x86, x64 and ARM64 processes;
+    // an explicit -p:Platform=x64 build targets x64.
+    [TestMethod]
+    public void Library_TargetsTheBuildPlatform()
+    {
+        typeof(ArrayExtensions).Assembly.ManifestModule.GetPEKind(out var kind, out var machine);
+
+#if PLATFORM_X64
+        kind.Should().Be(PortableExecutableKinds.ILOnly | PortableExecutableKinds.PE32Plus);
+        machine.Should().Be(ImageFileMachine.AMD64);
+#else
+        kind.Should().Be(PortableExecutableKinds.ILOnly);
+        machine.Should().Be(ImageFileMachine.I386);
+#endif
+    }
+
     #endregion
 
     #region RangeExtensions
