@@ -4,6 +4,8 @@ layout: page
 keywords: Linq Dotnet
 ---
 
+> **These results are out of date.** They were recorded in October 2021, before the library fixes in [pull request #4](https://github.com/gatewayprogrammingschool/Faslinq/pull/4) and the benchmark fixes in [pull request #5](https://github.com/gatewayprogrammingschool/Faslinq/pull/5). The library measured here still had bugs that changed its results, and the `Take` benchmarks took nothing at 1 record. Re-run the benchmarks to refresh these results, then remove this note.
+
 <div class="content_row">
     <div class="flex_container">
         <div class="flex_card">
